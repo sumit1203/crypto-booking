@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "start": "node ./src/index.js",
+    "lint": "eslint src",
+    "test": "rimraf .nyc_output && ./node_modules/.bin/nyc --reporter=text ./node_modules/mocha/bin/mocha test/**/*.spec.js --timeout 20000",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -16,7 +19,32 @@
     "url": "https://github.com/windingtree/crypto-booking-app/issues"
   },
   "homepage": "https://github.com/windingtree/crypto-booking-app#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "express-rate-limit": "^2.11.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.1.0",
+    "eslint-config-standard": "12.0.0-alpha.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2",
+    "rimraf": "^2.6.2"
+  },
   "engines": {
     "node": "10.6.0"
+  },
+  "nyc": {
+    "exclude": [
+      "scripts/",
+      "test/"
+    ]
   }
 }
