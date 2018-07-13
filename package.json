@@ -1,0 +1,22 @@
+{
+  "name": "crypto-booking-app",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/windingtree/crypto-booking-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/windingtree/crypto-booking-app/issues"
+  },
+  "homepage": "https://github.com/windingtree/crypto-booking-app#readme",
+  "engines": {
+    "node": "10.6.0"
+  }
+}
