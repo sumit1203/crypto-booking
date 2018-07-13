@@ -1,9 +1,10 @@
+require('dotenv').config();
 const { app } = require('./app');
 
-const server = app.listen(config.get('port'), () => {
-  if (config.get('log')) {
-    console.log(`WT API AT ${config.get('port')}!`);
-  }
+const PORT = process.env.SERVER_PORT || 3000;
+
+const server = app.listen(PORT, () => {
+  console.log(`Server running at ${PORT}!`);
 });
 
 module.exports = server;

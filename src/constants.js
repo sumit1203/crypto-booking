@@ -1,7 +1,3 @@
-const DEFAULT_PAGINATION_LIMIT = 20;
-const MAX_PAGE_SIZE = 50;
 
 module.exports = {
-  DEFAULT_PAGINATION_LIMIT,
-  MAX_PAGE_SIZE,
 };

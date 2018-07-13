@@ -10,14 +10,9 @@ app.use(bodyParser.json());
 app.use('/*', validateIPWhiteList);
 
 // Error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   if (!err.code) {
-    // Handle special cases of generic errors
-    if (err.message === 'Invalid JSON RPC response: ""') {
-      err = handleApplicationError('unreachableChain', err);
-    } else {
-      err = handleApplicationError('genericError', err);
-    }
+    err = handleApplicationError('genericError', err);
   }
   res.status(err.status).json({
     status: err.status,
@@ -30,8 +25,8 @@ app.use((err, req, res, next) => {
 // Root handler
 app.get('/', (req, res) => {
   const response = {
-    docs: 'https://github.com/windingtree/wt-nodejs-api/blob/master/README.md',
-    info: 'https://github.com/windingtree/wt-nodejs-api',
+    docs: 'https://github.com/windingtree/crypto-booking-app#readme',
+    info: 'https://github.com/windingtree/crypto-booking-app#',
     version,
   };
   res.status(200).json(response);
