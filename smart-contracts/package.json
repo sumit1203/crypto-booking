@@ -8,7 +8,9 @@
   "scripts": {
     "test": "scripts/test.sh",
     "lint": "eslint test",
-    "testrpc": "./node_modules/.bin/ganache-cli"
+    "testrpc": "./node_modules/.bin/ganache-cli",
+    "deploy-mainnet": "./node_modules/.bin/truffle migrate --network mainnet --reset",
+    "deploy-ropsten": "./node_modules/.bin/truffle migrate --network ropsten --reset"
   },
   "publishConfig": {
     "access": "public",
