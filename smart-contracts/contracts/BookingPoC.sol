@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
@@ -20,11 +20,12 @@ contract BookingPoC is Ownable {
 
   // A mapping of the rooms booked by night, it saves the guest address by
   // room/night
-  // Night => Room => Guest
-  mapping(uint256 => mapping(uint256 => address)) public nights;
-
-  // The total amount of rooms offered for booking
-  uint256 public totalRooms;
+  // RoomType => Night => Room => Guest
+  struct RoomType {
+    uint256 totalRooms;
+    mapping(uint256 => mapping(uint256 => address)) nights;
+  }
+  mapping(string => RoomType) rooms;
 
   // The total amount of nights offered for booking
   uint256 public totalNights;
@@ -32,11 +33,15 @@ contract BookingPoC is Ownable {
   // The ERC20 lifToken that will be used for payment
   ERC20 public lifToken;
 
-  event BookingChanged(uint256[] nights, uint256 room, address newGuest);
+  event BookingChanged(
+    string roomType, uint256[] nights, uint256 room, address newGuest
+  );
 
-  event BookingDone(uint256[] nights, uint256 room, address guest);
+  event BookingDone(
+    string roomType, uint256[] nights, uint256 room, address guest
+  );
 
-  event RoomsAdded(uint256 newRooms);
+  event RoomsAdded(string roomType, uint256 newRooms);
 
   /**
    * @dev Constructor
@@ -69,37 +74,42 @@ contract BookingPoC is Ownable {
 
   /**
    * @dev Increase the amount of rooms offered, only called by owner
-   * @param rooms The amount of rooms to be increased
+   * @param roomType The room type to be added
+   * @param amount The amount of rooms to be increased
    */
-  function addRooms(uint256 rooms) onlyOwner public {
-    totalRooms = totalRooms.add(rooms);
-    emit RoomsAdded(rooms);
+  function addRooms(string roomType, uint256 amount) onlyOwner public {
+    rooms[roomType].totalRooms = rooms[roomType].totalRooms.add(amount);
+    emit RoomsAdded(roomType, amount);
   }
 
   /**
    * @dev Book a room for a certain address, internal function
+   * @param roomType The room type to be booked
    * @param _nights The nights that we want to book
    * @param room The room that wants to be booked
    * @param guest The address of the guest that will book the room
    */
-  function bookRoom(uint256[] _nights, uint256 room, address guest) internal {
+  function bookRoom(
+    string roomType, uint256[] _nights, uint256 room, address guest
+  ) internal {
     for (uint i = 0; i < _nights.length; i ++)
-      nights[_nights[i]][room] = guest;
-    emit BookingDone(_nights, room, guest);
+      rooms[roomType].nights[_nights[i]][room] = guest;
+    emit BookingDone(roomType, _nights, room, guest);
   }
 
   /**
    * @dev Book a room for a certain address, onlyOwner function
+   * @param roomType The room type to be booked
    * @param _nights The nights that we want to book
    * @param room The room that wants to be booked
    * @param guest The address of the guest that will book the room
    */
   function changeBooking(
-    uint256[] _nights, uint256 room, address guest
+    string roomType, uint256[] _nights, uint256 room, address guest
   ) public onlyOwner {
     for (uint i = 0; i < _nights.length; i ++)
-      nights[_nights[i]][room] = guest;
-    emit BookingChanged(_nights, room, guest);
+      rooms[roomType].nights[_nights[i]][room] = guest;
+    emit BookingChanged(roomType, _nights, room, guest);
   }
 
   /**
@@ -107,12 +117,14 @@ contract BookingPoC is Ownable {
    * @param pricePerNight The price per night in wei
    * @param offerTimestamp The timestamp of when the offer ends
    * @param offerSignature The signature provided by the offer signer
+   * @param roomType The room type that the guest wants to book
    * @param _nights The nights that the guest wants to book
    */
   function bookWithEth(
     uint256 pricePerNight,
     uint256 offerTimestamp,
     bytes offerSignature,
+    string roomType,
     uint256[] _nights
   ) public payable {
     // Check that the offer is still valid
@@ -122,17 +134,17 @@ contract BookingPoC is Ownable {
     require(pricePerNight.mul(_nights.length) <= msg.value);
 
     // Check if there is at least one room available
-    uint256[] memory rooms = roomsAvailable(_nights);
-    require(rooms.length > 0);
+    uint256[] memory available = roomsAvailable(roomType, _nights);
+    require(available.length > 0);
 
     // Check the signer of the offer is the right address
-    bytes32 priceSigned = keccak256(
-      abi.encodePacked(pricePerNight, offerTimestamp, "eth")
-    ).toEthSignedMessageHash();
+    bytes32 priceSigned = keccak256(abi.encodePacked(
+      roomType, pricePerNight, offerTimestamp, "eth"
+    )).toEthSignedMessageHash();
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(_nights, rooms[0], msg.sender);
+    bookRoom(roomType, _nights, available[0], msg.sender);
 
     // Transfer the eth to the owner
     owner.transfer(msg.value);
@@ -143,12 +155,14 @@ contract BookingPoC is Ownable {
    * @param pricePerNight The price per night in wei
    * @param offerTimestamp The timestamp of when the offer ends
    * @param offerSignature The signature provided by the offer signer
+   * @param roomType The room type that the guest wants to book
    * @param _nights The nights that the guest wants to book
    */
   function bookWithLif(
     uint256 pricePerNight,
     uint256 offerTimestamp,
     bytes offerSignature,
+    string roomType,
     uint256[] _nights
   ) public {
     // Check that the offer is still valid
@@ -159,34 +173,44 @@ contract BookingPoC is Ownable {
     require(pricePerNight.mul(_nights.length) <= lifTokenAllowance);
 
     // Check if there is at least one room available
-    uint256[] memory rooms = roomsAvailable(_nights);
-    require(rooms.length > 0);
+    uint256[] memory available = roomsAvailable(roomType, _nights);
+    require(available.length > 0);
 
     // Check the signer of the offer is the right address
-    bytes32 priceSigned = keccak256(
-      abi.encodePacked(pricePerNight, offerTimestamp, "lif")
-    ).toEthSignedMessageHash();
+    bytes32 priceSigned = keccak256(abi.encodePacked(
+      roomType, pricePerNight, offerTimestamp, "lif"
+    )).toEthSignedMessageHash();
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(_nights, rooms[0], msg.sender);
+    bookRoom(roomType, _nights, available[0], msg.sender);
 
     // Transfer the lifTokens to the owner
     lifToken.transferFrom(msg.sender, owner, lifTokenAllowance);
   }
 
+  /**
+   * @dev Get the total rooms for a room type
+   * @param roomType The room type that wants to be booked
+   */
+  function totalRooms(string roomType) view public returns (uint256) {
+    return rooms[roomType].totalRooms;
+  }
 
   /**
    * @dev Get the availability of a specific room
+   * @param roomType The room type that wants to be booked
    * @param _nights The nights to check availability
    * @param room The room that wants to be booked
    * @return bool If the room is available or not
    */
-  function roomAvailable(uint256[] _nights, uint256 room) view public returns (bool) {
-    require(room <= totalRooms);
+  function roomAvailable(
+    string roomType, uint256[] _nights, uint256 room
+  ) view public returns (bool) {
+    require(room <= rooms[roomType].totalRooms);
     for (uint i = 0; i < _nights.length; i ++) {
       require(_nights[i] <= totalNights);
-      if (nights[_nights[i]][room] != address(0))
+      if (rooms[roomType].nights[_nights[i]][room] != address(0))
         return false;
       }
     return true;
@@ -194,21 +218,25 @@ contract BookingPoC is Ownable {
 
   /**
    * @dev Get the available rooms for certain nights
+   * @param roomType The room type that wants to be booked
    * @param _nights The nights to check availability
    * @return uint256 Array of the rooms available for that nights
    */
-  function roomsAvailable(uint256[] _nights) view public returns (uint256[]) {
+  function roomsAvailable(
+    string roomType, uint256[] _nights
+  ) view public returns (uint256[]) {
     require(_nights[i] <= totalNights);
-    uint256[] memory rooms = new uint256[](totalRooms);
-    for (uint z = 1; z <= totalRooms; z ++) {
-      rooms[z-1] = z;
+    uint256[] memory available = new uint256[](rooms[roomType].totalRooms);
+    for (uint z = 1; z <= rooms[roomType].totalRooms; z ++) {
+      available[z-1] = z;
       for (uint i = 0; i < _nights.length; i ++)
-        if (nights[_nights[i]][z] != address(0)) {
-          rooms[z-1] = 0;
+        if (rooms[roomType].nights[_nights[i]][z] != address(0)) {
+          available[z-1] = 0;
           break;
         }
     }
-    return rooms;
+    return available;
   }
+
 
 }
