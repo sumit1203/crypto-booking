@@ -46,16 +46,23 @@ contract('BookingPoC', function (accounts) {
 
     const offerTimestamp = parseInt(new Date().getTime() / 1000) - 1;
     const lifWeiPerNight = 100;
+    const bookingHash = web3.utils.sha3('ABC-123');
     const hashedMessage = web3.utils.soliditySha3(
       { type: 'string', value: 'basic' },
       { type: 'uint256', value: lifWeiPerNight },
       { type: 'uint256', value: offerTimestamp },
-      { type: 'string', value: 'lif' });
+      { type: 'string', value: 'lif' },
+      { type: 'bytes32', value: bookingHash }
+    );
     const offerSignature = await web3.eth.sign(hashedMessage, accounts[1]);
 
     await lifToken.approve(booking.address, 300, { from: accounts[3] });
 
-    await booking.bookWithLif(lifWeiPerNight, offerTimestamp, offerSignature, 'basic', [1, 2, 3], { from: accounts[3] });
+    await booking.bookWithLif(
+      lifWeiPerNight, offerTimestamp, offerSignature,
+      'basic', [1, 2, 3], bookingHash,
+      { from: accounts[3] }
+    );
     assert.equal(300, await lifToken.balanceOf(accounts[0]));
     assert.equal(false, await booking.roomAvailable('basic', [1, 2, 3], 1));
     roomsAvailable = await booking.roomsAvailable('basic', [1, 2, 3]);
@@ -79,15 +86,19 @@ contract('BookingPoC', function (accounts) {
 
     const offerTimestamp = parseInt(new Date().getTime() / 1000) - 1;
     const lifWeiPerNight = 100;
+    const bookingHash = web3.utils.sha3('ABC-123');
     const hashedMessage = web3.utils.soliditySha3(
       { type: 'string', value: 'basic' },
       { type: 'uint256', value: lifWeiPerNight },
       { type: 'uint256', value: offerTimestamp },
-      { type: 'string', value: 'eth' });
+      { type: 'string', value: 'eth' },
+      { type: 'bytes32', value: bookingHash }
+    );
     const offerSignature = await web3.eth.sign(hashedMessage, accounts[1]);
 
     await booking.bookWithEth(
-      lifWeiPerNight, offerTimestamp, offerSignature, 'basic', [1, 2, 3],
+      lifWeiPerNight, offerTimestamp, offerSignature,
+      'basic', [1, 2, 3], bookingHash,
       { from: accounts[3], value: 300 }
     );
 
