@@ -1,46 +1,15 @@
 # Crypto booking app
-[WIP]
 
-## App configuration
-### Install
-```bash
-$ npm i
-```
-#### Run
-Add an `.env` file corresponding to the current environment.
+The Crypto booking app is a simple web app that uses the Winding Tree services to enable bookings of a hotel rooms with
+Ether or Lif tokens payment. The web app works only with a specific hotel that has all his content published in a
+WT hotel index deployed on an ETH testnet network.
 
-Run server im production mode
-```bash
-$ npm run dev
+For mor info read the [docs](https://docs.google.com/document/d/1ERV07bu1K4tpnZh7aZhA4Z4MlDQteVH2TwDk5AvWM7w/edit?usp=sharing)
 
+## Smart contracts
+ Are located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking-app/tree/develop/smart-contracts)
+directory
 
-### Test
-#### Test env
-First step is add an `.env` file to `test/utils/`. Ex.
-
-```bash
-WHITELIST=11.22.33.44,55.66.77.88       # Optional
-SERVER_PORT=3001                        # Optional
-MAILGUN_API_KEY=long-random-secret-key
-MAILGUN_DOMAIN=some.domain.org
-MAILGUN_FROM_EMAIL=from@example.com
-MAILGUN_TO_EMAIL=to@example.com
-```
-
-## Dev
-### Dev .env
-Create a new `.env` file with the the following fields.
-
-```bash
-WHITELIST=11.22.33.44,55.66.77.88       # Optional
-SERVER_PORT=3001                        # Optional
-MAILGUN_API_KEY=long-random-secret-key
-MAILGUN_DOMAIN=some.domain.org
-MAILGUN_FROM_EMAIL=from@example.com
-```
-
-### Run
-Run server in develop mode
-```bash
-$ npm run dev
-```
+## Server
+ Are located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking-app/tree/develop/server)
+directory
