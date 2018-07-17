@@ -20,10 +20,14 @@ contract BookingPoC is Ownable {
 
   // A mapping of the rooms booked by night, it saves the guest address by
   // room/night
-  // RoomType => Night => Room => Guest
+  // RoomType => Night => Room => Booking
+  struct Booking {
+    address guest;
+    bytes32 bookingHash;
+  }
   struct RoomType {
     uint256 totalRooms;
-    mapping(uint256 => mapping(uint256 => address)) nights;
+    mapping(uint256 => mapping(uint256 => Booking)) nights;
   }
   mapping(string => RoomType) rooms;
 
@@ -34,11 +38,13 @@ contract BookingPoC is Ownable {
   ERC20 public lifToken;
 
   event BookingChanged(
-    string roomType, uint256[] nights, uint256 room, address newGuest
+    string roomType, uint256[] nights, uint256 room,
+    address newGuest, bytes32 bookingHash
   );
 
   event BookingDone(
-    string roomType, uint256[] nights, uint256 room, address guest
+    string roomType, uint256[] nights, uint256 room,
+    address guest, bytes32 bookingHash
   );
 
   event RoomsAdded(string roomType, uint256 newRooms);
@@ -90,11 +96,14 @@ contract BookingPoC is Ownable {
    * @param guest The address of the guest that will book the room
    */
   function bookRoom(
-    string roomType, uint256[] _nights, uint256 room, address guest
+    string roomType, uint256[] _nights, uint256 room,
+    address guest, bytes32 bookingHash
   ) internal {
-    for (uint i = 0; i < _nights.length; i ++)
-      rooms[roomType].nights[_nights[i]][room] = guest;
-    emit BookingDone(roomType, _nights, room, guest);
+    for (uint i = 0; i < _nights.length; i ++) {
+      rooms[roomType].nights[_nights[i]][room].guest = guest;
+      rooms[roomType].nights[_nights[i]][room].bookingHash = bookingHash;
+    }
+    emit BookingDone(roomType, _nights, room, guest, bookingHash);
   }
 
   /**
@@ -105,11 +114,14 @@ contract BookingPoC is Ownable {
    * @param guest The address of the guest that will book the room
    */
   function changeBooking(
-    string roomType, uint256[] _nights, uint256 room, address guest
+    string roomType, uint256[] _nights, uint256 room,
+    address guest, bytes32 bookingHash
   ) public onlyOwner {
-    for (uint i = 0; i < _nights.length; i ++)
-      rooms[roomType].nights[_nights[i]][room] = guest;
-    emit BookingChanged(roomType, _nights, room, guest);
+    for (uint i = 0; i < _nights.length; i ++) {
+      rooms[roomType].nights[_nights[i]][room].guest = guest;
+      rooms[roomType].nights[_nights[i]][room].bookingHash = bookingHash;
+    }
+    emit BookingChanged(roomType, _nights, room, guest, bookingHash);
   }
 
   /**
@@ -125,7 +137,8 @@ contract BookingPoC is Ownable {
     uint256 offerTimestamp,
     bytes offerSignature,
     string roomType,
-    uint256[] _nights
+    uint256[] _nights,
+    bytes32 bookingHash
   ) public payable {
     // Check that the offer is still valid
     require(offerTimestamp < now);
@@ -139,12 +152,12 @@ contract BookingPoC is Ownable {
 
     // Check the signer of the offer is the right address
     bytes32 priceSigned = keccak256(abi.encodePacked(
-      roomType, pricePerNight, offerTimestamp, "eth"
+      roomType, pricePerNight, offerTimestamp, "eth", bookingHash
     )).toEthSignedMessageHash();
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(roomType, _nights, available[0], msg.sender);
+    bookRoom(roomType, _nights, available[0], msg.sender, bookingHash);
 
     // Transfer the eth to the owner
     owner.transfer(msg.value);
@@ -163,7 +176,8 @@ contract BookingPoC is Ownable {
     uint256 offerTimestamp,
     bytes offerSignature,
     string roomType,
-    uint256[] _nights
+    uint256[] _nights,
+    bytes32 bookingHash
   ) public {
     // Check that the offer is still valid
     require(offerTimestamp < now);
@@ -178,12 +192,12 @@ contract BookingPoC is Ownable {
 
     // Check the signer of the offer is the right address
     bytes32 priceSigned = keccak256(abi.encodePacked(
-      roomType, pricePerNight, offerTimestamp, "lif"
+      roomType, pricePerNight, offerTimestamp, "lif", bookingHash
     )).toEthSignedMessageHash();
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(roomType, _nights, available[0], msg.sender);
+    bookRoom(roomType, _nights, available[0], msg.sender, bookingHash);
 
     // Transfer the lifTokens to the owner
     lifToken.transferFrom(msg.sender, owner, lifTokenAllowance);
@@ -210,7 +224,7 @@ contract BookingPoC is Ownable {
     require(room <= rooms[roomType].totalRooms);
     for (uint i = 0; i < _nights.length; i ++) {
       require(_nights[i] <= totalNights);
-      if (rooms[roomType].nights[_nights[i]][room] != address(0))
+      if (rooms[roomType].nights[_nights[i]][room].guest != address(0))
         return false;
       }
     return true;
@@ -230,7 +244,7 @@ contract BookingPoC is Ownable {
     for (uint z = 1; z <= rooms[roomType].totalRooms; z ++) {
       available[z-1] = z;
       for (uint i = 0; i < _nights.length; i ++)
-        if (rooms[roomType].nights[_nights[i]][z] != address(0)) {
+        if (rooms[roomType].nights[_nights[i]][z].guest != address(0)) {
           available[z-1] = 0;
           break;
         }
