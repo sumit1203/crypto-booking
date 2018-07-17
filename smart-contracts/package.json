@@ -10,7 +10,8 @@
     "lint": "eslint test",
     "testrpc": "./node_modules/.bin/ganache-cli",
     "deploy-mainnet": "./node_modules/.bin/truffle migrate --network mainnet --reset",
-    "deploy-ropsten": "./node_modules/.bin/truffle migrate --network ropsten --reset"
+    "deploy-ropsten": "./node_modules/.bin/truffle migrate --network ropsten --reset",
+    "contract-flattener": "node_modules/.bin/truffle-flattener contracts/BookingPoC.sol > build/BookingPocFlattened.sol"
   },
   "publishConfig": {
     "access": "public",
@@ -30,6 +31,7 @@
     "chai-as-promised": "^7.1.1",
     "ethereumjs-util": "^5.1.5",
     "moment": "^2.21.0",
+    "truffle-flattener": "^1.2.5",
     "truffle-hdwallet-provider": "0.0.3",
     "web3": "^1.0.0-beta.33",
     "zeppelin-solidity": "^1.8.0"
