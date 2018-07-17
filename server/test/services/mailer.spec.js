@@ -36,7 +36,7 @@ describe('Mail service', () => {
     }
   });
 
-  xit('Should send a confirmation email', async () => {
+  it('Should send a confirmation email', async () => {
     try {
       const data = {
         roomType: 'Room type 1',
@@ -52,11 +52,7 @@ describe('Mail service', () => {
       };
       await sendConfirmation(data, mailInfo);
     } catch (e) {
-      console.log(e);
       expect(false);
     }
-
   });
-
-
 });

@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-const BookingPoc = require('../../smart-contracts/build/contracts/BookingPoC.json')
+const BookingPoc = require('../../../smart-contracts/build/contracts/BookingPoC.json');
 
 const {
   sendConfirmation,
@@ -11,23 +11,28 @@ const {
 
 const secret = process.env.SECRET;
 const web3 = new Web3(process.env.WEB3_PROVIDER);
-const bookingPoc = web3.eth.Contract(BookingPoc.t_magic_abi, prcess.env.BOOKING_POC_ADDRESS);
 
-bookingPoc.events.BookingDone()
-.on('data', onBookingDoneData);
+const bookingPoc = new web3.eth.Contract(BookingPoc.abi, process.env.BOOKING_POC_ADDRESS);
 
-const onBookingDoneData = ({returnValues, transactionHash}) => {
-  const from = process.env.FROM;
+const onBookingDoneData = async ({returnValues, transactionHash}) => {
+  const from = process.env.MAILGUN_FROM_EMAIL;
   // TODO: We need to read the email from storage ...
-  const to = process.env.TO;
+  const to = process.env.MAILGUN_TO_EMAIL;
   const subject = 'ETHBerlin booking confirmation.';
   const dataString = `${returnValues}${transactionHash}`
   const secretCode = codeGenerator(dataString, secret);
-  sendConfirmation({
+  return sendConfirmation({
     ...returnValues,
     transactionHash,
-    secretCode
+    secretCode: await secretCode,
   },
   { from , to, subject });
   // TODO: Add logger here
 };
+
+bookingPoc.events.BookingDone()
+.on('data', onBookingDoneData);
+
+module.exports = {
+  onBookingDoneData,
+}

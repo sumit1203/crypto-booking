@@ -9,6 +9,7 @@ const sendRawEmail = async (from = process.env.MAILGUN_FROM_EMAIL, to, subject, 
   try {
     return mailgunClient.messages().send({ from, to, subject, html });
   } catch (e) {
+    // TODO: Handle errors
     throw e;
   }
 };
@@ -18,6 +19,7 @@ const sendConfirmation = async (data, { from , to, subject }) => {
     const html = confirmationBody(data)
     return mailgunClient.messages().send({ from, to, subject, html });
   } catch (e) {
+    // TODO: Handle errors
     throw e;
   }
 };
