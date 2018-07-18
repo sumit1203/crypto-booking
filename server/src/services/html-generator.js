@@ -1,5 +1,5 @@
-const testBody = (name) => {
-  const testHtml = `
+const confirmationBody = ({ roomType, nights, room, guest, bookingHash, secretCode}) => {
+  const confirmationHtml = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
   <head>
@@ -66,7 +66,11 @@ const testBody = (name) => {
                   <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                       <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                        Please ${name} confirm your email address by clicking the link below.
+                        Hey you, owner of ${guest}, have a ${roomType} for ${nights} nights. The room is ${room}.
+
+                        SECRET CODE IS : ${secretCode.slice(0,3)} ${secretCode.slice(3,6)} ${secretCode.slice(6)}. Keep it safe!
+
+                        The transaction hash is ${bookingHash}
                       </td>
                     </tr>
                   </table>
@@ -81,9 +85,10 @@ const testBody = (name) => {
 </html>
 `;
 
-  return testHtml;
+  return confirmationHtml;
 };
 
+
 module.exports = {
-  testBody,
+  confirmationBody,
 };
