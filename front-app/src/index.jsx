@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './components/App';
-import 'windingtree-ui/dist/styles.css';
+import 'windingtree-ui/src/css/app.scss';
 
 const render = (Component) => {
   ReactDOM.render(
