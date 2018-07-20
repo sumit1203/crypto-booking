@@ -21,7 +21,7 @@ const settings = {
   },
   output: {
     filename: '[name].[hash].js',
-    path: resolve(__dirname, '..', 'dist'),
+    path: resolve(__dirname, '..', 'public'),
   },
   module: {
     rules,

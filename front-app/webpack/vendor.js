@@ -5,8 +5,6 @@ const vendor = [
   'react-router',
   'react-virtualized',
   'react-hot-loader',
-  'lodash',
-  'moment',
   'react-loadable',
 ];
 
