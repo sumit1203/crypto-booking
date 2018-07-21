@@ -29,6 +29,7 @@ MAILGUN_FROM_EMAIL=from@example.com
 MAILGUN_TO_EMAIL=to@example.com
 WEB3_PROVIDER=https://ropsten.infura.io/v3/1234567890
 BOOKING_POC_ADDRESS=0x123...321
+MONGODB_URI=localhost/db-name
 ```
 
 ## Dev
@@ -44,6 +45,7 @@ MAILGUN_DOMAIN=some.domain.org
 MAILGUN_FROM_EMAIL=from@example.com
 WEB3_PROVIDER=https://ropsten.infura.io/v3/1234567890
 BOOKING_POC_ADDRESS=0x123...321
+MONGODB_URI=localhost/db-name
 ```
 
 ### Run dev mode

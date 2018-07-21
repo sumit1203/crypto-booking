@@ -5,6 +5,8 @@ const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
 
+require('./models');
+
 const app = express();
 app.use(bodyParser.json());
 app.use('/*', validateIPWhiteList);
