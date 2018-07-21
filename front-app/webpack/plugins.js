@@ -50,7 +50,8 @@ if (isProduction) {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new BundleAnalyzerPlugin({
-      analyzerMode: isProduction ? 'disabled' : 'static'
+      analyzerMode: isProduction ? 'disabled' : 'static',
+      openAnalyzer: false
     })
   );
 }
