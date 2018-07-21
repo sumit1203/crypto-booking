@@ -6,9 +6,9 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noPublicKey'],
   },
-  guestAddress: {
+  guestEthAddress: {
     type: String,
-    required: [true, 'noGuestAddress'],
+    required: [true, 'noGuestEthAddress'],
   },
   payment: {
     amount: {

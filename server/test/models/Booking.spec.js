@@ -4,7 +4,7 @@ const { expect, assert } = require('chai');
 const { Booking } = require('../../src/models/Booking');
 const validBooking = {
   publicKey: 'some public key',
-  guestAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
+  guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
   payment: {
     amount: 0.1,
     type: 'eth',
@@ -25,7 +25,7 @@ describe('Booking schema', () => {
     const validation = booking.validateSync();
     expect(validation).to.be.a('undefined');
     expect(booking).to.have.property('publicKey', validBooking.publicKey);
-    expect(booking).to.have.property('guestAddress', validBooking.guestAddress);
+    expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
     expect(booking).to.have.property('payment');
     expect(booking.payment).to.have.property('amount', validBooking.payment.amount);
     expect(booking.payment).to.have.property('type', validBooking.payment.type);
@@ -53,21 +53,21 @@ describe('Booking schema', () => {
     });
   });
 
-  describe('guestAddress', () => {
-    it('Should have the property guestAddress with type string', () => {
+  describe('guestEthAddress', () => {
+    it('Should have the property guestEthAddress with type string', () => {
       const booking = new Booking(validBooking);
-      booking.guestAddress = 123;
+      booking.guestEthAddress = 123;
       const validation = booking.validateSync();
       expect(validation).to.be.a('undefined');
-      expect(booking.guestAddress).to.be.a('string');
+      expect(booking.guestEthAddress).to.be.a('string');
     });
 
-    it('Should throw an error if guestAddress is not defined', () => {
+    it('Should throw an error if guestEthAddress is not defined', () => {
       const booking = new Booking(validBooking);
-      booking.guestAddress = '';
+      booking.guestEthAddress = '';
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'guestAddress');
-      expect(validation.errors.guestAddress).to.have.property('message', 'noGuestAddress');
+      basicValidationExpect(validation, 'guestEthAddress');
+      expect(validation.errors.guestEthAddress).to.have.property('message', 'noGuestEthAddress');
     });
   });
 

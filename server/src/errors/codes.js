@@ -14,10 +14,10 @@ module.exports = {
     short: 'API rate Limit Exceeded',
     long: 'The rate limit was exceeded. Please try later.',
   },
-  noGuestAddress: {
+  noGuestEthAddress: {
     status: 409,
-    short: 'No guest address provided.',
-    long: 'The field guestAddress is required.',
+    short: 'No guest Ethereum address provided.',
+    long: 'The field guestEthAddress is required.',
   },
   noPublicKey: {
     status: 409,
