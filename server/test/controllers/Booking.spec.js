@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const BookingModel = mongoose.model('Booking');
 const { Booking } = require('../../src/controllers/Booking');
-const { isHex } = require('../../src/utils/hex');
+const { utils } = require('web3');
 
 const validBooking = {
   publicKey: 'some public key',
@@ -29,7 +29,7 @@ const validBookingDB = {
     type: 'eth',
     tx: 'some tx',
   },
-  personalInfo: '7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
+  personalInfo: '0x7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
 };
 
 describe('Booking controller', () => {
@@ -70,7 +70,7 @@ describe('Booking controller', () => {
     const booking = await Booking.create(validBooking);
     const dbBooking = await BookingModel.findById(booking.id).exec();
     expect(dbBooking).to.be.an('object');
-    expect(isHex(dbBooking.personalInfo)).to.be.equal(true);
+    expect(utils.isHex(dbBooking.personalInfo)).to.be.equal(true);
     await BookingModel.remove({ _id: booking.id }).exec();
   });
   it('Should read a booking', async () => {

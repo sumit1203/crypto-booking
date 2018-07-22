@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
-const { isHex, encodeHex, decodeHex } = require('../utils/hex.js');
+const { utils } = require('web3');
 const { handleApplicationError } = require('../errors');
 
 class Booking {
@@ -48,17 +48,17 @@ class Booking {
   }
 
   get personalInfo () {
-    let decoded = decodeHex(this._personalInfo);
+    let decoded = utils.hexToString(this._personalInfo);
     return JSON.parse(decoded);
   }
 
   set personalInfo (value) {
-    if (isHex(value)) {
+    if (utils.isHex(value)) {
       this._personalInfo = value;
       return null;
     }
     value = JSON.stringify(value);
-    this._personalInfo = encodeHex(value);
+    this._personalInfo = utils.stringToHex(value);
   }
 
   /**
