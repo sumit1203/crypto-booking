@@ -33,10 +33,13 @@ const validBookingDB = {
 };
 
 describe('Booking controller', () => {
+  afterEach(async function () {
+    await BookingModel.remove({}).exec();
+  });
   after(() => {
     mongoose.connection.close();
   });
-  it('Should create a valid booking', async () => {
+  it('Should create a valid booking', async function () {
     validBooking.guestEthAddress = `0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e${Date.now()}`;
     const booking = await Booking.create(validBooking);
     expect(booking).to.be.an.instanceof(Booking);
@@ -52,7 +55,6 @@ describe('Booking controller', () => {
     expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
     expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
     expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
-    await BookingModel.remove({ _id: booking.id }).exec();
   });
 
   it('Should throw an error on creating an invalid booking', async () => {
@@ -71,7 +73,6 @@ describe('Booking controller', () => {
     const dbBooking = await BookingModel.findById(booking.id).exec();
     expect(dbBooking).to.be.an('object');
     expect(utils.isHex(dbBooking.personalInfo)).to.be.equal(true);
-    await BookingModel.remove({ _id: booking.id }).exec();
   });
   it('Should read a booking', async () => {
     validBooking.guestEthAddress = validBookingDB.guestEthAddress = `0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e${Date.now()}`;
@@ -91,7 +92,6 @@ describe('Booking controller', () => {
     expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
     expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
     expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
-    await BookingModel.remove({ _id: booking.id }).exec();
   });
 
   it('Should return null if the id not exists', async () => {
@@ -111,7 +111,6 @@ describe('Booking controller', () => {
     expect(booking2).to.be.an.instanceof(Booking);
     expect(booking2).to.have.property('personalInfo');
     expect(booking2.personalInfo).to.have.property('email', newPersonalInfo.email);
-    await BookingModel.remove({ _id: booking.id }).exec();
   });
 
   it('Should delete a booking', async () => {
