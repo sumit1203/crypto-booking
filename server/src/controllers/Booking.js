@@ -116,7 +116,6 @@ class Booking {
   * @return {Booking}
   */
   static async create (data) {
-    // TODO preprocess personalInfo
     const booking = new Booking(data);
     booking.paymentAmount = data.paymentAmount;
     booking.paymentType = data.paymentType;
