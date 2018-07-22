@@ -7,30 +7,7 @@ const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
 const { Booking } = require('../../src/controllers/Booking');
 const { utils } = require('web3');
-
-const validBooking = {
-  publicKey: 'some public key',
-  guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
-  paymentAmount: 0.1,
-  paymentType: 'eth',
-  personalInfo: {
-    name: 'Some name',
-    email: 'email@email.com',
-    birthday: '17/12/1987',
-    phone: '+11111111111',
-  },
-};
-
-const validBookingDB = {
-  publicKey: 'some public key',
-  guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
-  payment: {
-    amount: 0.1,
-    type: 'eth',
-    tx: 'some tx',
-  },
-  personalInfo: '0x7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
-};
+const { validBooking, validBookingDB } = require('../utils/test-data');
 
 describe('Booking controller', () => {
   afterEach(async function () {

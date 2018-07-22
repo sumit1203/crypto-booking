@@ -2,16 +2,7 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect, assert } = require('chai');
 const { Booking } = require('../../src/models/Booking');
-const validBooking = {
-  publicKey: 'some public key',
-  guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
-  payment: {
-    amount: 0.1,
-    type: 'eth',
-    tx: 'some tx',
-  },
-  personalInfo: 'some encrypted personal info',
-};
+const { validBookingDB } = require('../utils/test-data');
 
 function basicValidationExpect (validation, field) {
   expect(validation).to.have.property('errors');
@@ -19,23 +10,23 @@ function basicValidationExpect (validation, field) {
 }
 
 describe('Booking schema', () => {
-  it('Should generate no error using validBooking data', () => {
-    const booking = new Booking(validBooking);
+  it('Should generate no error using validBookingDB data', () => {
+    const booking = new Booking(validBookingDB);
     const validation = booking.validateSync();
     expect(validation).to.be.a('undefined');
-    expect(booking).to.have.property('publicKey', validBooking.publicKey);
-    expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
+    expect(booking).to.have.property('publicKey', validBookingDB.publicKey);
+    expect(booking).to.have.property('guestEthAddress', validBookingDB.guestEthAddress);
     expect(booking).to.have.property('payment');
-    expect(booking.payment).to.have.property('amount', validBooking.payment.amount);
-    expect(booking.payment).to.have.property('type', validBooking.payment.type);
-    expect(booking.payment).to.have.property('tx', validBooking.payment.tx);
+    expect(booking.payment).to.have.property('amount', validBookingDB.payment.amount);
+    expect(booking.payment).to.have.property('type', validBookingDB.payment.type);
+    expect(booking.payment).to.have.property('tx', validBookingDB.payment.tx);
     expect(booking).to.have.property('signatureTimestamp');
-    expect(booking).to.have.property('personalInfo', validBooking.personalInfo);
+    expect(booking).to.have.property('personalInfo', validBookingDB.personalInfo);
   });
 
   describe('publicKey', () => {
     it('Should have the property publicKey with type string', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       const newPublicKey = 'some new public key';
       booking.publicKey = newPublicKey;
       const validation = booking.validateSync();
@@ -44,7 +35,7 @@ describe('Booking schema', () => {
     });
 
     it('Should throw an error if publicKey is not defined', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.publicKey = '';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'publicKey');
@@ -54,7 +45,7 @@ describe('Booking schema', () => {
 
   describe('guestEthAddress', () => {
     it('Should have the property guestEthAddress with type string', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.guestEthAddress = 123;
       const validation = booking.validateSync();
       expect(validation).to.be.a('undefined');
@@ -62,7 +53,7 @@ describe('Booking schema', () => {
     });
 
     it('Should throw an error if guestEthAddress is not defined', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.guestEthAddress = '';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'guestEthAddress');
@@ -72,7 +63,7 @@ describe('Booking schema', () => {
 
   describe('payment amount', () => {
     it('Should have the property payment.amount with type number', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.payment.amount = 'asdas';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'payment.amount');
@@ -80,7 +71,7 @@ describe('Booking schema', () => {
     });
 
     it('Should throw an error if payment.amount is not defined', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.payment.amount = undefined;
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'payment.amount');
@@ -88,7 +79,7 @@ describe('Booking schema', () => {
     });
 
     it('Should throw an error if payment.amount equal or less than 0', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.payment.amount = 0;
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'payment.amount');
@@ -98,7 +89,7 @@ describe('Booking schema', () => {
 
   describe('payment type', () => {
     it('Should allow to set payment.type as "lif"', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.payment.type = 'lif';
       const validation = booking.validateSync();
       expect(validation).to.be.a('undefined');
@@ -106,7 +97,7 @@ describe('Booking schema', () => {
     });
 
     it('Should throw an error if payment.type is not "eth" or "lif"', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.payment.type = 'some invalid type';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'payment.type');
@@ -114,7 +105,7 @@ describe('Booking schema', () => {
     });
 
     it('Should throw an error if payment.type is not defined', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.payment.type = undefined;
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'payment.type');
@@ -124,7 +115,7 @@ describe('Booking schema', () => {
 
   describe('payment tx', () => {
     it('Should have the property payment.tx with type string', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       const newPaymentTx = 'some new payment tx';
       booking.payment.tx = newPaymentTx;
       const validation = booking.validateSync();
@@ -135,7 +126,7 @@ describe('Booking schema', () => {
 
   describe('signatureTimestamp', () => {
     it('Should have the property signatureTimestamp with type date', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.signatureTimestamp = 'asdas';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'signatureTimestamp');
@@ -145,7 +136,7 @@ describe('Booking schema', () => {
 
   describe('personalInfo', () => {
     it('Should have the property personalInfo with type string', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       const newPersonalInfo = 'some new payment tx';
       booking.personalInfo = newPersonalInfo;
       const validation = booking.validateSync();
@@ -154,7 +145,7 @@ describe('Booking schema', () => {
     });
 
     it('Should throw an error if personalInfo is not defined', () => {
-      const booking = new Booking(validBooking);
+      const booking = new Booking(validBookingDB);
       booking.personalInfo = '';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'personalInfo');
