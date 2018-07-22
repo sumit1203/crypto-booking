@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const SIGNATURE_LIMIT = 30;
 
 const Booking = new Schema({
   publicKey: {
@@ -8,6 +9,7 @@ const Booking = new Schema({
   },
   guestEthAddress: {
     type: String,
+    unique: true,
     required: [true, 'noGuestEthAddress'],
   },
   payment: {
@@ -28,11 +30,13 @@ const Booking = new Schema({
     },
     tx: {
       type: String,
-      required: [true, 'noPaymentTx'],
     },
   },
   signatureTimestamp: {
-    type: Number,
+    type: Date,
+    default: function () {
+      return Date.now() + SIGNATURE_LIMIT * 60 * 1000;
+    },
     required: [true, 'noSignatureTimestamp'],
   },
   personalInfo: {

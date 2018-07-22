@@ -10,7 +10,6 @@ const validBooking = {
     type: 'eth',
     tx: 'some tx',
   },
-  signatureTimestamp: 1532196084,
   personalInfo: 'some encrypted personal info',
 };
 
@@ -30,7 +29,7 @@ describe('Booking schema', () => {
     expect(booking.payment).to.have.property('amount', validBooking.payment.amount);
     expect(booking.payment).to.have.property('type', validBooking.payment.type);
     expect(booking.payment).to.have.property('tx', validBooking.payment.tx);
-    expect(booking).to.have.property('signatureTimestamp', validBooking.signatureTimestamp);
+    expect(booking).to.have.property('signatureTimestamp');
     expect(booking).to.have.property('personalInfo', validBooking.personalInfo);
   });
 
@@ -132,31 +131,15 @@ describe('Booking schema', () => {
       expect(validation).to.be.a('undefined');
       expect(booking.payment.tx).to.be.equal(newPaymentTx);
     });
-
-    it('Should throw an error if payment.tx is not defined', () => {
-      const booking = new Booking(validBooking);
-      booking.payment.tx = '';
-      const validation = booking.validateSync();
-      basicValidationExpect(validation, 'payment.tx');
-      expect(validation.errors['payment.tx']).to.have.property('message', 'noPaymentTx');
-    });
   });
 
   describe('signatureTimestamp', () => {
-    it('Should have the property signatureTimestamp with type number', () => {
+    it('Should have the property signatureTimestamp with type date', () => {
       const booking = new Booking(validBooking);
       booking.signatureTimestamp = 'asdas';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'signatureTimestamp');
-      assert.match(validation.errors.signatureTimestamp.message, /cast to number/i);
-    });
-
-    it('Should throw an error if signatureTimestamp is not defined', () => {
-      const booking = new Booking(validBooking);
-      booking.signatureTimestamp = '';
-      const validation = booking.validateSync();
-      basicValidationExpect(validation, 'signatureTimestamp');
-      expect(validation.errors.signatureTimestamp).to.have.property('message', 'noSignatureTimestamp');
+      assert.match(validation.errors.signatureTimestamp.message, /cast to date/i);
     });
   });
 
