@@ -86,7 +86,7 @@ class Booking {
             payment: this._payment,
             personalInfo: this._personalInfo,
           },
-        }, { upsert: true, new: true }).exec();
+        }).exec();
     } catch (e) {
       const firstKeyError = Object.keys(e.errors)[0];
       const firstError = e.errors[firstKeyError];

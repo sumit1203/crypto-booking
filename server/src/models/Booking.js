@@ -35,7 +35,7 @@ const Booking = new Schema({
   signatureTimestamp: {
     type: Date,
     default: function () {
-      return Date.now() + SIGNATURE_LIMIT * 60 * 1000;
+      return Date.now() - SIGNATURE_LIMIT * 60 * 1000;
     },
     required: [true, 'noSignatureTimestamp'],
   },
