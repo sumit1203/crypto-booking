@@ -5,7 +5,7 @@ export default class CollaborationSection extends React.Component {
   render() {
 
     return (
-      <article className="section-wrapper py-4 bg-light"
+      <article className="section-wrapper py-5 bg-light"
       style={{
         backgroundImage: 'url(https://windingtree.com/assets/img/banners/lif-token-bg.svg)',
         backgroundPosition: 'right center, left center',
@@ -15,11 +15,9 @@ export default class CollaborationSection extends React.Component {
       }}>
         <div className="container">
             <div className="row">
-              <div className="col-4 col-md-8 col-lg-12">
-                <p className="mb-2 lead  pr-5">
-                  Winding Tree provides ETH Berlin accomodation services together with our partner Botique Hotel i31.
-                  We offer hackers and engineers a discount of 20% if paying by <b><a href="/">Lif tokens</a></b>.
-                </p>
+              <div className="col-4 col-md-8 col-lg-12  pr-5 lead">
+                <p className="mb-1 mt-1">Winding Tree provides ETH Berlin accomodation services together with our partner Botique Hotel i31.</p>
+                <p className="mb-1"><b>We offer hackers and engineers a discount of 20% if paying by <a href="/">Lif tokens</a></b>.</p>
               </div>
             </div>
           </div>
