@@ -1,9 +1,12 @@
 import React from 'react';
+import RoomBooking from './RoomBooking';
 
-const BookingSection = () => (
-  <div>
-      Booking
-  </div>
-);
+class BookingSection extends React.Component {
+  render() {
+    return (
+      <RoomBooking />
+    );
+  }
+}
 
 export default BookingSection;

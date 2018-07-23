@@ -1,5 +1,6 @@
 const { resolve, join } = require('path');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -24,6 +25,7 @@ const cleanOptions = {
 };
 
 const plugins = [
+  new Dotenv(),
   new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new HtmlWebpackPlugin({

@@ -7,6 +7,7 @@ import CollaborationSection from '../components/CollaborationSection';
 import BookingSection from '../components/BookingSection';
 import LifSection from '../components/LifSection';
 import Navbar from '../components/Navbar';
+import RoomsSection from '../components/RoomsSection';
 
 const Home = () => (
   <div>
@@ -14,6 +15,7 @@ const Home = () => (
     <HeroSection />
     <CollaborationSection />
     <HotelSection />
+    <RoomsSection />
     <BookingSection />
     <LifSection />
     <LearnMoreSection />
