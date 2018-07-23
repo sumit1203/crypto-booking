@@ -1,5 +1,7 @@
 const { join } = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const precss = require('precss');
+const postcssCssnext = require('postcss-cssnext');
 
 const rules = [{
   test: /.jsx?$/,
@@ -15,9 +17,18 @@ const rules = [{
         sourceMap: true,
         importLoaders: 2,
       },
-    }, {
+    },           {
       loader: 'postcss-loader',
-    }, {
+      options: {
+        sourceMap: true,
+        plugins() {
+          return [
+            precss,
+            postcssCssnext,
+          ];
+        },
+      }
+    },{
       loader: 'sass-loader',
       options: {
         sourceMap: true,
@@ -34,8 +45,17 @@ const rules = [{
       sourceMap: true,
       importLoaders: 2,
     },
-  }, {
+  },{
     loader: 'postcss-loader',
+    options: {
+      sourceMap: true,
+      plugins() {
+        return [
+          precss,
+          postcssCssnext,
+        ];
+      },
+    }
   }],
 }, {
   test: /\.(woff2|woff|ttf|eot|svg)(\?.*$|$)/,
@@ -45,7 +65,7 @@ const rules = [{
     join(__dirname, 'node_modules'),
   ],
 }, {
-  test: /\.(jpg|jpeg|gif|png|ico)(\?.*$|$)$/,
+  test: /\.(jpg|jpeg|gif|png|ico|svg)(\?.*$|$)$/,
   loader: 'file-loader?name=img/[name].[ext]',
   include: [
     join(__dirname, 'src'),
