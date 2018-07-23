@@ -5,13 +5,15 @@ const { handleApplicationError } = require('../errors');
 const { toPlainObject } = require('../utils/classHelper');
 
 class Booking {
-  constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo }) {
+  constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo, roomType, nights }) {
     this.id = _id;
     this.publicKey = publicKey;
     this.guestEthAddress = guestEthAddress;
     this._payment = payment || {};
     this._signatureTimestamp = signatureTimestamp;
     this.personalInfo = personalInfo;
+    this.roomType = roomType;
+    this.nights = nights;
   }
 
   get paymentTx () {
@@ -72,6 +74,8 @@ class Booking {
           guestEthAddress: this.guestEthAddress,
           payment: this._payment,
           personalInfo: this._personalInfo,
+          nights: this.nights,
+          roomType: this.roomType,
         });
         this._signatureTimestamp = dbModel.signatureTimestamp;
         this.id = dbModel.id;
@@ -85,6 +89,8 @@ class Booking {
             guestEthAddress: this.guestEthAddress,
             payment: this._payment,
             personalInfo: this._personalInfo,
+            nights: this.nights,
+            roomType: this.roomType,
           },
         }).exec();
     } catch (e) {

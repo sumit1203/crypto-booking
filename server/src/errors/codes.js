@@ -64,4 +64,19 @@ module.exports = {
     short: 'Duplicate booking.',
     long: 'Only one booking per guest eth address is allowed.',
   },
+  nigthsOutOfRange: {
+    status: 409,
+    short: 'Nigths out of range.',
+    long: 'Nights must be an array with number between 1 an 4. ie: [1,2,3,4].',
+  },
+  noNights: {
+    status: 409,
+    short: 'No nights provided.',
+    long: 'Nights is required.',
+  },
+  noRoomType: {
+    status: 409,
+    short: 'No room type provided.',
+    long: 'The roomType is required.',
+  },
 };
