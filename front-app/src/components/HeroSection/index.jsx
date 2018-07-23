@@ -8,8 +8,8 @@ export default class HeroSection extends React.Component {
   render() {
 
     return (
-      <article className="mb-2">
-        <div className="section-wrapper bg--gradient">
+      <article>
+        <div className="section-wrapper py-5 bg--gradient">
           <div className="container">
             <div className="index-banner__inner text-center">
               <div className="row justify-content-md-center">
@@ -29,11 +29,15 @@ export default class HeroSection extends React.Component {
           </div>
         </div>
         <a className="bg-white block-shadow d-block"  style={{padding: '16px 0 14px 0'}} href="https://ethberlin.com" title="Visit the oficial website.">
+          <div className="container">
           <div className="row">
             <div className="col text-center">
-              <img src={LogoEB} width="150" alt="ETH Berlin" style={{position: 'relative', top: -4}} className="mr-1"/>
-              <span className="h5 mr-1"><b>Berlin, Germany</b></span>
+              <img src={LogoEB} width="150" alt="ETH Berlin" style={{position: 'relative', top: -4}}/>
+              <span className="mx-1 h5">•</span>
+              <span className="h5"><b>Berlin, Germany</b></span>
+              <span className="mx-1 h5">•</span>
               <span className="h5">September 7-9, 2018</span>
+            </div>
             </div>
           </div>
         </a>
