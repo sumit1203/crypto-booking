@@ -8,19 +8,17 @@ const { validBooking, validBookingDB } = require('../utils/test-data');
 const apiUrl = `http://localhost:${process.env.SERVER_PORT}/api`;
 let server;
 let BookingModel;
+before(async () => {
+  server = await require('../../src/index.js');
+  BookingModel = mongoose.model('Booking');
+});
+after(async () => {
+  await server.close();
+  await mongoose.connection.close();
+});
 describe('Booking API', () => {
-  before(async () => {
-    server = await require('../../src/index.js');
-    BookingModel = mongoose.model('Booking');
-  });
-
   afterEach(async function () {
     await BookingModel.remove({}).exec();
-  });
-
-  after(async () => {
-    await server.close();
-    await mongoose.connection.close();
   });
 
   describe('POST /api/booking', () => {
