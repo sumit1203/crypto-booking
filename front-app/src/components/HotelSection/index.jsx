@@ -12,7 +12,8 @@ class HotelContainer extends React.Component {
   async componentDidMount() {
     try {
       const response = await fetch(process.env.HOTEL_URL);
-      this.setState({ isLoading: false, hotelData: response.json() });
+      const hotelData = await response.json();
+      this.setState({ isLoading: false, hotelData });
     } catch (e) {
       this.setState({ isLoading: true });
       console.error(e);
