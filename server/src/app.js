@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
-
 require('./models');
+const routes = require('./routes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,6 +20,9 @@ app.get('/', (req, res) => {
   };
   res.status(200).json(response);
 });
+
+// API routes
+app.use('/api', routes);
 
 // 404 handler
 app.use('*', (req, res) => {
