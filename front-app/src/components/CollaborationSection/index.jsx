@@ -1,9 +1,31 @@
 import React from 'react';
 
-const CollaborationSection = () => (
-  <div>
-    Collaboration
-  </div>
-);
+export default class CollaborationSection extends React.Component {
 
-export default CollaborationSection;
+  render() {
+
+    return (
+      <article className="section-wrapper py-4 bg-light"
+      style={{
+        backgroundImage: 'url(https://windingtree.com/assets/img/banners/lif-token-bg.svg)',
+        backgroundPosition: 'right center, left center',
+        backgroundRepeat: 'no-repeat, no-repeat',
+        backgroundSize: 'contain, auto',
+        boxShadow: '0 5px 30px rgba(0,0,0,.05) inset'
+      }}>
+        <div className="container">
+            <div className="row">
+              <div className="col-4 col-md-8 col-lg-12">
+                <p className="mb-2 lead  pr-5">
+                  Winding Tree provides ETH Berlin accomodation services together with our partner Botique Hotel i31.
+                  We offer hackers and engineers a discount of 20% if paying by <b><a href="/">Lif tokens</a></b>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+      </article>
+    );
+  }
+
+}
