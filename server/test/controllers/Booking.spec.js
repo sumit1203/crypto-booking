@@ -8,14 +8,15 @@ const BookingModel = mongoose.model('Booking');
 const { Booking } = require('../../src/controllers/Booking');
 const { utils } = require('web3');
 const { validBooking, validBookingDB } = require('../utils/test-data');
+after(() => {
+  mongoose.connection.close();
+});
 
 describe('Booking controller', () => {
   afterEach(async function () {
     await BookingModel.remove({}).exec();
   });
-  after(() => {
-    mongoose.connection.close();
-  });
+
   it('Should create a valid booking', async function () {
     validBooking.guestEthAddress = `0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e${Date.now()}`;
     const booking = await Booking.create(validBooking);
