@@ -183,36 +183,69 @@ describe('Booking schema', () => {
     });
   });
 
-  describe('nights', () => {
-    it('Should allow to set nights with array of numbers between 1 an 4', () => {
+  describe('from', () => {
+    it('Should allow to set from as a number between 1 an 4', () => {
       const booking = new Booking(validBookingDB);
       let validation = booking.validateSync();
       expect(validation).to.be.a('undefined');
-      expect(booking.nigths).to.be.equal(validBookingDB.nigths);
+      expect(booking.from).to.be.equal(validBookingDB.from);
     });
 
-    it('Should throw an error if nights has a number greater than 4', () => {
+    it('Should throw an error if from has a number greater than 4', () => {
       const booking = new Booking(validBookingDB);
-      booking.nights = [1, 2, 5];
+      booking.from = 5;
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'nights');
-      expect(validation.errors.nights).to.have.property('message', 'nigthsOutOfRange');
+      basicValidationExpect(validation, 'from');
+      expect(validation.errors.from).to.have.property('message', 'fromOutOfRange');
     });
 
-    it('Should throw an error if nights has a number less than 1', () => {
+    it('Should throw an error if from has a number less than 1', () => {
       const booking = new Booking(validBookingDB);
-      booking.nights = [0, 2, 3];
+      booking.from = 0;
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'nights');
-      expect(validation.errors.nights).to.have.property('message', 'nigthsOutOfRange');
+      basicValidationExpect(validation, 'from');
+      expect(validation.errors.from).to.have.property('message', 'fromOutOfRange');
     });
 
-    it('Should throw an error if personalInfo is not defined', () => {
+    it('Should throw an error if from is not defined', () => {
       const booking = new Booking(validBookingDB);
-      booking.nights = undefined;
+      booking.from = undefined;
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'nights');
-      expect(validation.errors.nights).to.have.property('message', 'noNights');
+      basicValidationExpect(validation, 'from');
+      expect(validation.errors.from).to.have.property('message', 'noFrom');
+    });
+  });
+  describe('to', () => {
+    it('Should allow to set "to" as a number between 1 an 4', () => {
+      const booking = new Booking(validBookingDB);
+      let validation = booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking.to).to.be.equal(validBookingDB.to);
+    });
+
+    it('Should throw an error if "to" has a number greater than 4', () => {
+      const booking = new Booking(validBookingDB);
+      booking.to = 5;
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'to');
+      expect(validation.errors.to).to.have.property('message', 'toOutOfRange');
+    });
+
+    it('Should throw an error if "to" has a number less than the to prop', () => {
+      const booking = new Booking(validBookingDB);
+      booking.to = 1;
+      booking.from = 2;
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'to');
+      expect(validation.errors.to).to.have.property('message', 'toOutOfRange');
+    });
+
+    it('Should throw an error if "to" is not defined', () => {
+      const booking = new Booking(validBookingDB);
+      booking.to = undefined;
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'to');
+      expect(validation.errors.to).to.have.property('message', 'noTo');
     });
   });
 });

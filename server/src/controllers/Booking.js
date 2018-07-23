@@ -5,7 +5,7 @@ const { handleApplicationError } = require('../errors');
 const { toPlainObject } = require('../utils/classHelper');
 
 class Booking {
-  constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo, roomType, nights }) {
+  constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo, roomType, to, from }) {
     this.id = _id;
     this.publicKey = publicKey;
     this.guestEthAddress = guestEthAddress;
@@ -13,7 +13,8 @@ class Booking {
     this._signatureTimestamp = signatureTimestamp;
     this.personalInfo = personalInfo;
     this.roomType = roomType;
-    this.nights = nights;
+    this.to = to;
+    this.from = from;
   }
 
   get paymentTx () {
@@ -68,15 +69,17 @@ class Booking {
   */
   async save () {
     try {
+      const data = {
+        publicKey: this.publicKey,
+        guestEthAddress: this.guestEthAddress,
+        payment: this._payment,
+        personalInfo: this._personalInfo,
+        to: this.to,
+        from: this.from,
+        roomType: this.roomType,
+      };
       if (!this.id) {
-        const dbModel = await BookingModel.create({
-          publicKey: this.publicKey,
-          guestEthAddress: this.guestEthAddress,
-          payment: this._payment,
-          personalInfo: this._personalInfo,
-          nights: this.nights,
-          roomType: this.roomType,
-        });
+        const dbModel = await BookingModel.create(data);
         this._signatureTimestamp = dbModel.signatureTimestamp;
         this.id = dbModel.id;
 
@@ -84,14 +87,7 @@ class Booking {
       }
       await BookingModel.update({ _id: this.id },
         {
-          $set: {
-            publicKey: this.publicKey,
-            guestEthAddress: this.guestEthAddress,
-            payment: this._payment,
-            personalInfo: this._personalInfo,
-            nights: this.nights,
-            roomType: this.roomType,
-          },
+          $set: data,
         }).exec();
     } catch (e) {
       if (!e.errors) {

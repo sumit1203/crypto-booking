@@ -48,15 +48,25 @@ const Booking = new Schema({
     enum: ['double', 'twin'],
     required: [true, 'noRoomType'],
   },
-  nights: {
-    type: [Number],
+  from: {
+    type: Number,
     validate: {
-      validator: function (nights) {
-        return !nights.some(n => n === null || n < 1 || n > 4);
+      validator: function (from) {
+        return from > 0 && from < 5;
       },
-      message: 'nigthsOutOfRange',
+      message: 'fromOutOfRange',
     },
-    required: [true, 'noNights'],
+    required: [true, 'noFrom'],
+  },
+  to: {
+    type: Number,
+    validate: {
+      validator: function (to) {
+        return to > this.from && to < 5;
+      },
+      message: 'toOutOfRange',
+    },
+    required: [true, 'noTo'],
   },
 });
 

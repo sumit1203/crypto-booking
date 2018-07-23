@@ -111,7 +111,8 @@ const validBooking = {
     phone: '+11111111111',
   },
   roomType: 'double',
-  nights: [1, 2, 3, 4],
+  from: 1,
+  to: 4,
 };
 
 const validBookingDB = {
@@ -124,7 +125,8 @@ const validBookingDB = {
   },
   personalInfo: '0x7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
   roomType: 'double',
-  nights: [1, 2, 3, 4],
+  from: 1,
+  to: 4,
 };
 
 module.exports = {
