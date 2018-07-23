@@ -33,6 +33,9 @@ describe('Booking controller', () => {
     expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
     expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
     expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
+    expect(booking).to.have.property('roomType', validBooking.roomType);
+    expect(booking).to.have.property('to', validBooking.to);
+    expect(booking).to.have.property('from', validBooking.from);
   });
 
   it('Should throw an error on creating an invalid booking', async () => {
@@ -70,6 +73,9 @@ describe('Booking controller', () => {
     expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
     expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
     expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
+    expect(booking).to.have.property('roomType', validBooking.roomType);
+    expect(booking).to.have.property('to', validBooking.to);
+    expect(booking).to.have.property('from', validBooking.from);
   });
 
   it('Should return null if the id not exists', async () => {
