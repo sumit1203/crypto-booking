@@ -43,10 +43,6 @@ class Booking {
     return Math.round(this._signatureTimestamp.getTime() / 1000);
   }
 
-  set signatureTimestamp (value) {
-    // avoid to set signatureTimestamp from ouside
-  }
-
   get personalInfo () {
     let decoded = utils.hexToString(this._personalInfo);
     return JSON.parse(decoded);
