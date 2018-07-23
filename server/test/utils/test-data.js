@@ -87,6 +87,18 @@ background-color: #f6f6f6;
   return testHtml;
 };
 
+class ToPlainObjectTestClass {
+  constructor () {
+    this.name = 'some name';
+    this._email = 'some@email.com';
+  }
+  get email () {
+    return this._email;
+  }
+  save () {
+  }
+}
+
 const validBooking = {
   publicKey: 'some public key',
   guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
@@ -115,4 +127,5 @@ module.exports = {
   testHtmlBody,
   validBooking,
   validBookingDB,
+  ToPlainObjectTestClass,
 };

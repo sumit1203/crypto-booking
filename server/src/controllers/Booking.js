@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
 const { utils } = require('web3');
 const { handleApplicationError } = require('../errors');
+const { toPlainObject } = require('../utils/classHelper');
 
 class Booking {
   constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo }) {
@@ -49,6 +50,9 @@ class Booking {
   }
 
   set personalInfo (value) {
+    if (!value) {
+      return;
+    }
     if (utils.isHex(value)) {
       this._personalInfo = value;
       return null;
@@ -84,6 +88,12 @@ class Booking {
           },
         }).exec();
     } catch (e) {
+      if (!e.errors) {
+        if (e.code === 11000) {
+          throw handleApplicationError('duplicateBooking');
+        }
+        throw handleApplicationError(e);
+      }
       const firstKeyError = Object.keys(e.errors)[0];
       const firstError = e.errors[firstKeyError];
       switch (firstError.name) {
@@ -106,6 +116,9 @@ class Booking {
     return BookingModel.remove({ _id: this.id }).exec();
   }
 
+  toPlainObject () {
+    return toPlainObject(this);
+  }
   /**
   * Creates a new Booking in the db and returns an instance of Booking
   * @param {Object} {publicKey, guestEthAddress, payment, personalInfo}
