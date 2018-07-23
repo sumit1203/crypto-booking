@@ -11,19 +11,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/*', validateIPWhiteList);
 
-// Error handler
-app.use((err, req, res) => {
-  if (!err.code) {
-    err = handleApplicationError('genericError', err);
-  }
-  res.status(err.status).json({
-    status: err.status,
-    code: err.code,
-    short: err.short,
-    long: err.long,
-  });
-});
-
 // Root handler
 app.get('/', (req, res) => {
   const response = {
@@ -41,6 +28,19 @@ app.use('*', (req, res) => {
     code: '#notFound',
     short: 'Page not found',
     long: 'This endpoint does not exist',
+  });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  if (!err.code) {
+    err = handleApplicationError('genericError', err);
+  }
+  res.status(err.status).json({
+    status: err.status,
+    code: err.code,
+    short: err.short,
+    long: err.long,
   });
 });
 

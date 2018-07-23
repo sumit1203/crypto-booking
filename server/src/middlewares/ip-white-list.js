@@ -1,7 +1,7 @@
 const { handleApplicationError } = require('../errors');
 
 const validateIPWhiteList = function (req, res, next) {
-  const whiteList = process.env.WHITELIST.split('1');
+  const whiteList = process.env.WHITELIST.split(',');
   if (!whiteList.length) {
     return next();
   }
@@ -10,7 +10,6 @@ const validateIPWhiteList = function (req, res, next) {
             req.connection.remoteAddress ||
             req.socket.remoteAddress ||
             req.connection.socket.remoteAddress;
-
   if (ip.substr(0, 7) === '::ffff:') {
     ip = ip.substr(7);
   }
