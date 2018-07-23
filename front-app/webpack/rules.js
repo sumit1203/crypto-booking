@@ -67,10 +67,6 @@ const rules = [{
 }, {
   test: /\.(jpg|jpeg|gif|png|ico|svg)(\?.*$|$)$/,
   loader: 'file-loader?name=img/[name].[ext]',
-  include: [
-    join(__dirname, 'src'),
-    join(__dirname, 'node_modules'),
-  ],
 }];
 
 module.exports = rules;
