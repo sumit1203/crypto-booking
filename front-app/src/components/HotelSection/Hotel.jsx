@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Description = () => (
+const Hotel = () => (
   <div>
       Hotel Description
   </div>
 );
 
-export default Description;
+export default Hotel;

@@ -1,5 +1,5 @@
 import React from 'react';
-import Description from './Description';
+import Hotel from './Hotel';
 
 class HotelContainer extends React.Component {
   constructor(props) {
@@ -10,19 +10,25 @@ class HotelContainer extends React.Component {
   }
 
   async componentDidMount() {
-    // TODO here get data form server :(hotel description, rooms(description, price, isAvailable))
-    const response = await (new Promise());
-    this.setState({ isLoading: false, hotelData: response });
+    try {
+      const response = await fetch(process.env.HOTEL_URL);
+      this.setState({ isLoading: false, hotelData: response.json() });
+    } catch (e) {
+      this.setState({ isLoading: true });
+      console.error(e);
+    }
   }
 
   render() {
     const { hotelData, isLoading } = this.state;
     if (isLoading) return null; // TODO here should be some Loading component
     return (
-      <div>
-        <Description description={hotelData.description} />
-        {/* TODO rooms should be rendered here */}
-      </div>
+      <Hotel
+        name={hotelData.name}
+        description={hotelData.description}
+        location={hotelData.location}
+        url={hotelData.contacts.url}
+      />
     );
   }
 }
