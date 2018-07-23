@@ -85,9 +85,21 @@ background-color: #f6f6f6;
 `;
 
   return testHtml;
-}
+};
 
+class ToPlainObjectTestClass {
+  constructor () {
+    this.name = 'some name';
+    this._email = 'some@email.com';
+  }
+  get email () {
+    return this._email;
+  }
+  save () {
+  }
+}
 
 module.exports = {
   testHtmlBody,
+  ToPlainObjectTestClass,
 };
