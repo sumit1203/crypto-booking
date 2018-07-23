@@ -32,17 +32,17 @@ module.exports = {
   noPaymentAmount: {
     status: 409,
     short: 'No payment amount provided.',
-    long: 'The payment.amount is required.',
+    long: 'The paymentAmount is required.',
   },
   noPaymentType: {
     status: 409,
     short: 'No payment type provided.',
-    long: 'The payment.type is required.',
+    long: 'The paymentType is required.',
   },
   noPaymentTx: {
     status: 409,
     short: 'No payment tx provided.',
-    long: 'The payment.tx is required.',
+    long: 'The paymentTx is required.',
   },
   noSignatureTimestamp: {
     status: 409,
@@ -53,5 +53,10 @@ module.exports = {
     status: 409,
     short: 'No personal information provided.',
     long: 'The personalInfo is required.',
+  },
+  duplicateBooking: {
+    status: 409,
+    short: 'Duplicate booking.',
+    long: 'Only one booking per guest eth address is allowed.',
   },
 };
