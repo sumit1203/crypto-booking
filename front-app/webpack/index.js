@@ -26,9 +26,12 @@ const settings = {
   module: {
     rules,
   },
+  mode: process.env.NODE_ENV,
   plugins,
   devServer,
   devtool,
 };
 
 module.exports = settings;
+
+
