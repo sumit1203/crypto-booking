@@ -43,6 +43,21 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noPersonalInfo'],
   },
+  roomType: {
+    type: String,
+    enum: ['double', 'twin'],
+    required: [true, 'noRoomType'],
+  },
+  nights: {
+    type: [Number],
+    validate: {
+      validator: function (nights) {
+        return !nights.some(n => n === null || n < 1 || n > 4);
+      },
+      message: 'nigthsOutOfRange',
+    },
+    required: [true, 'noNights'],
+  },
 });
 
 module.exports = { Booking: mongoose.model('Booking', Booking) };

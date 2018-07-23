@@ -152,4 +152,67 @@ describe('Booking schema', () => {
       expect(validation.errors.personalInfo).to.have.property('message', 'noPersonalInfo');
     });
   });
+
+  describe('roomType', () => {
+    it('Should allow to set roomType as "double" and "twin"', () => {
+      const booking = new Booking(validBookingDB);
+      booking.roomType = 'double';
+      let validation = booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking.roomType).to.be.equal('double');
+      booking.roomType = 'twin';
+      validation = booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking.roomType).to.be.equal('twin');
+    });
+
+    it('Should throw an error if roomType is not "double" or "twin"', () => {
+      const booking = new Booking(validBookingDB);
+      booking.roomType = 'some other room';
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'roomType');
+      expect(validation.errors.roomType).to.have.property('kind', 'enum');
+    });
+
+    it('Should throw an error if personalInfo is not defined', () => {
+      const booking = new Booking(validBookingDB);
+      booking.roomType = '';
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'roomType');
+      expect(validation.errors.roomType).to.have.property('message', 'noRoomType');
+    });
+  });
+
+  describe('nights', () => {
+    it('Should allow to set nights with array of numbers between 1 an 4', () => {
+      const booking = new Booking(validBookingDB);
+      let validation = booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking.nigths).to.be.equal(validBookingDB.nigths);
+    });
+
+    it('Should throw an error if nights has a number greater than 4', () => {
+      const booking = new Booking(validBookingDB);
+      booking.nights = [1, 2, 5];
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'nights');
+      expect(validation.errors.nights).to.have.property('message', 'nigthsOutOfRange');
+    });
+
+    it('Should throw an error if nights has a number less than 1', () => {
+      const booking = new Booking(validBookingDB);
+      booking.nights = [0, 2, 3];
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'nights');
+      expect(validation.errors.nights).to.have.property('message', 'nigthsOutOfRange');
+    });
+
+    it('Should throw an error if personalInfo is not defined', () => {
+      const booking = new Booking(validBookingDB);
+      booking.nights = undefined;
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'nights');
+      expect(validation.errors.nights).to.have.property('message', 'noNights');
+    });
+  });
 });
