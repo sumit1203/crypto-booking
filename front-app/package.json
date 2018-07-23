@@ -22,6 +22,7 @@
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "cssnano": "^4.0.2",
+    "dotenv-webpack": "^1.5.7",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
@@ -51,7 +52,8 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-virtualized": "^9.20.1",
-    "serve": "^9.2.0"
+    "serve": "^9.2.0",
+    "web3": "^1.0.0-beta.34"
   },
   "now": {
     "name": "crypto-booking",
