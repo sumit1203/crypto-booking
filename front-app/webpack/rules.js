@@ -7,7 +7,6 @@ const rules = [{
   exclude: /node_modules/,
 }, {
   test: /\.scss$/,
-  exclude: /node_modules/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
     use: [{
@@ -15,8 +14,6 @@ const rules = [{
       options: {
         sourceMap: true,
         importLoaders: 2,
-        modules: true,
-        localIdentName: '[name]__[local]___[hash:base64:5]'
       },
     }, {
       loader: 'postcss-loader',
@@ -36,8 +33,6 @@ const rules = [{
     options: {
       sourceMap: true,
       importLoaders: 2,
-      modules: true,
-      localIdentName: '[name]__[local]___[hash:base64:5]'
     },
   }, {
     loader: 'postcss-loader',
