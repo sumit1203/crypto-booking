@@ -64,20 +64,36 @@ class BookingSection extends React.Component {
 
     onSubmit = async (e) => {
         e.preventDefault();
-        const {roomType, from, to, guestEthAddress, paymentType, ...personalInfo} = this.state;
-        const mappedFromDate = this._mapDateToInteger(from);
-        const mappedToDate = this._mapDateToInteger(to) - 1;
-        const nights = []
-        for(let i=mappedFromDate; i <= mappedToDate; i ++) {
-            nights.push(i)
-        }
-        const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call();
-        if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
-            this.setState({isFull: true})
-            return
-        }
+        // const {roomType, from, to, guestEthAddress, paymentType, ...personalInfo} = this.state;
+        // const mappedFromDate = this._mapDateToInteger(from);
+        // const mappedToDate = this._mapDateToInteger(to) - 1;
+        // const nights = []
+        // for(let i=mappedFromDate; i <= mappedToDate; i ++) {
+        //     nights.push(i)
+        // }
+        // const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call();
+        // if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
+        //     this.setState({isFull: true})
+        //     return
+        // }
 
-        const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo};
+        // const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo};
+
+        const data = {
+          guestEthAddress: '0xeCC57437Eb3c25a575E24CFf345Bf9e880b0819b',
+          paymentType: 'eth',
+          roomType: 'double',
+          personalInfo: {
+            name: 'Augusto Lemble',
+            email: 'augusto@windingtree.com',
+            birthday: '17/12/1987',
+            phone: '+11111111111',
+          },
+          roomType: 'double',
+          from: 1,
+          to: 4,
+        };
+
         const response = await fetch('http://localhost:3001/api/booking', {
             method: 'POST',
             body: JSON.stringify(data),
@@ -85,15 +101,25 @@ class BookingSection extends React.Component {
                 'Content-Type': 'application/json'
             }
         })
-        this.setState({response: await response.json()})
+        const {signatureData, offerSignature, booking, contractAddress} = await response.json();
+
+        const txData = this.bookingPoC.methods.bookWithEth(
+          signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
+          signatureData.roomType, [1,2,3,4], signatureData.bookingHash
+        ).encodeABI();
+        this.setState({instructions: {
+          value: booking.paymentAmount,
+          to: contractAddress,
+          data: txData
+        }});
     };
 
     render() {
-        const {from, response, isFull} = this.state;
+        const {from, instructions, isFull} = this.state;
         if (isFull) return <FullyBooked/>
-            if (response) return <CheckEmail paymentAmount={response.booking.paymentAmount}
-                                         contract={response.BookingContract}
-                                         offerSignature={response.offerSignature}/>;
+            if (instructions) return <CheckEmail paymentAmount={instructions.value}
+                                         contract={instructions.to}
+                                         offerSignature={instructions.data}/>;
         const fromDate = new Date(from);
         const nextDate = fromDate.setUTCDate(fromDate.getUTCDate() + 1);
         const toDateMin = _formatDate(nextDate);
