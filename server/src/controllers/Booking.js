@@ -136,11 +136,10 @@ class Booking {
   static async create (data) {
     const booking = new Booking(data);
     const ethPrice = fetchEthPrice();
-    const dateTo = 4;
-    const dateFrom = 1;
-    booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + dateTo - dateFrom) / await ethPrice;
+    booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / await ethPrice;
+    booking.paymentType = data.paymentType;
     await booking.save();
-    const signedOffer = await signOffer({...booking, roomType: data.roomType}, await readKey());
+    const signedOffer = await signOffer(booking, await readKey());
 
     return {
       booking,
