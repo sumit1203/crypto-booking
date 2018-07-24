@@ -1,11 +1,8 @@
 import React from 'react';
 import Web3 from 'web3';
 import imgRoom1 from '../../img/content/hotel-rooms/hotel-room-01.jpg';
-import imgRoom2 from '../../img/content/hotel-rooms/hotel-room-02.jpg';
-import imgRoom3 from '../../img/content/hotel-rooms/hotel-room-03.jpg';
 import imgRoom4 from '../../img/content/hotel-rooms/hotel-room-04.jpg';
-
-import Room from '../Room';
+import BookingPoC  from '../../../../smart-contracts/build/contracts/BookingPoC.json';
 
 class RoomsSection extends React.Component {
   constructor(props) {
@@ -17,15 +14,32 @@ class RoomsSection extends React.Component {
   }
 
   async componentDidMount() {
-    // TODO ask for rooms data
     try {
-      const mockedRequest = () => new Promise(() => []);
-      const response = await mockedRequest();
-      this.setState({ isLoading: false, rooms: response });
-    } catch (e) {
-      this.setState({ isLoading: true });
+        const bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, process.env.BOOKING_POC_ADDRESS);
+        const nights = [1,2,3,4]
+        this.availabilities = await nights.reduce(async (acc, night) => {
+            acc = await acc;
+            const d1 = await this._availability(bookingPoC, 'double', [night]);
+            const t1 = await this._availability(bookingPoC, 'twin', [night]);
+            return {double: {...acc.double, [night]: d1}, twin: {...acc.twin, [night]: t1}}
+        }, {double: {}, twin: {}})
+        console.log(this.availabilities)
+        this.setState({isLoading: false});
+        }catch (e) {
+        this.setState({ isLoading: true });
+        console.error(e);
+        }
     }
-  }
+
+    _availability = async (bookingPoC, roomType, nights = [1,2,3,4]) => {
+        return bookingPoC.methods.roomsAvailable(roomType, nights).call();
+    }
+
+    isRoomTypeFull = (roomType) => {
+      if (!this.availabilities) return
+      return !Object.keys(this.availabilities[roomType])
+          .some(day => this.availabilities[roomType][day].some(availabilityFlag => !!parseInt(availabilityFlag)))
+    }
 
   render() {
     const { isLoading } = this.state;
@@ -72,8 +86,8 @@ class RoomsSection extends React.Component {
                     </b>
                       : 80$/night
                   </p>
-                  <a href="#" className="btn  btn-secondary mt-1">
-                      Book this room
+                  <a href="#BookARoom" className="btn  btn-secondary mt-1">
+                      {this.isRoomTypeFull('double') ? 'this room is full' : 'Book this room'}
                   </a>
                   <a href="#" className="float-right mt-2">
                       How to pay with Lif
@@ -112,8 +126,8 @@ class RoomsSection extends React.Component {
                     </b>
                       : 80$/night
                   </p>
-                  <a href="#" className="btn  btn-secondary mt-1">
-                      Book this room
+                  <a href="#BookARoom" className="btn  btn-secondary mt-1">
+                      {this.isRoomTypeFull('twin') ? 'this room is full' : 'Book this room'}
                   </a>
                   <a href="#" className="float-right mt-2">
                       How to pay with Lif
