@@ -36,6 +36,7 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('roomType', validBooking.roomType);
     expect(booking).to.have.property('to', validBooking.to);
     expect(booking).to.have.property('from', validBooking.from);
+    expect(signedOffer).to.be.ok;
   });
 
   it('Should throw an error on creating an invalid booking', async () => {

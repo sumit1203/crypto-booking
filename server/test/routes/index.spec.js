@@ -43,7 +43,6 @@ describe('Booking API', () => {
 
       try {
         const res = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
-        console.log(res);
         throw new Error('should not be called');
       } catch (e) {
         expect(e).to.have.property('error');
