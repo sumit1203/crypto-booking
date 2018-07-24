@@ -147,8 +147,8 @@ contract BookingPoC is Ownable {
     require(pricePerNight.mul(_nights.length) <= msg.value);
 
     // Check if there is at least one room available
-    uint256[] memory available = roomsAvailable(roomType, _nights);
-    require(available.length > 0);
+    uint256 available = firstRoomAvailable(roomType, _nights);
+    require(available > 0);
 
     // Check the signer of the offer is the right address
     bytes32 priceSigned = keccak256(abi.encodePacked(
@@ -157,7 +157,7 @@ contract BookingPoC is Ownable {
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(roomType, _nights, available[0], msg.sender, bookingHash);
+    bookRoom(roomType, _nights, available, msg.sender, bookingHash);
 
     // Transfer the eth to the owner
     owner.transfer(msg.value);
@@ -187,8 +187,8 @@ contract BookingPoC is Ownable {
     require(pricePerNight.mul(_nights.length) <= lifTokenAllowance);
 
     // Check if there is at least one room available
-    uint256[] memory available = roomsAvailable(roomType, _nights);
-    require(available.length > 0);
+    uint256 available = firstRoomAvailable(roomType, _nights);
+    require(available > 0);
 
     // Check the signer of the offer is the right address
     bytes32 priceSigned = keccak256(abi.encodePacked(
@@ -197,7 +197,7 @@ contract BookingPoC is Ownable {
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(roomType, _nights, available[0], msg.sender, bookingHash);
+    bookRoom(roomType, _nights, available, msg.sender, bookingHash);
 
     // Transfer the lifTokens to the owner
     lifToken.transferFrom(msg.sender, owner, lifTokenAllowance);
@@ -252,5 +252,29 @@ contract BookingPoC is Ownable {
     return available;
   }
 
+  /**
+   * @dev Get the first available room for certain nights
+   * @param roomType The room type that wants to be booked
+   * @param _nights The nights to check availability
+   * @return uint256 The first available room
+   */
+  function firstRoomAvailable(
+    string roomType, uint256[] _nights
+  ) internal returns (uint256) {
+    require(_nights[i] <= totalNights);
+    uint256 available = 0;
+    bool isAvailable;
+    for (uint z = rooms[roomType].totalRooms; z >= 1 ; z --) {
+      isAvailable = true;
+      for (uint i = 0; i < _nights.length; i ++) {
+        if (rooms[roomType].nights[_nights[i]][z].guest != address(0))
+          isAvailable = false;
+          break;
+        }
+      if (isAvailable)
+        available = z;
+    }
+    return available;
+  }
 
 }
