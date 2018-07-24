@@ -26,7 +26,7 @@ describe('Booking API', () => {
       const body = validBooking;
       const {booking} = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
       expect(booking).to.have.property('id');
-      expect(booking).to.have.property('publicKey', validBooking.publicKey);
+      expect(booking).to.have.property('publicKey');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
       expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
@@ -57,7 +57,7 @@ describe('Booking API', () => {
       await dbBooking.save();
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'GET', json: true });
       expect(booking).to.have.property('id');
-      expect(booking).to.have.property('publicKey', validBooking.publicKey);
+      expect(booking).to.have.property('publicKey');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
       expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
