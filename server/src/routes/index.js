@@ -6,10 +6,10 @@ const bookingUrl = '/booking';
 
 router.post(`${bookingUrl}`, async (req, res, next) => {
   try {
-    const { booking, signedOffer } = await Booking.create(req.body);
+    const { booking, offerSignature } = await Booking.create(req.body);
     res.json({
       booking: booking.toPlainObject(),
-      signedOffer,
+      offerSignature,
       BookingContract: process.env.BOOKING_POC_ADDRESS,
     });
   } catch (e) {

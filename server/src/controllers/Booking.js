@@ -134,16 +134,18 @@ class Booking {
   * @return {Booking}
   */
   static async create (data) {
+    data.signatureTimestamp = new Date(Date.now() - 30 * 60 * 1000);
     const booking = new Booking(data);
     const ethPrice = fetchEthPrice();
     booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / await ethPrice;
     booking.paymentType = data.paymentType;
+    const {offerSignature, bookingHash } = await signOffer(booking, await readKey());
+    booking.publicKey = bookingHash;
     await booking.save();
-    const signedOffer = await signOffer(booking, await readKey());
 
     return {
       booking,
-      signedOffer,
+      offerSignature,
     }
   }
 
