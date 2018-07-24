@@ -89,7 +89,7 @@ const confirmationBody = ({ roomType, nights, room, guest, bookingHash, secretCo
 };
 
 
-const instructionsBody = ({ booking,  offerSignature, BookingContract}) => {
+const instructionsBody = (paymentAmount, BookingContract, txData) => {
   const instructionsHtml = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -157,7 +157,7 @@ const instructionsBody = ({ booking,  offerSignature, BookingContract}) => {
                   <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                       <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                          Please, send ${booking.paymentAmount} Eth to ${BookingContract}, with this data: ${offerSignature}.
+                          Please, send <b>${paymentAmount}</b> Eth to <b>${BookingContract}</b>, with this data: <b>${txData}</b>.
                       </td>
                     </tr>
                   </table>
