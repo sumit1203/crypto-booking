@@ -30,10 +30,14 @@ const sendConfirmation = async (data, { from , to, subject }) => {
 
 const sendInstructions = async ({ booking, offerSignature, signatureData, contractAddress }, { from , to, subject }) => {
   try {
+    const nights = [];
+    for (let i = booking.from; i <= booking.to; i++) {
+      nights.push(i);
+    }
     const bookingPoC = new web3.eth.Contract(BookingPoC.abi, process.env.BOOKING_POC_ADDRESS);
     const txData = bookingPoC.methods.bookWithEth(
       signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-      signatureData.roomType, [1,2,3,4], signatureData.bookingHash
+      signatureData.roomType, nights, signatureData.bookingHash
     ).encodeABI();
 
     const html = instructionsBody(booking.paymentAmount, process.env.BOOKING_POC_ADDRESS ,txData);
