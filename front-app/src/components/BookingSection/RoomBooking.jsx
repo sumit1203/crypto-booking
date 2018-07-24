@@ -19,8 +19,8 @@ export default class RoomBooking extends React.Component {
     return (
       <article id='BookARoom' className="section-wrapper bg-light py-3 py-md-5">
         <div className="container">
-          <div classnName="row justify-content-center">
-            <div classnName="col-md-8">
+          <div className="row justify-content-center">
+            <div className="col-md-8">
               <h2>
                   Book a Room
               </h2>
