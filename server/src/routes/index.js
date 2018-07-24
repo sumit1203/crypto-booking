@@ -1,5 +1,6 @@
 const express = require('express');
 const { Booking } = require('../controllers/Booking');
+const { sendInstructions } = require('../services/mail');
 
 const router = express.Router();
 const bookingUrl = '/booking';
@@ -7,11 +8,18 @@ const bookingUrl = '/booking';
 router.post(`${bookingUrl}`, async (req, res, next) => {
   try {
     const { booking, offerSignature } = await Booking.create(req.body);
-    res.json({
+    const data = {
       booking: booking.toPlainObject(),
       offerSignature,
       BookingContract: process.env.BOOKING_POC_ADDRESS,
-    });
+    }
+
+    sendInstructions(data, {
+      from: process.env.MAILGUN_FROM_EMAIL ,
+      to: process.env.MAILGUN_TO_EMAIL,
+      subject: 'Hotel reservation instructions'
+     });
+    res.json(data);
   } catch (e) {
     return next(e);
   }
