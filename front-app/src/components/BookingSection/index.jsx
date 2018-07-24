@@ -36,6 +36,7 @@ class BookingSection extends React.Component {
     };
 
     onRoomTypeChange = (e) => {
+      console.log(e)
         this.setState({ roomType: e.target.value });
     };
 
@@ -64,9 +65,9 @@ class BookingSection extends React.Component {
 
     onSubmit = async (e) => {
         e.preventDefault();
-        // const {roomType, from, to, guestEthAddress, paymentType, ...personalInfo} = this.state;
-        // const mappedFromDate = this._mapDateToInteger(from);
-        // const mappedToDate = this._mapDateToInteger(to) - 1;
+        const {roomType, from, to, guestEthAddress, paymentType, ...personalInfo} = this.state;
+        const mappedFromDate = this._mapDateToInteger(from);
+        const mappedToDate = this._mapDateToInteger(to) - 1;
         // const nights = []
         // for(let i=mappedFromDate; i <= mappedToDate; i ++) {
         //     nights.push(i)
@@ -77,22 +78,7 @@ class BookingSection extends React.Component {
         //     return
         // }
 
-        // const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo};
-
-        const data = {
-          guestEthAddress: '0xeCC57437Eb3c25a575E24CFf345Bf9e880b0819b',
-          paymentType: 'eth',
-          roomType: 'double',
-          personalInfo: {
-            name: 'Augusto Lemble',
-            email: 'augusto@windingtree.com',
-            birthday: '17/12/1987',
-            phone: '+11111111111',
-          },
-          roomType: 'double',
-          from: 1,
-          to: 4,
-        };
+        const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo};
 
         const response = await fetch('http://localhost:3001/api/booking', {
             method: 'POST',
