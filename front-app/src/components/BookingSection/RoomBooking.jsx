@@ -29,7 +29,7 @@ export default class RoomBooking extends React.Component {
             <label htmlFor="twin" style={{ marginRight: 8 }}>
                 Twin Room
             </label>
-            <input className="form-control form-control-lg" id="twin" style={{ display: 'inline-block', marginBottom: '5px' }} name="type" type="radio" value="twin" onChange={onRoomTypeChange} required/>
+            <input className="form-control form-control-lg" id="twin" style={{ display: 'inline-block', marginBottom: '5px' }} name="type" type="radio" value="twin" onChange={onRoomTypeChange}/>
           </Section>
           <Section>
             <label htmlFor="double" style={{ marginRight: 8 }}>
@@ -38,21 +38,21 @@ export default class RoomBooking extends React.Component {
             <input className="form-control form-control-lg" id="double" style={{ display: 'inline-block', marginBottom: '5px' }} name="type" type="radio" value="double" onChange={onRoomTypeChange} />
           </Section>
           <Section>
-            <input className="form-control form-control-lg" style={{ marginRight: '5px' }} type="date" min="2018-09-06" max="2018-09-09" onChange={onFromDateChange} value={from} required/>
-            <input className="form-control form-control-lg" type="date" name="to" min={toDateMin} max="2018-09-10" onChange={onToDateChange} required/>
+            <input className="form-control form-control-lg" style={{ marginRight: '5px' }} type="date" min="2018-09-06" max="2018-09-09" onChange={onFromDateChange} value={from}/>
+            <input className="form-control form-control-lg" type="date" name="to" min={toDateMin} max="2018-09-10" onChange={onToDateChange}/>
           </Section>
           <Section>
             <label htmlFor="guestAddress" style={labelBlockStyle}>
                 Guest Eth Address
             </label>
-            <input className="form-control form-control-lg" id="guestAddress" style={{ marginRight: '5px' }} type="text" onChange={onAddressChange} placeholder='0xe99356bde974bbe08721d77712168fa070aa8da2' required/>
+            <input className="form-control form-control-lg" id="guestAddress" style={{ marginRight: '5px' }} type="text" onChange={onAddressChange} placeholder='0xe99356bde974bbe08721d77712168fa070aa8da2'/>
           </Section>
           <Section>
             <div style={{ display: 'inline-block', marginRight: 32 }}>
               <label htmlFor="fullName" style={labelBlockStyle}>
                   Full Name
               </label>
-              <input className="form-control form-control-lg" id="fullName" style={{ marginRight: '5px' }} type="text" onChange={onFullNameChange} required placeholder='Pedrotti Capone'/>
+              <input className="form-control form-control-lg" id="fullName" style={{ marginRight: '5px' }} type="text" onChange={onFullNameChange} placeholder='Pedrotti Capone'/>
               <label htmlFor="birthDate" style={labelBlockStyle}>
                   birth Date
               </label>
@@ -62,7 +62,7 @@ export default class RoomBooking extends React.Component {
               <label htmlFor="email" style={labelBlockStyle}>
                   Email
               </label>
-              <input className="form-control form-control-lg" id="email" style={{ marginRight: '5px' }} type="email" onChange={onEmailChange} required placeholder='someGuy@windingtree.com'/>
+              <input className="form-control form-control-lg" id="email" style={{ marginRight: '5px' }} type="email" onChange={onEmailChange} placeholder='someGuy@windingtree.com'/>
               <label htmlFor="phone" style={labelBlockStyle}>
                   Phone Number
               </label>
