@@ -104,6 +104,7 @@ const validBooking = {
   guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
   paymentAmount: 0.1,
   paymentType: 'eth',
+  roomType: 'double',
   personalInfo: {
     name: 'Some name',
     email: 'email@email.com',

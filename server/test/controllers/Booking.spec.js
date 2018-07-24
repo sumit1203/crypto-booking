@@ -19,12 +19,12 @@ describe('Booking controller', () => {
 
   it('Should create a valid booking', async function () {
     validBooking.guestEthAddress = `0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e${Date.now()}`;
-    const booking = await Booking.create(validBooking);
+    const {booking, signedOffer } = await Booking.create(validBooking);
     expect(booking).to.be.an.instanceof(Booking);
     expect(booking).to.have.property('id');
     expect(booking).to.have.property('publicKey', validBooking.publicKey);
     expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
-    expect(booking).to.have.property('paymentAmount', validBooking.paymentAmount);
+    expect(booking).to.have.property('paymentAmount');
     expect(booking).to.have.property('paymentType', validBooking.paymentType);
     expect(booking).to.have.property('signatureTimestamp');
     expect(booking.signatureTimestamp).to.have.a('number');
