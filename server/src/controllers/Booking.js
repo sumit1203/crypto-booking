@@ -139,7 +139,7 @@ class Booking {
     const ethPrice = await fetchEthPrice();
 
     booking.weiPerNight = utils.toWei((ROOM_TYPE_PRICES[data.roomType] / ethPrice).toString(), 'ether');
-    booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / ethPrice;
+    booking.paymentAmount = (ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / ethPrice) + 0.00001;
     booking.paymentType = data.paymentType;
 
     const {signatureData, offerSignature, bookingHash } = await signOffer(booking, await readKey());

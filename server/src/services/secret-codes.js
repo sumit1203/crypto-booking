@@ -35,7 +35,7 @@ const signOffer = async (booking, key) => {
       { type: 'string', value: signatureData.roomType },
       { type: 'uint256', value: signatureData.weiPerNight },
       { type: 'uint256', value: signatureData.signatureTimestamp },
-      { type: 'string', value: signatureData.roomType },
+      { type: 'string', value: signatureData.paymentType },
       { type: 'bytes32', value: signatureData.bookingHash }
     );
 
