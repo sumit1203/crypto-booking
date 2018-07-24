@@ -1,6 +1,7 @@
 const mailgun = require('mailgun-js');
 const {
-  confirmationBody
+  confirmationBody,
+  instructionsBody,
 } = require('./html-generator');
 
 const mailgunClient = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
@@ -24,7 +25,18 @@ const sendConfirmation = async (data, { from , to, subject }) => {
   }
 };
 
+const sendInstructions = async (data, { from , to, subject }) => {
+  try {
+    const html = instructionsBody(data)
+    return mailgunClient.messages().send({ from, to, subject, html });
+  } catch (e) {
+    // TODO: Handle errors
+    throw e;
+  }
+};
+
 module.exports = {
   sendRawEmail,
   sendConfirmation,
+  sendInstructions,
 };
