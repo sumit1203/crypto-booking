@@ -102,7 +102,8 @@ class BookingSection extends React.Component {
             }
         })
         const {signatureData, offerSignature, booking, contractAddress} = await response.json();
-
+        console.log('Signature data:', signatureData)
+        console.log('Offer signature:', offerSignature)
         const txData = this.bookingPoC.methods.bookWithEth(
           signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
           signatureData.roomType, [1,2,3,4], signatureData.bookingHash

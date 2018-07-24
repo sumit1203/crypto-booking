@@ -30,7 +30,7 @@ const signOffer = async (booking, key) => {
       paymentType: booking._payment.type,
       bookingHash: bookingHash
     };
-
+    console.log('Signature data:', signatureData)
     const hashedMessage = web3.utils.soliditySha3(
       { type: 'string', value: signatureData.roomType },
       { type: 'uint256', value: signatureData.weiPerNight },
