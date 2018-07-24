@@ -34,7 +34,7 @@ const signOffer = async (booking, key) => {
     const accounts = web3.eth.accounts.wallet;
     const offerSignature = await web3.eth.sign(hashedMessage, accounts[0].address);
     web3.eth.accounts.wallet.clear();
-    return offerSignature;
+    return { offerSignature, bookingHash };
 }
 
 module.exports = {
