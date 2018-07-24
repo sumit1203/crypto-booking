@@ -68,15 +68,15 @@ class BookingSection extends React.Component {
         const {roomType, from, to, guestEthAddress, paymentType, ...personalInfo} = this.state;
         const mappedFromDate = this._mapDateToInteger(from);
         const mappedToDate = this._mapDateToInteger(to) - 1;
-        // const nights = []
-        // for(let i=mappedFromDate; i <= mappedToDate; i ++) {
-        //     nights.push(i)
-        // }
-        // const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call();
-        // if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
-        //     this.setState({isFull: true})
-        //     return
-        // }
+        const nights = []
+        for(let i=mappedFromDate; i <= mappedToDate; i ++) {
+            nights.push(i)
+        }
+        const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call();
+        if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
+            this.setState({isFull: true})
+            return
+        }
 
         const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo};
 
