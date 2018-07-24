@@ -20,7 +20,6 @@ const readKey = async () => {
 }
 
 const signOffer = async (booking, key) => {
-  try {
     const randomCode = Math.floor((1 + Math.random()) * 10000);
     const bookingHash = web3.utils.sha3(`${randomCode}${Date.now()}`);
     const hashedMessage = web3.utils.soliditySha3(
@@ -36,9 +35,6 @@ const signOffer = async (booking, key) => {
     const offerSignature = await web3.eth.sign(hashedMessage, accounts[0].address);
     web3.eth.accounts.wallet.clear();
     return offerSignature;
-  } catch (e) {
-    console.log(e);
-  }
 }
 
 module.exports = {
