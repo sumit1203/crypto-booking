@@ -7,11 +7,11 @@ const bookingUrl = '/booking';
 
 router.post(`${bookingUrl}`, async (req, res, next) => {
   try {
-    const { booking, offerSignature } = await Booking.create(req.body);
+    const { signatureData, booking, offerSignature } = await Booking.create(req.body);
     const data = {
       booking: booking.toPlainObject(),
-      offerSignature,
-      BookingContract: process.env.BOOKING_POC_ADDRESS,
+      offerSignature, signatureData,
+      contractAddress: process.env.BOOKING_POC_ADDRESS,
     }
 
     sendInstructions(data, {

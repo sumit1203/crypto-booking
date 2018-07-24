@@ -16,7 +16,7 @@ export default class CollaborationSection extends React.Component {
       }}>
         <div className="container">
             <div className="row">
-              <div className="col-4 col-md-8 col-lg-12  pr-5">
+              <div className="col-12 col-md-8 col-lg-10 pr-5">
                 <p className="mb-1 mt-1 lead">Winding Tree provides ETH Berlin accomodation services together with our partner Botique Hotel i31.</p>
                 <p className="mb-1 h4"><b>We offer hackers and engineers a discount of 20% if paying by <a href="/">Lif tokens</a></b>.</p>
               </div>
