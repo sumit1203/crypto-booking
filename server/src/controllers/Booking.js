@@ -51,7 +51,7 @@ class Booking {
 
   get signatureTimestamp () {
     if (!this._signatureTimestamp) return null;
-    return Math.round(this._signatureTimestamp.getTime() / 1000);
+    return this._signatureTimestamp;
   }
 
   get personalInfo () {
@@ -134,18 +134,22 @@ class Booking {
   * @return {Booking}
   */
   static async create (data) {
-    data.signatureTimestamp = new Date(Date.now() - 30 * 60 * 1000);
+    data.signatureTimestamp = parseInt(new Date().getTime() / 1000) - 60*30;
     const booking = new Booking(data);
-    const ethPrice = fetchEthPrice();
-    booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / await ethPrice;
+    const ethPrice = await fetchEthPrice();
+
+    booking.weiPerNight = utils.toWei((ROOM_TYPE_PRICES[data.roomType] / ethPrice).toString(), 'ether');
+    booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / ethPrice;
     booking.paymentType = data.paymentType;
-    const {offerSignature, bookingHash } = await signOffer(booking, await readKey());
+
+    const {signatureData, offerSignature, bookingHash } = await signOffer(booking, await readKey());
     booking.publicKey = bookingHash;
     await booking.save();
 
     return {
       booking,
       offerSignature,
+      signatureData
     }
   }
 

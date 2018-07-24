@@ -22,19 +22,28 @@ const readKey = async () => {
 const signOffer = async (booking, key) => {
     const randomCode = Math.floor((1 + Math.random()) * 10000);
     const bookingHash = web3.utils.sha3(`${randomCode}${Date.now()}`);
+
+    const signatureData = {
+      roomType: booking.roomType,
+      weiPerNight: booking.weiPerNight,
+      signatureTimestamp:booking._signatureTimestamp,
+      paymentType: booking._payment.type,
+      bookingHash: bookingHash
+    };
+
     const hashedMessage = web3.utils.soliditySha3(
-      { type: 'string', value: booking.roomType||'double' },
-      { type: 'uint256', value: booking.paymentAmount },
-      { type: 'uint256', value: booking.signatureTimestamp },
-      { type: 'string', value: booking.paymentType },
-      { type: 'bytes32', value: bookingHash }
+      { type: 'string', value: signatureData.roomType },
+      { type: 'uint256', value: signatureData.weiPerNight },
+      { type: 'uint256', value: signatureData.signatureTimestamp },
+      { type: 'string', value: signatureData.roomType },
+      { type: 'bytes32', value: signatureData.bookingHash }
     );
 
     web3.eth.accounts.wallet.add(key);
     const accounts = web3.eth.accounts.wallet;
     const offerSignature = await web3.eth.sign(hashedMessage, accounts[0].address);
     web3.eth.accounts.wallet.clear();
-    return { offerSignature, bookingHash };
+    return { signatureData, offerSignature, bookingHash };
 }
 
 module.exports = {
