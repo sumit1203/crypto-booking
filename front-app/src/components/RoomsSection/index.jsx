@@ -87,7 +87,7 @@ class RoomsSection extends React.Component {
                       : 80$/night
                   </p>
                   <a href="#BookARoom" className="btn  btn-secondary mt-1">
-                      {this.isRoomTypeFull('double') ? 'this room is full' : 'Book this room'}
+                      {this.isRoomTypeFull('double') ? 'these rooms are fully booked' : 'Book this room'}
                   </a>
                   <a href="#" className="float-right mt-2">
                       How to pay with Lif
@@ -127,7 +127,7 @@ class RoomsSection extends React.Component {
                       : 80$/night
                   </p>
                   <a href="#BookARoom" className="btn  btn-secondary mt-1">
-                      {this.isRoomTypeFull('twin') ? 'this room is full' : 'Book this room'}
+                      {this.isRoomTypeFull('twin') ? 'these rooms are fully booked' : 'Book this room'}
                   </a>
                   <a href="#" className="float-right mt-2">
                       How to pay with Lif
