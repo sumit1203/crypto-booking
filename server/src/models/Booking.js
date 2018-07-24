@@ -62,7 +62,7 @@ const Booking = new Schema({
     type: Number,
     validate: {
       validator: function (to) {
-        return to > this.from && to < 5;
+        return to >= this.from && to < 5;
       },
       message: 'toOutOfRange',
     },
