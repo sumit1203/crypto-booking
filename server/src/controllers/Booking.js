@@ -3,15 +3,25 @@ const BookingModel = mongoose.model('Booking');
 const { utils } = require('web3');
 const { handleApplicationError } = require('../errors');
 const { toPlainObject } = require('../utils/classHelper');
+const { fetchEthPrice } = require('../services/prices');
+const { readKey, signOffer } = require('../services/secret-codes');
+
+const ROOM_TYPE_PRICES = {
+  twin: 100,
+  double: 100,
+};
 
 class Booking {
-  constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo }) {
+  constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo, roomType, to, from }) {
     this.id = _id;
     this.publicKey = publicKey;
     this.guestEthAddress = guestEthAddress;
     this._payment = payment || {};
     this._signatureTimestamp = signatureTimestamp;
     this.personalInfo = personalInfo;
+    this.roomType = roomType;
+    this.to = to;
+    this.from = from;
   }
 
   get paymentTx () {
@@ -66,13 +76,17 @@ class Booking {
   */
   async save () {
     try {
+      const data = {
+        publicKey: this.publicKey,
+        guestEthAddress: this.guestEthAddress,
+        payment: this._payment,
+        personalInfo: this._personalInfo,
+        to: this.to,
+        from: this.from,
+        roomType: this.roomType,
+      };
       if (!this.id) {
-        const dbModel = await BookingModel.create({
-          publicKey: this.publicKey,
-          guestEthAddress: this.guestEthAddress,
-          payment: this._payment,
-          personalInfo: this._personalInfo,
-        });
+        const dbModel = await BookingModel.create(data);
         this._signatureTimestamp = dbModel.signatureTimestamp;
         this.id = dbModel.id;
 
@@ -80,12 +94,7 @@ class Booking {
       }
       await BookingModel.update({ _id: this.id },
         {
-          $set: {
-            publicKey: this.publicKey,
-            guestEthAddress: this.guestEthAddress,
-            payment: this._payment,
-            personalInfo: this._personalInfo,
-          },
+          $set: data,
         }).exec();
     } catch (e) {
       if (!e.errors) {
@@ -126,10 +135,16 @@ class Booking {
   */
   static async create (data) {
     const booking = new Booking(data);
-    booking.paymentAmount = data.paymentAmount;
+    const ethPrice = fetchEthPrice();
+    booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / await ethPrice;
     booking.paymentType = data.paymentType;
     await booking.save();
-    return booking;
+    const signedOffer = await signOffer(booking, await readKey());
+
+    return {
+      booking,
+      signedOffer,
+    }
   }
 
   /**

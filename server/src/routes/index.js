@@ -6,8 +6,12 @@ const bookingUrl = '/booking';
 
 router.post(`${bookingUrl}`, async (req, res, next) => {
   try {
-    const booking = await Booking.create(req.body);
-    res.json(booking.toPlainObject());
+    const { booking, signedOffer } = await Booking.create(req.body);
+    res.json({
+      booking: booking.toPlainObject(),
+      signedOffer,
+      BookingContract: process.env.BOOKING_POC_ADDRESS,
+    });
   } catch (e) {
     return next(e);
   }
