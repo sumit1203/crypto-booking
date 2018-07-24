@@ -3,6 +3,13 @@ const BookingModel = mongoose.model('Booking');
 const { utils } = require('web3');
 const { handleApplicationError } = require('../errors');
 const { toPlainObject } = require('../utils/classHelper');
+const { fetchEthPrice } = require('../services/prices');
+const { readKey, signOffer } = require('../services/secret-codes');
+
+const ROOM_TYPE_PRICES = {
+  twin: 100,
+  double: 100,
+};
 
 class Booking {
   constructor ({ _id, publicKey, guestEthAddress, payment, signatureTimestamp, personalInfo, roomType, to, from }) {
@@ -128,10 +135,16 @@ class Booking {
   */
   static async create (data) {
     const booking = new Booking(data);
-    booking.paymentAmount = data.paymentAmount;
+    const ethPrice = fetchEthPrice();
+    booking.paymentAmount = ROOM_TYPE_PRICES[data.roomType] * (1 + booking.to - booking.from) / await ethPrice;
     booking.paymentType = data.paymentType;
     await booking.save();
-    return booking;
+    const signedOffer = await signOffer(booking, await readKey());
+
+    return {
+      booking,
+      signedOffer,
+    }
   }
 
   /**
