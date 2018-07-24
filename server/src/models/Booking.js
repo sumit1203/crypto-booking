@@ -9,7 +9,6 @@ const Booking = new Schema({
   },
   guestEthAddress: {
     type: String,
-    unique: true,
     required: [true, 'noGuestEthAddress'],
   },
   payment: {
@@ -42,6 +41,31 @@ const Booking = new Schema({
   personalInfo: {
     type: String,
     required: [true, 'noPersonalInfo'],
+  },
+  roomType: {
+    type: String,
+    enum: ['double', 'twin'],
+    required: [true, 'noRoomType'],
+  },
+  from: {
+    type: Number,
+    validate: {
+      validator: function (from) {
+        return from > 0 && from < 5;
+      },
+      message: 'fromOutOfRange',
+    },
+    required: [true, 'noFrom'],
+  },
+  to: {
+    type: Number,
+    validate: {
+      validator: function (to) {
+        return to >= this.from && to < 5;
+      },
+      message: 'toOutOfRange',
+    },
+    required: [true, 'noTo'],
   },
 });
 

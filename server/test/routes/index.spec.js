@@ -24,11 +24,11 @@ describe('Booking API', () => {
   describe('POST /api/booking', () => {
     it('Should create a valid booking', async () => {
       const body = validBooking;
-      const booking = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+      const {booking} = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
       expect(booking).to.have.property('id');
-      expect(booking).to.have.property('publicKey', validBooking.publicKey);
+      expect(booking).to.have.property('publicKey');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
-      expect(booking).to.have.property('paymentAmount', validBooking.paymentAmount);
+      expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
       expect(booking).to.have.property('signatureTimestamp');
       expect(booking.signatureTimestamp).to.have.a('number');
@@ -39,14 +39,14 @@ describe('Booking API', () => {
       expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
     });
     it('Should propagate data errors', async () => {
-      const body = Object.assign({}, validBooking, { paymentAmount: 0 });
+      const body = Object.assign({}, validBooking, { roomType: -1 });
 
       try {
-        await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+        const res = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
         throw new Error('should not be called');
       } catch (e) {
         expect(e).to.have.property('error');
-        expect(e.error).to.have.property('code', '#minAmount');
+        expect(e.error).to.have.property('code', '#invalidPaymentAmount');
       }
     });
   });
@@ -57,9 +57,9 @@ describe('Booking API', () => {
       await dbBooking.save();
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'GET', json: true });
       expect(booking).to.have.property('id');
-      expect(booking).to.have.property('publicKey', validBooking.publicKey);
+      expect(booking).to.have.property('publicKey');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
-      expect(booking).to.have.property('paymentAmount', validBooking.paymentAmount);
+      expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
       expect(booking).to.have.property('signatureTimestamp');
       expect(booking.signatureTimestamp).to.have.a('number');
