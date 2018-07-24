@@ -9,7 +9,6 @@ const Booking = new Schema({
   },
   guestEthAddress: {
     type: String,
-    unique: true,
     required: [true, 'noGuestEthAddress'],
   },
   payment: {
