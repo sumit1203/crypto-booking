@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 function _formatDate(date) {
     const d = new Date(date);
     let month = '' + (d.getUTCMonth() + 1);
