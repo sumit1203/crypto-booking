@@ -64,4 +64,29 @@ module.exports = {
     short: 'Duplicate booking.',
     long: 'Only one booking per guest eth address is allowed.',
   },
+  toOutOfRange: {
+    status: 409,
+    short: 'Property "To" out of range.',
+    long: '"To" must be a number between "from" and 4',
+  },
+  noTo: {
+    status: 409,
+    short: 'No propery "To" provided.',
+    long: '"to" is required.',
+  },
+  fromOutOfRange: {
+    status: 409,
+    short: 'Property "from" out of range.',
+    long: '"from" must be a number between 1 and 4',
+  },
+  noFrom: {
+    status: 409,
+    short: 'No propery "from" provided.',
+    long: '"from" is required.',
+  },
+  noRoomType: {
+    status: 409,
+    short: 'No room type provided.',
+    long: 'The roomType is required.',
+  },
 };
