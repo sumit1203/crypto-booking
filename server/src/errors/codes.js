@@ -4,6 +4,16 @@ module.exports = {
     short: 'Something went wrong.',
     long: 'Something went wrong. Please contact the administrator.',
   },
+  invalidEncryptedPersonalInfo: {
+    status: 500,
+    short: 'Invalid encrypted personal information.',
+    long: 'The encryptedPersonalInfo must be a hex.',
+  },
+  invalidEthPrice: {
+    status: 500,
+    short: 'Invalid eth price.',
+    long: 'The ethPrice must be a number.',
+  },
   whiteList: {
     status: 403,
     short: 'IP is not whitelisted.',
@@ -58,6 +68,11 @@ module.exports = {
     status: 409,
     short: 'No personal information provided.',
     long: 'The personalInfo is required.',
+  },
+  invalidPersonalInfo: {
+    status: 409,
+    short: 'Invalid personal information.',
+    long: 'The personalInfo must be an object.',
   },
   duplicateBooking: {
     status: 409,
