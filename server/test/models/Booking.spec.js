@@ -36,6 +36,7 @@ describe('Booking model', () => {
       expect(booking.encryptedPersonalInfo).to.be.a('string');
       expect(booking).to.have.property('roomType');
       expect(booking.roomType).to.be.a('string');
+      expect(booking).to.have.property('emailSent', false);
     });
   });
 

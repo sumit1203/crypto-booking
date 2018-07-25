@@ -67,6 +67,10 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noEncryptedPersonalInfo'],
   },
+  emailSent: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 Booking.method({
@@ -110,7 +114,7 @@ Booking.post('save', function (error, doc, next) {
   if (!error.errors) {
     return next(error);
   }
-  
+
   const firstKeyError = Object.keys(error.errors)[0];
   const firstError = error.errors[firstKeyError];
   switch (firstError.name) {
