@@ -36,6 +36,13 @@ async function readBooking (filter) {
     booking.personalInfo = bookingModel.decryptPersonalInfo();
     return booking;
   }
+  if (filter.bookingHash) {
+    const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
+    if (!bookingModel) return null;
+    const booking = bookingModel.toObject();
+    booking.personalInfo = bookingModel.decryptPersonalInfo();
+    return booking;
+  }
   return null;
 }
 
