@@ -2,56 +2,54 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect, assert } = require('chai');
 const { Booking } = require('../../src/models/Booking');
-const { validBookingDB } = require('../utils/test-data');
+const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
 
 function basicValidationExpect (validation, field) {
   expect(validation).to.have.property('errors');
   expect(validation.errors).to.have.property(field);
 }
 
-describe('Booking schema', () => {
-  it('Should generate no error using validBookingDB data', () => {
-    const booking = new Booking(validBookingDB);
-    const validation = booking.validateSync();
-    expect(validation).to.be.a('undefined');
-    expect(booking).to.have.property('publicKey', validBookingDB.publicKey);
-    expect(booking).to.have.property('guestEthAddress', validBookingDB.guestEthAddress);
-    expect(booking).to.have.property('payment');
-    expect(booking.payment).to.have.property('amount', validBookingDB.payment.amount);
-    expect(booking.payment).to.have.property('type', validBookingDB.payment.type);
-    expect(booking.payment).to.have.property('tx', validBookingDB.payment.tx);
-    expect(booking).to.have.property('signatureTimestamp');
-    expect(booking).to.have.property('personalInfo', validBookingDB.personalInfo);
+describe('Booking model', () => {
+  xdescribe('encryptPersonalInfo', () => {});
+  xdescribe('decryptPersonalInfo', () => {});
+  xdescribe('generateBookingHash', () => {});
+  xdescribe('generatePaymentAmount', () => {});
+  xdescribe('getWeiPerNight', () => {});
+  describe('generate', () => {
+    it('Should generate no error using validBooking data', async () => {
+      const booking = Booking.generate(validBookingWithEthPrice);
+      const validation = await booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking).to.have.property('bookingHash');
+      expect(booking.bookingHash).to.be.a('string');
+      expect(booking).to.have.property('guestEthAddress', validBookingWithEthPrice.guestEthAddress);
+      expect(booking.guestEthAddress).to.be.a('string');
+      expect(booking).to.have.property('paymentAmount');
+      expect(booking.paymentAmount).to.be.a('number');
+      expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
+      expect(booking.paymentType).to.be.a('string');
+      expect(booking).to.have.property('paymentTx', validBookingWithEthPrice.paymentTx);
+      expect(booking.paymentTx).to.be.a('string');
+      expect(booking).to.have.property('signatureTimestamp');
+      expect(booking.signatureTimestamp).to.be.a('number');
+      expect(booking).to.have.property('encryptedPersonalInfo');
+      expect(booking.encryptedPersonalInfo).to.be.a('string');
+      expect(booking).to.have.property('roomType');
+      expect(booking.roomType).to.be.a('string');
+    });
   });
 
-  describe('publicKey', () => {
-    it('Should have the property publicKey with type string', () => {
-      const booking = new Booking(validBookingDB);
-      const newPublicKey = 'some new public key';
-      booking.publicKey = newPublicKey;
+  describe('bookingHash', () => {
+    it('Should throw an error if bookingHash is not defined', () => {
+      const booking = Booking.generate(validBookingWithEthPrice);
+      booking.bookingHash = '';
       const validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.publicKey).to.be.a('string');
-    });
-
-    it('Should throw an error if publicKey is not defined', () => {
-      const booking = new Booking(validBookingDB);
-      booking.publicKey = '';
-      const validation = booking.validateSync();
-      basicValidationExpect(validation, 'publicKey');
-      expect(validation.errors.publicKey).to.have.property('message', 'noPublicKey');
+      basicValidationExpect(validation, 'bookingHash');
+      expect(validation.errors.bookingHash).to.have.property('message', 'noBookingHash');
     });
   });
 
   describe('guestEthAddress', () => {
-    it('Should have the property guestEthAddress with type string', () => {
-      const booking = new Booking(validBookingDB);
-      booking.guestEthAddress = 123;
-      const validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.guestEthAddress).to.be.a('string');
-    });
-
     it('Should throw an error if guestEthAddress is not defined', () => {
       const booking = new Booking(validBookingDB);
       booking.guestEthAddress = '';
@@ -62,94 +60,71 @@ describe('Booking schema', () => {
   });
 
   describe('payment amount', () => {
-    it('Should have the property payment.amount with type number', () => {
+    it('Should throw an error if paymentAmount is not defined', () => {
       const booking = new Booking(validBookingDB);
-      booking.payment.amount = 'asdas';
+      booking.paymentAmount = undefined;
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'payment.amount');
-      assert.match(validation.errors['payment.amount'].message, /cast to number/i);
-    });
-
-    it('Should throw an error if payment.amount is not defined', () => {
-      const booking = new Booking(validBookingDB);
-      booking.payment.amount = undefined;
-      const validation = booking.validateSync();
-      basicValidationExpect(validation, 'payment.amount');
-      expect(validation.errors['payment.amount']).to.have.property('message', 'noPaymentAmount');
+      basicValidationExpect(validation, 'paymentAmount');
+      expect(validation.errors.paymentAmount).to.have.property('message', 'noPaymentAmount');
     });
 
     it('Should throw an error if payment.amount equal or less than 0', () => {
       const booking = new Booking(validBookingDB);
-      booking.payment.amount = 0;
+      booking.paymentAmount = 0;
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'payment.amount');
-      expect(validation.errors['payment.amount']).to.have.property('message', 'minAmount');
+      basicValidationExpect(validation, 'paymentAmount');
+      expect(validation.errors.paymentAmount).to.have.property('message', 'minAmount');
     });
   });
 
   describe('payment type', () => {
-    it('Should allow to set payment.type as "lif"', () => {
+    it('Should allow to set paymentType as "lif" or "eth"', () => {
       const booking = new Booking(validBookingDB);
-      booking.payment.type = 'lif';
-      const validation = booking.validateSync();
+      booking.paymentType = 'lif';
+      let validation = booking.validateSync();
       expect(validation).to.be.a('undefined');
-      expect(booking.payment.type).to.be.equal('lif');
+      expect(booking.paymentType).to.be.equal('lif');
+      booking.paymentType = 'eth';
+      validation = booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking.paymentType).to.be.equal('eth');
     });
 
-    it('Should throw an error if payment.type is not "eth" or "lif"', () => {
+    it('Should throw an error if paymentType is not "eth" or "lif"', () => {
       const booking = new Booking(validBookingDB);
-      booking.payment.type = 'some invalid type';
+      booking.paymentType = 'some invalid type';
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'payment.type');
-      expect(validation.errors['payment.type']).to.have.property('kind', 'enum');
+      basicValidationExpect(validation, 'paymentType');
+      expect(validation.errors.paymentType).to.have.property('kind', 'enum');
     });
 
-    it('Should throw an error if payment.type is not defined', () => {
+    it('Should throw an error if paymentType is not defined', () => {
       const booking = new Booking(validBookingDB);
-      booking.payment.type = undefined;
+      booking.paymentType = undefined;
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'payment.type');
-      expect(validation.errors['payment.type']).to.have.property('message', 'noPaymentType');
+      basicValidationExpect(validation, 'paymentType');
+      expect(validation.errors.paymentType).to.have.property('message', 'noPaymentType');
     });
   });
 
   describe('payment tx', () => {
-    it('Should have the property payment.tx with type string', () => {
+    it('Should have the property paymentTx with type string', () => {
       const booking = new Booking(validBookingDB);
       const newPaymentTx = 'some new payment tx';
-      booking.payment.tx = newPaymentTx;
+      booking.paymentTx = newPaymentTx;
       const validation = booking.validateSync();
       expect(validation).to.be.a('undefined');
-      expect(booking.payment.tx).to.be.equal(newPaymentTx);
+      expect(booking.paymentTx).to.be.equal(newPaymentTx);
     });
   });
 
-  describe('signatureTimestamp', () => {
-    it('Should have the property signatureTimestamp with type date', () => {
+  describe('encryptedPersonalInfo', () => {
+    it('Should throw an error if encryptedPersonalInfo is not defined', () => {
       const booking = new Booking(validBookingDB);
-      booking.signatureTimestamp = 'asdas';
+      booking.encryptedPersonalInfo = '';
       const validation = booking.validateSync();
-      basicValidationExpect(validation, 'signatureTimestamp');
-      assert.match(validation.errors.signatureTimestamp.message, /cast to date/i);
-    });
-  });
-
-  describe('personalInfo', () => {
-    it('Should have the property personalInfo with type string', () => {
-      const booking = new Booking(validBookingDB);
-      const newPersonalInfo = 'some new payment tx';
-      booking.personalInfo = newPersonalInfo;
-      const validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.personalInfo).to.be.equal(newPersonalInfo);
-    });
-
-    it('Should throw an error if personalInfo is not defined', () => {
-      const booking = new Booking(validBookingDB);
-      booking.personalInfo = '';
-      const validation = booking.validateSync();
-      basicValidationExpect(validation, 'personalInfo');
-      expect(validation.errors.personalInfo).to.have.property('message', 'noPersonalInfo');
+      basicValidationExpect(validation, 'encryptedPersonalInfo');
+      expect(validation.errors.encryptedPersonalInfo).to.have.property('message', 'noEncryptedPersonalInfo');
     });
   });
 
@@ -184,13 +159,6 @@ describe('Booking schema', () => {
   });
 
   describe('from', () => {
-    it('Should allow to set from as a number between 1 an 4', () => {
-      const booking = new Booking(validBookingDB);
-      let validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.from).to.be.equal(validBookingDB.from);
-    });
-
     it('Should throw an error if from has a number greater than 4', () => {
       const booking = new Booking(validBookingDB);
       booking.from = 5;
@@ -216,13 +184,6 @@ describe('Booking schema', () => {
     });
   });
   describe('to', () => {
-    it('Should allow to set "to" as a number between 1 an 4', () => {
-      const booking = new Booking(validBookingDB);
-      let validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.to).to.be.equal(validBookingDB.to);
-    });
-
     it('Should throw an error if "to" has a number greater than 4', () => {
       const booking = new Booking(validBookingDB);
       booking.to = 5;
