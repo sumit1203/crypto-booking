@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const mongoose = require('mongoose');
 const request = require('request-promise-native');
 
-const { validBooking, validBookingDB } = require('../utils/test-data');
+const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const apiUrl = `http://localhost:${process.env.SERVER_PORT}/api`;
 let server;
 let BookingModel;
@@ -24,9 +24,9 @@ describe('Booking API', () => {
   describe('POST /api/booking', () => {
     it('Should create a valid booking', async () => {
       const body = validBooking;
-      const {booking} = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
-      expect(booking).to.have.property('id');
-      expect(booking).to.have.property('publicKey');
+      const { booking } = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+      expect(booking).to.have.property('_id');
+      expect(booking).to.have.property('bookingHash');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
       expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
@@ -42,7 +42,7 @@ describe('Booking API', () => {
       const body = Object.assign({}, validBooking, { roomType: -1 });
 
       try {
-        const res = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+        await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
         throw new Error('should not be called');
       } catch (e) {
         expect(e).to.have.property('error');
@@ -53,11 +53,11 @@ describe('Booking API', () => {
 
   describe('GET /api/booking/:id', () => {
     it('Should read a booking', async () => {
-      const dbBooking = new BookingModel(validBookingDB);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
       await dbBooking.save();
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'GET', json: true });
-      expect(booking).to.have.property('id');
-      expect(booking).to.have.property('publicKey');
+      expect(booking).to.have.property('_id');
+      expect(booking).to.have.property('bookingHash');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
       expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
@@ -82,11 +82,11 @@ describe('Booking API', () => {
 
   describe('DELETE /api/booking/:id', () => {
     it('Should delete a booking', async () => {
-      const dbBooking = new BookingModel(validBookingDB);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
       await dbBooking.save();
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'DELETE', json: true });
       const dbReadBooking = await BookingModel.findById(booking.id).exec();
-      expect(booking).to.have.property('id', dbBooking.id);
+      expect(booking).to.have.property('_id', dbBooking.id);
       expect(dbReadBooking).to.be.an.equal(null);
     });
   });

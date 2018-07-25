@@ -39,4 +39,11 @@ async function readBooking (filter) {
   return null;
 }
 
-module.exports = { readBooking, createBooking };
+async function deleteBooking (filter) {
+  if (mongoose.Types.ObjectId.isValid(filter.id)) {
+    await BookingModel.deleteOne({ id: filter.id }).exec();
+  }
+  return null;
+}
+
+module.exports = { readBooking, createBooking, deleteBooking };
