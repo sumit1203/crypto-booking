@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 require('dotenv').config({ path: './test/utils/.env' });
-const { expect, assert } = require('chai');
+const { expect } = require('chai');
 const { Booking } = require('../../src/models/Booking');
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
 

@@ -1,10 +1,10 @@
 /* eslint-env mocha */
-require('dotenv').config({path: './test/utils/.env'});
+require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const {
   sendRawEmail,
   sendConfirmation,
- } = require('../../src/services/mail');
+} = require('../../src/services/mail');
 const { testHtmlBody } = require('../utils/test-data');
 
 const TO = process.env.MAILGUN_TO_EMAIL;
@@ -17,14 +17,13 @@ describe('Mail service', () => {
     } catch (e) {
       expect(false);
     }
-
   });
 
   it('Should Throw with invalid from', async () => {
     try {
       await sendRawEmail('wrongFrom', TO, 'Test email', testHtmlBody('User'));
     } catch (e) {
-        expect(e).to.have.property('message', '\'from\' parameter is not a valid address. please check documentation');
+      expect(e).to.have.property('message', '\'from\' parameter is not a valid address. please check documentation');
     }
   });
 
@@ -48,7 +47,7 @@ describe('Mail service', () => {
       const mailInfo = {
         from: FROM,
         to: TO,
-        subject: '[TEST] Confirmation email'
+        subject: '[TEST] Confirmation email',
       };
       await sendConfirmation(data, mailInfo);
     } catch (e) {
