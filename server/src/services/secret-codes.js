@@ -27,7 +27,6 @@ const signOffer = async (booking, key) => {
     paymentType: booking.paymentType,
     bookingHash: booking.bookingHash,
   };
-  console.log('Signature data:', signatureData);
   const hashedMessage = web3.utils.soliditySha3(
     { type: 'string', value: signatureData.roomType },
     { type: 'uint256', value: signatureData.weiPerNight },
@@ -40,7 +39,7 @@ const signOffer = async (booking, key) => {
   const accounts = web3.eth.accounts.wallet;
   const offerSignature = await web3.eth.sign(hashedMessage, accounts[0].address);
   web3.eth.accounts.wallet.clear();
-  return { signatureData, offerSignature, bookingHash };
+  return { signatureData, offerSignature };
 };
 
 module.exports = {

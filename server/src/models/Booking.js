@@ -13,6 +13,31 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noGuestEthAddress'],
   },
+  roomType: {
+    type: String,
+    enum: ['double', 'twin'],
+    required: [true, 'noRoomType'],
+  },
+  from: {
+    type: Number,
+    validate: {
+      validator: function (from) {
+        return from > 0 && from < 5;
+      },
+      message: 'fromOutOfRange',
+    },
+    required: [true, 'noFrom'],
+  },
+  to: {
+    type: Number,
+    validate: {
+      validator: function (to) {
+        return to >= this.from && to < 5;
+      },
+      message: 'toOutOfRange',
+    },
+    required: [true, 'noTo'],
+  },
   paymentAmount: {
     type: Number,
     validate: {
@@ -42,31 +67,6 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noEncryptedPersonalInfo'],
   },
-  roomType: {
-    type: String,
-    enum: ['double', 'twin'],
-    required: [true, 'noRoomType'],
-  },
-  from: {
-    type: Number,
-    validate: {
-      validator: function (from) {
-        return from > 0 && from < 5;
-      },
-      message: 'fromOutOfRange',
-    },
-    required: [true, 'noFrom'],
-  },
-  to: {
-    type: Number,
-    validate: {
-      validator: function (to) {
-        return to >= this.from && to < 5;
-      },
-      message: 'toOutOfRange',
-    },
-    required: [true, 'noTo'],
-  },
 });
 
 Booking.method({
@@ -78,7 +78,7 @@ Booking.method({
     this.encryptedPersonalInfo = utils.stringToHex(personalInfo);
   },
   decryptPersonalInfo: function () {
-    if (utils.isHex(this.encryptedPersonalInfo)) {
+    if (!utils.isHex(this.encryptedPersonalInfo)) {
       throw handleApplicationError('invalidEncryptedPersonalInfo');
     }
     let decoded = utils.hexToString(this.encryptedPersonalInfo);
@@ -110,6 +110,7 @@ Booking.post('save', function (error, doc, next) {
   if (!error.errors) {
     return next(error);
   }
+  
   const firstKeyError = Object.keys(error.errors)[0];
   const firstError = error.errors[firstKeyError];
   switch (firstError.name) {
