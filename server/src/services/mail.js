@@ -4,8 +4,7 @@ const {
   instructionsBody,
   bookingChangeBody,
 } = require('./html-generator');
-const BookingPoC = require('../../../smart-contracts/build/contracts/BookingPoC.json');
-const { web3 } = require('./web3');
+const { bookingPoc } = require('./web3');
 
 const mailgunClient = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
 
@@ -44,8 +43,8 @@ const sendInstructions = async ({ booking, offerSignature, signatureData, contra
     for (let i = booking.from; i <= booking.to; i++) {
       nights.push(i);
     }
-    const bookingPoC = new web3.eth.Contract(BookingPoC.abi, process.env.BOOKING_POC_ADDRESS);
-    const txData = bookingPoC.methods.bookWithEth(
+
+    const txData = bookingPoc.methods.bookWithEth(
       signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
       signatureData.roomType, nights, signatureData.bookingHash
     ).encodeABI();
@@ -63,4 +62,5 @@ module.exports = {
   sendRawEmail,
   sendConfirmation,
   sendInstructions,
+  sendBookingChange,
 };
