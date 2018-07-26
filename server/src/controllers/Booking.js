@@ -53,4 +53,10 @@ async function deleteBooking (filter) {
   return null;
 }
 
-module.exports = { readBooking, createBooking, deleteBooking };
+async function emailSentBooking (id) {
+  const bookingModel = await BookingModel.findById(id).exec();
+  bookingModel.emailSent = true;
+  return bookingModel.save();
+}
+
+module.exports = { readBooking, createBooking, deleteBooking, emailSentBooking };
