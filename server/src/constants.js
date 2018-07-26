@@ -11,6 +11,6 @@ module.exports = {
   },
   BOOKING_ROOM_TYPES: {
     twin: 'twin',
-    lif: 'lif',
+    double: 'double',
   },
 };
