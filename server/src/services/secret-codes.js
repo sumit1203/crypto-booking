@@ -1,6 +1,5 @@
 const crypto = require('crypto');
-const Web3 = require('web3');
-const web3 = new Web3(process.env.WEB3_PROVIDER);
+const { web3 } = require('./web3');
 
 const codeGenerator = async (data, secret) => {
   const hmac = crypto.createHmac('sha256', secret);
