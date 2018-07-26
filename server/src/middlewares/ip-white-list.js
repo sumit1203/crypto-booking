@@ -1,7 +1,7 @@
 const { handleApplicationError } = require('../errors');
 
 const validateIPWhiteList = function (req, res, next) {
-  if (process.env.WHITELIST == '*') {
+  if (process.env.WHITELIST === '*') {
     return next();
   }
   const whiteList = process.env.WHITELIST.split(',');
