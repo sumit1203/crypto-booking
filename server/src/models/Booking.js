@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
-  BOOKING_ROOM_TYPES } = require('../constants');
+  BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { utils } = require('web3');
 
@@ -68,6 +68,12 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noEncryptedPersonalInfo'],
   },
+  status: {
+    type: String,
+    required: [true, 'noStatus'],
+    default: 'pending',
+    enum: [BOOKING_STATUS.pending, BOOKING_STATUS.canceled, BOOKING_STATUS.approved],
+  },
 });
 
 Booking.method({
@@ -100,6 +106,18 @@ Booking.method({
       throw handleApplicationError('invalidEthPrice');
     }
     return utils.toWei((ROOM_TYPE_PRICES[this.roomType] / ethPrice).toString(), 'ether');
+  },
+  setAsPending: function () {
+    this.status = BOOKING_STATUS.pending;
+    return this.save();
+  },
+  setAsCanceled: function () {
+    this.status = BOOKING_STATUS.canceled;
+    return this.save();
+  },
+  setAsApproved: function () {
+    this.status = BOOKING_STATUS.approved;
+    return this.save();
   },
 });
 

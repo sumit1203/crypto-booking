@@ -13,4 +13,9 @@ module.exports = {
     twin: 'twin',
     double: 'double',
   },
+  BOOKING_STATUS: {
+    pending: 'pending',
+    canceled: 'canceled',
+    approved: 'approved',
+  },
 };
