@@ -157,10 +157,10 @@ export default class RoomBooking extends React.Component {
                 <div className="row mb-1">
                   <div className="col-sm-8">
                     <div className="row no-gutters mb-1">
-                      <div className="col-3">
+                      <div className="col-4">
                         <img src={payment} style={{position: 'relative', right: -30}} alt="icon" width="100" className="img-fluid"/>
                       </div>
-                      <div className="col-9">
+                      <div className="col-8">
                         <div className="form-check" style={{marginBottom: '0.3em', paddingTop: 7}}>
                           <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}} type="radio" name="pay-eth" id="pay-eth" value="ETH" defaultChecked={true}/>
                           <label className="form-check-label" htmlFor="payment-method">
