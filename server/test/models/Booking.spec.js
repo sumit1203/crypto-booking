@@ -2,6 +2,7 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const { Booking } = require('../../src/models/Booking');
+const { BOOKING_PAYMENT_TYPES } = require('../../src/constants');
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
 
 function basicValidationExpect (validation, field) {
@@ -78,19 +79,20 @@ describe('Booking model', () => {
   });
 
   describe('payment type', () => {
-    it('Should allow to set paymentType as "lif" or "eth"', () => {
-      const booking = new Booking(validBookingDB);
-      booking.paymentType = 'lif';
-      let validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.paymentType).to.be.equal('lif');
-      booking.paymentType = 'eth';
-      validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.paymentType).to.be.equal('eth');
+    const allowedPaymentTypes = Object.keys(BOOKING_PAYMENT_TYPES);
+    const allowedPaymentTypesString = allowedPaymentTypes.join(', ').toLowerCase();
+
+    it(`Should allow to set paymentType as ${allowedPaymentTypesString}`, () => {
+      for (const types of allowedPaymentTypes) {
+        const booking = new Booking(validBookingDB);
+        booking.paymentType = types;
+        const validation = booking.validateSync();
+        expect(validation).to.be.a('undefined');
+        expect(booking.paymentType).to.be.equal(types);
+      }
     });
 
-    it('Should throw an error if paymentType is not "eth" or "lif"', () => {
+    it(`Should throw an error if paymentType is not ${allowedPaymentTypes}`, () => {
       const booking = new Booking(validBookingDB);
       booking.paymentType = 'some invalid type';
       const validation = booking.validateSync();

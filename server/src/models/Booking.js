@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES } = require('../constants');
+const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { utils } = require('web3');
 
@@ -50,7 +50,7 @@ const Booking = new Schema({
   },
   paymentType: {
     type: String,
-    enum: ['eth', 'lif'],
+    enum: [BOOKING_PAYMENT_TYPES.eth, BOOKING_PAYMENT_TYPES.lif],
     required: [true, 'noPaymentType'],
   },
   paymentTx: {
@@ -110,7 +110,7 @@ Booking.post('save', function (error, doc, next) {
   if (!error.errors) {
     return next(error);
   }
-  
+
   const firstKeyError = Object.keys(error.errors)[0];
   const firstError = error.errors[firstKeyError];
   switch (firstError.name) {

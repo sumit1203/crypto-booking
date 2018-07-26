@@ -5,4 +5,8 @@ module.exports = {
     twin: 100,
     double: 100,
   },
+  BOOKING_PAYMENT_TYPES: {
+    eth: 'eth',
+    lif: 'lif',
+  },
 };
