@@ -1,5 +1,6 @@
 const express = require('express');
 const { createBooking, readBooking, deleteBooking } = require('../controllers/Booking');
+
 const { sendInstructions } = require('../services/mail');
 
 const router = express.Router();
@@ -26,9 +27,9 @@ router.post(`${bookingUrl}`, async (req, res, next) => {
   }
 });
 
-router.get(`${bookingUrl}/:id`, async (req, res, next) => {
+router.get(`${bookingUrl}/:bookingHash`, async (req, res, next) => {
   try {
-    const booking = await readBooking({ id: req.params.id });
+    const booking = await readBooking({ bookingHash: req.params.bookingHash });
     if (!booking) return next();
     res.json(booking);
   } catch (e) {
