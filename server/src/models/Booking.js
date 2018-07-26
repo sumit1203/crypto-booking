@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES } = require('../constants');
+const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
+  BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
-const { utils } = require('web3');
+const { web3 } = require('../services/web3');
 
 const Booking = new Schema({
   bookingHash: {
@@ -15,7 +16,7 @@ const Booking = new Schema({
   },
   roomType: {
     type: String,
-    enum: ['double', 'twin'],
+    enum: [BOOKING_ROOM_TYPES.double, BOOKING_ROOM_TYPES.twin],
     required: [true, 'noRoomType'],
   },
   from: {
@@ -50,7 +51,7 @@ const Booking = new Schema({
   },
   paymentType: {
     type: String,
-    enum: ['eth', 'lif'],
+    enum: [BOOKING_PAYMENT_TYPES.eth, BOOKING_PAYMENT_TYPES.lif],
     required: [true, 'noPaymentType'],
   },
   paymentTx: {
@@ -67,6 +68,16 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noEncryptedPersonalInfo'],
   },
+  emailSent: {
+    type: Boolean,
+    default: false,
+  },
+  status: {
+    type: String,
+    required: [true, 'noStatus'],
+    default: 'pending',
+    enum: [BOOKING_STATUS.pending, BOOKING_STATUS.canceled, BOOKING_STATUS.approved],
+  },
 });
 
 Booking.method({
@@ -75,18 +86,18 @@ Booking.method({
       throw handleApplicationError('invalidPersonalInfo');
     }
     personalInfo = JSON.stringify(personalInfo);
-    this.encryptedPersonalInfo = utils.stringToHex(personalInfo);
+    this.encryptedPersonalInfo = web3.utils.stringToHex(personalInfo);
   },
   decryptPersonalInfo: function () {
-    if (!utils.isHex(this.encryptedPersonalInfo)) {
+    if (!web3.utils.isHex(this.encryptedPersonalInfo)) {
       throw handleApplicationError('invalidEncryptedPersonalInfo');
     }
-    let decoded = utils.hexToString(this.encryptedPersonalInfo);
+    let decoded = web3.utils.hexToString(this.encryptedPersonalInfo);
     return JSON.parse(decoded);
   },
   generateBookingHash: function () {
     const randomCode = Math.floor((1 + Math.random()) * 10000);
-    this.bookingHash = utils.sha3(`${randomCode}${Date.now()}`);
+    this.bookingHash = web3.utils.sha3(`${randomCode}${Date.now()}`);
   },
   generatePaymentAmount: function (ethPrice) {
     if (typeof ethPrice !== 'number') {
@@ -98,7 +109,19 @@ Booking.method({
     if (typeof ethPrice !== 'number') {
       throw handleApplicationError('invalidEthPrice');
     }
-    return utils.toWei((ROOM_TYPE_PRICES[this.roomType] / ethPrice).toString(), 'ether');
+    return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / ethPrice).toString(), 'ether');
+  },
+  setAsPending: function () {
+    this.status = BOOKING_STATUS.pending;
+    return this.save();
+  },
+  setAsCanceled: function () {
+    this.status = BOOKING_STATUS.canceled;
+    return this.save();
+  },
+  setAsApproved: function () {
+    this.status = BOOKING_STATUS.approved;
+    return this.save();
   },
 });
 
@@ -110,7 +133,7 @@ Booking.post('save', function (error, doc, next) {
   if (!error.errors) {
     return next(error);
   }
-  
+
   const firstKeyError = Object.keys(error.errors)[0];
   const firstError = error.errors[firstKeyError];
   switch (firstError.name) {
