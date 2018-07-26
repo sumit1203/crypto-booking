@@ -36,7 +36,7 @@ const checkEtherumUpdates = () => {
 
   bookingPoc.getPastEvents('allEvents', options, (err, events) => {
     if (err) {
-      return console.log(err);
+      return console.error(err);
     }
     events.forEach((event) => {
       if (eventTypes[event.event]) {
