@@ -4,9 +4,8 @@ const {
   instructionsBody,
 } = require('./html-generator');
 const BookingPoC = require('../../../smart-contracts/build/contracts/BookingPoC.json');
-const Web3 = require('web3');
+const { web3 } = require('./web3');
 
-const web3 = new Web3(process.env.WEB3_PROVIDER);
 const mailgunClient = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
 
 const sendRawEmail = async (from = process.env.MAILGUN_FROM_EMAIL, to, subject, html) => {

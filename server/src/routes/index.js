@@ -1,5 +1,6 @@
 const express = require('express');
 const { createBooking, readBooking, deleteBooking } = require('../controllers/Booking');
+
 const { sendInstructions } = require('../services/mail');
 
 const router = express.Router();

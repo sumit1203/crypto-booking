@@ -2,6 +2,7 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const { Booking } = require('../../src/models/Booking');
+
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
 
 function basicValidationExpect (validation, field) {
