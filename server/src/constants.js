@@ -5,4 +5,9 @@ module.exports = {
     twin: 100,
     double: 100,
   },
+  BOOKING_STATUS: {
+    pending: 'pending',
+    cancel: 'cancel',
+    approve: 'approve',
+  },
 };

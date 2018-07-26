@@ -1,3 +1,5 @@
+const { BOOKING_STATUS } = require('../constants');
+
 module.exports = {
   genericError: {
     status: 500,
@@ -103,5 +105,15 @@ module.exports = {
     status: 409,
     short: 'No room type provided.',
     long: 'The roomType is required.',
+  },
+  noStatus: {
+    status: 409,
+    short: 'No propery "status" provided.',
+    long: '"from" is required.',
+  },
+  invalidStatus: {
+    status: 409,
+    short: 'Invalid propery "status" provided.',
+    long: `"status" could be ${Object.keys(BOOKING_STATUS).join(', ').toLowerCase()}.`,
   },
 };

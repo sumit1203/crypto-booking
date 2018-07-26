@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES } = require('../constants');
+const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { utils } = require('web3');
 
@@ -67,6 +67,12 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noEncryptedPersonalInfo'],
   },
+  status: {
+    type: String,
+    required: [true, 'noStatus'],
+    default: 'pending',
+    enum: [BOOKING_STATUS.pending, BOOKING_STATUS.cancel, BOOKING_STATUS.approve],
+  },
 });
 
 Booking.method({
@@ -100,6 +106,18 @@ Booking.method({
     }
     return utils.toWei((ROOM_TYPE_PRICES[this.roomType] / ethPrice).toString(), 'ether');
   },
+  setAsPending: function () {
+    this.status = BOOKING_STATUS.pending;
+    return this.save();
+  },
+  setAsCancel: function () {
+    this.status = BOOKING_STATUS.cancel;
+    return this.save();
+  },
+  setAsApprove: function () {
+    this.status = BOOKING_STATUS.approve;
+    return this.save();
+  },
 });
 
 // Error Handler
@@ -110,7 +128,7 @@ Booking.post('save', function (error, doc, next) {
   if (!error.errors) {
     return next(error);
   }
-  
+
   const firstKeyError = Object.keys(error.errors)[0];
   const firstError = error.errors[firstKeyError];
   switch (firstError.name) {
