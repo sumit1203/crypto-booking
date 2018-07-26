@@ -2,6 +2,7 @@ const mailgun = require('mailgun-js');
 const {
   confirmationBody,
   instructionsBody,
+  bookingChangeBody,
 } = require('./html-generator');
 const BookingPoC = require('../../../smart-contracts/build/contracts/BookingPoC.json');
 const { web3 } = require('./web3');
@@ -20,6 +21,16 @@ const sendRawEmail = async (from = process.env.MAILGUN_FROM_EMAIL, to, subject, 
 const sendConfirmation = async (data, { from, to, subject }) => {
   try {
     const html = confirmationBody(data);
+    return mailgunClient.messages().send({ from, to, subject, html });
+  } catch (e) {
+    // TODO: Handle errors
+    throw e;
+  }
+};
+
+const sendBookingChange = async (data, { from, to, subject }) => {
+  try {
+    const html = bookingChangeBody(data);
     return mailgunClient.messages().send({ from, to, subject, html });
   } catch (e) {
     // TODO: Handle errors
