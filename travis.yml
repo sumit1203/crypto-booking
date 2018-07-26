@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "node"
+cache:
+  directories:
+    - "node_modules" # This will tell Travis CI to cache the dependencies
+script: npm test # Here you could also run the build step of your application
+before_deploy: cd server && npm install now --no-save && npm install # Install Now CLI on Travis
+deploy:
+  - provider: script
+    script: npm run deploy
+    skip_cleanup: true
+    on:
+      master: true
