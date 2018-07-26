@@ -17,20 +17,20 @@ const sendRawEmail = async (from = process.env.MAILGUN_FROM_EMAIL, to, subject, 
   }
 };
 
-const sendConfirmation = async (data, { from, to, subject }) => {
+const sendConfirmation = async (event, secretCode, to) => {
   try {
-    const html = confirmationBody(data);
-    return mailgunClient.messages().send({ from, to, subject, html });
+    const html = confirmationBody(event, secretCode);
+    return mailgunClient.messages().send({ from: process.env.MAILGUN_FROM_EMAIL, to, subject: 'Hotel confirmation for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
     throw e;
   }
 };
 
-const sendBookingChange = async (data, { from, to, subject }) => {
+const sendBookingChange = async (event, secretCode, to) => {
   try {
-    const html = bookingChangeBody(data);
-    return mailgunClient.messages().send({ from, to, subject, html });
+    const html = bookingChangeBody(event, secretCode);
+    return mailgunClient.messages().send({ from: process.env.MAILGUN_FROM_EMAIL, to, subject: 'Hotel changes for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
     throw e;
