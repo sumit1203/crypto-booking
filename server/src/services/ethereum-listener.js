@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-const BookingPoc = require('../../../smart-contracts/build/contracts/BookingPoC.json');
+const BookingPoc = require('../public/BookingPoC.json');
 
 const {
   sendConfirmation,
