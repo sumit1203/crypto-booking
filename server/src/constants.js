@@ -7,7 +7,7 @@ module.exports = {
   },
   BOOKING_STATUS: {
     pending: 'pending',
-    cancel: 'cancel',
-    approve: 'approve',
+    canceled: 'canceled',
+    approved: 'approved',
   },
 };

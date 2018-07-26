@@ -71,7 +71,7 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noStatus'],
     default: 'pending',
-    enum: [BOOKING_STATUS.pending, BOOKING_STATUS.cancel, BOOKING_STATUS.approve],
+    enum: [BOOKING_STATUS.pending, BOOKING_STATUS.canceled, BOOKING_STATUS.approved],
   },
 });
 
@@ -110,12 +110,12 @@ Booking.method({
     this.status = BOOKING_STATUS.pending;
     return this.save();
   },
-  setAsCancel: function () {
-    this.status = BOOKING_STATUS.cancel;
+  setAsCanceled: function () {
+    this.status = BOOKING_STATUS.canceled;
     return this.save();
   },
-  setAsApprove: function () {
-    this.status = BOOKING_STATUS.approve;
+  setAsApproved: function () {
+    this.status = BOOKING_STATUS.approved;
     return this.save();
   },
 });

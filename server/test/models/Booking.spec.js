@@ -219,24 +219,24 @@ describe('Booking model', () => {
     describe('setAsPending', () => {
       it('Should set the booking as pending', async () => {
         const booking = new Booking(validBookingDB);
-        booking.status = BOOKING_STATUS.approve;
+        booking.status = BOOKING_STATUS.approved;
         await booking.save();
         await booking.setAsPending();
         expect(booking).to.have.property('status', BOOKING_STATUS.pending);
       });
     });
-    describe('setAsCancel', async () => {
-      it('Should set the booking as cancel', async () => {
+    describe('setAsCanceled', async () => {
+      it('Should set the booking as canceled', async () => {
         const booking = new Booking(validBookingDB);
-        await booking.setAsCancel();
-        expect(booking).to.have.property('status', BOOKING_STATUS.cancel);
+        await booking.setAsCanceled();
+        expect(booking).to.have.property('status', BOOKING_STATUS.canceled);
       });
     });
-    describe('setAsApprove', async () => {
-      it('Should set the booking as approve', async () => {
+    describe('setAsApproved', async () => {
+      it('Should set the booking as approved', async () => {
         const booking = new Booking(validBookingDB);
-        await booking.setAsApprove();
-        expect(booking).to.have.property('status', BOOKING_STATUS.approve);
+        await booking.setAsApproved();
+        expect(booking).to.have.property('status', BOOKING_STATUS.approved);
       });
     });
     describe('generate', () => {
