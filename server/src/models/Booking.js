@@ -68,9 +68,15 @@ const Booking = new Schema({
     type: String,
     required: [true, 'noEncryptedPersonalInfo'],
   },
-  emailSent: {
+  confirmationEmailSent: {
     type: Boolean,
     default: false,
+  },
+  lastChange: {
+    type: Number,
+    default: function () {
+      return Date.now() / 1000;
+    },
   },
   status: {
     type: String,

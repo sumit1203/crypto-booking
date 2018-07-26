@@ -13,6 +13,8 @@ before(async () => {
   BookingModel = mongoose.model('Booking');
 });
 after(async () => {
+  const { ethereunListenerCron } = require('../../src/app');
+  ethereunListenerCron.destroy();
   await server.close();
   await mongoose.connection.close();
 });

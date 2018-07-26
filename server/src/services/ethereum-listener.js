@@ -1,38 +1,52 @@
-const Web3 = require('web3');
-const BookingPoc = require('../../../smart-contracts/build/contracts/BookingPoC.json');
+const { bookingPoc } = require('./web3');
+const { readBooking, changesEmailSentBooking, confirmationEmailSentBooking } = require('../controllers/Booking');
+const { sendConfirmation, sendBookingChange } = require('./mail.js');
+const { codeGenerator } = require('./secret-codes.js');
 
-const {
-  sendConfirmation,
-} = require('./mail.js');
+let _nextBlockToProcess = process.env.STARTING_BLOCK;
 
-const {
-  codeGenerator,
-} = require('./secret-codes.js');
-
-const secret = process.env.SECRET;
-const web3 = new Web3(process.env.WEB3_PROVIDER);
-
-const bookingPoc = new web3.eth.Contract(BookingPoc.abi, process.env.BOOKING_POC_ADDRESS);
-
-const onBookingDoneData = async ({ returnValues, transactionHash }) => {
-  const from = process.env.MAILGUN_FROM_EMAIL;
-  // TODO: We need to read the email from storage ...
-  const to = process.env.MAILGUN_TO_EMAIL;
-  const subject = 'ETHBerlin booking confirmation.';
-  const dataString = `${returnValues}${transactionHash}`;
-  const secretCode = codeGenerator(dataString, secret);
-  return sendConfirmation({
-    ...returnValues,
-    transactionHash,
-    secretCode: await secretCode,
-  },
-  { from, to, subject });
-  // TODO: Add logger here
+const onBookingDone = async (event) => {
+  const booking = readBooking({ bookingHash: event.returnValues.bookingHash });
+  if (booking.confirmationEmailSent) {
+    return;
+  }
+  sendConfirmation(event, await codeGenerator(event), booking.personalInfo.email);
+  confirmationEmailSentBooking(booking.id);
 };
 
-bookingPoc.events.BookingDone()
-  .on('data', onBookingDoneData);
+const onBookingChange = async (event) => {
+  const booking = readBooking({ bookingHash: event.returnValues.bookingHash });
+  if (booking.guestEthAddress === event.returnValues.newGuest) {
+    return;
+  }
+  sendBookingChange(event, await codeGenerator(event), booking.personalInfo.email);
+  changesEmailSentBooking(booking.id);
+};
+
+const eventTypes = {
+  'BookingChanged': onBookingChange,
+  'BookingDone': onBookingDone,
+};
+
+const checkEtherumUpdates = () => {
+  const options = {
+    fromBlock: _nextBlockToProcess,
+    toBlock: 'latest',
+  };
+
+  bookingPoc.getPastEvents('allEvents', options, (err, events) => {
+    if (err) {
+      return console.error(err);
+    }
+    events.forEach((event) => {
+      if (eventTypes[event.event]) {
+        eventTypes[event.event](event);
+      }
+      _nextBlockToProcess = event.blockNumber + 1;
+    });
+  });
+};
 
 module.exports = {
-  onBookingDoneData,
+  checkEtherumUpdates,
 };
