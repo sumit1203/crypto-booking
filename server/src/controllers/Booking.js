@@ -11,7 +11,7 @@ async function createBooking (data) {
   data.ethPrice = await fetchEthPrice();
   const bookingModel = BookingModel.generate(data);
   await bookingModel.save();
-  const booking = bookingModel.toObject();
+  const booking = _prepareForExport(bookingModel);
   booking.weiPerNight = bookingModel.getWeiPerNight(data.ethPrice);
   booking.personalInfo = bookingModel.decryptPersonalInfo();
   const { signatureData, offerSignature } = await signOffer(booking, await readKey());
@@ -23,6 +23,12 @@ async function createBooking (data) {
   };
 }
 
+function _prepareForExport (bookingModel) {
+  const booking = bookingModel.toObject();
+  booking.personalInfo = bookingModel.decryptPersonalInfo();
+  return booking;
+}
+
 /**
   * Finds the booking in the bd and returns an instance of Booking
   * @param {Object} {id: <Booking_id>}
@@ -32,9 +38,12 @@ async function readBooking (filter) {
   if (mongoose.Types.ObjectId.isValid(filter.id)) {
     const bookingModel = await BookingModel.findById(filter.id).exec();
     if (!bookingModel) return null;
-    const booking = bookingModel.toObject();
-    booking.personalInfo = bookingModel.decryptPersonalInfo();
-    return booking;
+    return _prepareForExport(bookingModel);
+  }
+  if (filter.bookingHash) {
+    const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
+    if (!bookingModel) return null;
+    return _prepareForExport(bookingModel);
   }
   return null;
 }
@@ -46,4 +55,10 @@ async function deleteBooking (filter) {
   return null;
 }
 
-module.exports = { readBooking, createBooking, deleteBooking };
+async function emailSentBooking (id) {
+  const bookingModel = await BookingModel.findById(id).exec();
+  bookingModel.emailSent = true;
+  return bookingModel.save();
+}
+
+module.exports = { readBooking, createBooking, deleteBooking, emailSentBooking };

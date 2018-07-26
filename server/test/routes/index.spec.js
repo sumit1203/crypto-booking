@@ -51,11 +51,11 @@ describe('Booking API', () => {
     });
   });
 
-  describe('GET /api/booking/:id', () => {
+  describe('GET /api/booking/:bookingHash', () => {
     it('Should read a booking', async () => {
       const dbBooking = BookingModel.generate(validBookingWithEthPrice);
       await dbBooking.save();
-      const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'GET', json: true });
+      const booking = await request({ url: `${apiUrl}/booking/${dbBooking.bookingHash}`, method: 'GET', json: true });
       expect(booking).to.have.property('_id');
       expect(booking).to.have.property('bookingHash');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
