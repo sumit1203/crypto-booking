@@ -1,11 +1,21 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Home from './Home';
+import Loadable from 'react-loadable';
+
+const LoadableHome = Loadable({
+    loader: () => import(
+        /* webpackChunkName: "Home-page" */
+        /* webpackMode: "lazy" */
+        './Home'),
+    loading() {
+        return <div>Loading...</div>
+    }
+});
 
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/" component={LoadableHome} />
     </Switch>
   </BrowserRouter>
 
