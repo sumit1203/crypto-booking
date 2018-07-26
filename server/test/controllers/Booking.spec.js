@@ -5,7 +5,7 @@ require('../../src/models');
 const mongoose = require('mongoose');
 
 const BookingModel = mongoose.model('Booking');
-const { createBooking, readBooking } = require('../../src/controllers/Booking');
+const { createBooking, readBooking, emailSentBooking } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 after(() => {
   mongoose.connection.close();
@@ -32,6 +32,7 @@ describe('Booking controller', () => {
     expect(booking.personalInfo).to.be.a('object');
     expect(booking).to.have.property('roomType');
     expect(booking.roomType).to.be.a('string');
+    expect(booking).to.have.property('emailSent', false);
     expect(offerSignature).to.not.be.an('undefined');
   });
 
@@ -75,6 +76,7 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
     expect(booking).to.have.property('to', validBookingWithEthPrice.to);
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);
+    expect(booking).to.have.property('emailSent', false);
   });
 
   it('Should read a booking using bookingHash', async () => {
@@ -102,5 +104,11 @@ describe('Booking controller', () => {
   it('Should return null if the id not exists', async () => {
     const booking = await readBooking({ id: 'fake id' });
     expect(booking).to.be.equal(null);
+  });
+  it('Should set emailSent as true', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    await dbBooking.save();
+    const booking = await emailSentBooking(dbBooking._id);
+    expect(booking).to.be.property('emailSent', true);
   });
 });
