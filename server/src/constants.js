@@ -9,4 +9,8 @@ module.exports = {
     eth: 'eth',
     lif: 'lif',
   },
+  BOOKING_ROOM_TYPES: {
+    twin: 'twin',
+    lif: 'lif',
+  },
 };
