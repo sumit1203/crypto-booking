@@ -6,7 +6,7 @@
   "scripts": {
     "test": "eslint .",
     "start": "NODE_ENV=development webpack-dev-server",
-    "build": "webpack --mode=production",
+    "build": "NODE_ENV=production webpack --mode=production",
     "deploy": "now deploy --public",
     "now-start": "NODE_ENV=production serve --single ./public"
   },
@@ -14,11 +14,13 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
+    "compression-webpack-plugin": "^1.1.11",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "cssnano": "^4.0.2",
@@ -31,7 +33,9 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.1",
     "node-sass": "^4.9.2",
+    "optimize-css-assets-webpack-plugin": "^5.0.0",
     "postcss": "^7.0.0",
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^2.1.6",
@@ -52,11 +56,10 @@
     "react-loadable": "^5.4.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-virtualized": "^9.20.1",
     "serve": "^9.2.0",
+    "web3": "^1.0.0-beta.34",
     "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets",
-    "windingtree-ui": "git+https://github.com/windingtree/wt-ui.git#develop",
-    "web3": "^1.0.0-beta.34"
+    "windingtree-ui": "git+https://github.com/windingtree/wt-ui.git#develop"
   },
   "now": {
     "name": "crypto-booking",
