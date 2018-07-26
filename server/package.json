@@ -7,7 +7,12 @@
     "start": "NODE_ENV=production node ./src/index.js",
     "dev": "NODE_ENV=develop node ./src/index.js",
     "test": "rimraf .nyc_output && NODE_ENV=test ./node_modules/.bin/nyc --reporter=text ./node_modules/mocha/bin/mocha test/**/*.spec.js --timeout 20000",
+<<<<<<< HEAD
     "lint": "eslint src test",
+=======
+    "lint": "eslint src",
+    "deploy": "now --token $NOW_TOKEN",
+>>>>>>> f595d28... chore: Add deploy script for now.sh
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
