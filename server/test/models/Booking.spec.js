@@ -2,6 +2,7 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const { Booking } = require('../../src/models/Booking');
+const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../../src/constants');
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
 
 function basicValidationExpect (validation, field) {
@@ -10,36 +11,6 @@ function basicValidationExpect (validation, field) {
 }
 
 describe('Booking model', () => {
-  xdescribe('encryptPersonalInfo', () => {});
-  xdescribe('decryptPersonalInfo', () => {});
-  xdescribe('generateBookingHash', () => {});
-  xdescribe('generatePaymentAmount', () => {});
-  xdescribe('getWeiPerNight', () => {});
-  describe('generate', () => {
-    it('Should generate no error using validBooking data', async () => {
-      const booking = Booking.generate(validBookingWithEthPrice);
-      const validation = await booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking).to.have.property('bookingHash');
-      expect(booking.bookingHash).to.be.a('string');
-      expect(booking).to.have.property('guestEthAddress', validBookingWithEthPrice.guestEthAddress);
-      expect(booking.guestEthAddress).to.be.a('string');
-      expect(booking).to.have.property('paymentAmount');
-      expect(booking.paymentAmount).to.be.a('number');
-      expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
-      expect(booking.paymentType).to.be.a('string');
-      expect(booking).to.have.property('paymentTx', validBookingWithEthPrice.paymentTx);
-      expect(booking.paymentTx).to.be.a('string');
-      expect(booking).to.have.property('signatureTimestamp');
-      expect(booking.signatureTimestamp).to.be.a('number');
-      expect(booking).to.have.property('encryptedPersonalInfo');
-      expect(booking.encryptedPersonalInfo).to.be.a('string');
-      expect(booking).to.have.property('roomType');
-      expect(booking.roomType).to.be.a('string');
-      expect(booking).to.have.property('emailSent', false);
-    });
-  });
-
   describe('bookingHash', () => {
     it('Should throw an error if bookingHash is not defined', () => {
       const booking = Booking.generate(validBookingWithEthPrice);
@@ -79,19 +50,20 @@ describe('Booking model', () => {
   });
 
   describe('payment type', () => {
-    it('Should allow to set paymentType as "lif" or "eth"', () => {
-      const booking = new Booking(validBookingDB);
-      booking.paymentType = 'lif';
-      let validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.paymentType).to.be.equal('lif');
-      booking.paymentType = 'eth';
-      validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.paymentType).to.be.equal('eth');
+    const allowedPaymentTypes = Object.keys(BOOKING_PAYMENT_TYPES);
+    const allowedPaymentTypesString = allowedPaymentTypes.join(', ').toLowerCase();
+
+    it(`Should allow to set paymentType as ${allowedPaymentTypesString}`, () => {
+      for (const types of allowedPaymentTypes) {
+        const booking = new Booking(validBookingDB);
+        booking.paymentType = types;
+        const validation = booking.validateSync();
+        expect(validation).to.be.a('undefined');
+        expect(booking.paymentType).to.be.equal(types);
+      }
     });
 
-    it('Should throw an error if paymentType is not "eth" or "lif"', () => {
+    it(`Should throw an error if paymentType is not ${allowedPaymentTypes}`, () => {
       const booking = new Booking(validBookingDB);
       booking.paymentType = 'some invalid type';
       const validation = booking.validateSync();
@@ -130,19 +102,19 @@ describe('Booking model', () => {
   });
 
   describe('roomType', () => {
-    it('Should allow to set roomType as "double" and "twin"', () => {
-      const booking = new Booking(validBookingDB);
-      booking.roomType = 'double';
-      let validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.roomType).to.be.equal('double');
-      booking.roomType = 'twin';
-      validation = booking.validateSync();
-      expect(validation).to.be.a('undefined');
-      expect(booking.roomType).to.be.equal('twin');
+    const allowedRoomTypes = Object.keys(BOOKING_ROOM_TYPES);
+    const allowedRoomTypesString = allowedRoomTypes.join(', ').toLowerCase();
+    it(`Should allow to set roomType as ${allowedRoomTypesString}`, () => {
+      for (const types of allowedRoomTypes) {
+        const booking = new Booking(validBookingDB);
+        booking.roomType = types;
+        const validation = booking.validateSync();
+        expect(validation).to.be.a('undefined');
+        expect(booking.roomType).to.be.equal(types);
+      }
     });
 
-    it('Should throw an error if roomType is not "double" or "twin"', () => {
+    it(`Should throw an error if roomType is not ${allowedRoomTypesString}`, () => {
       const booking = new Booking(validBookingDB);
       booking.roomType = 'some other room';
       const validation = booking.validateSync();
@@ -150,7 +122,7 @@ describe('Booking model', () => {
       expect(validation.errors.roomType).to.have.property('kind', 'enum');
     });
 
-    it('Should throw an error if personalInfo is not defined', () => {
+    it('Should throw an error if roomType is not defined', () => {
       const booking = new Booking(validBookingDB);
       booking.roomType = '';
       const validation = booking.validateSync();
@@ -208,6 +180,89 @@ describe('Booking model', () => {
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'to');
       expect(validation.errors.to).to.have.property('message', 'noTo');
+    });
+  });
+  describe('status', () => {
+    const allowedStatus = Object.keys(BOOKING_STATUS);
+    const allowedStatusString = allowedStatus.join(', ').toLowerCase();
+    it(`Should allow to set status as ${allowedStatusString}`, async () => {
+      const booking = new Booking(validBookingDB);
+      for (const status of allowedStatus) {
+        booking.status = status;
+        const validation = booking.validateSync();
+        expect(validation).to.be.a('undefined');
+        expect(booking.status).to.be.equal(status);
+      }
+    });
+
+    it(`Should throw an error if status is not ${allowedStatusString}`, () => {
+      const booking = new Booking(validBookingDB);
+      booking.status = 'some other status';
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'status');
+      expect(validation.errors.status).to.have.property('kind', 'enum');
+    });
+
+    it('Should throw an error if status is not defined', () => {
+      const booking = new Booking(validBookingDB);
+      booking.status = '';
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'status');
+      expect(validation.errors.status).to.have.property('message', 'noStatus');
+    });
+  });
+  describe('methods', () => {
+    xdescribe('encryptPersonalInfo', () => {});
+    xdescribe('decryptPersonalInfo', () => {});
+    xdescribe('generateBookingHash', () => {});
+    xdescribe('generatePaymentAmount', () => {});
+    xdescribe('getWeiPerNight', () => {});
+    describe('setAsPending', () => {
+      it('Should set the booking as pending', async () => {
+        const booking = new Booking(validBookingDB);
+        booking.status = BOOKING_STATUS.approved;
+        await booking.save();
+        await booking.setAsPending();
+        expect(booking).to.have.property('status', BOOKING_STATUS.pending);
+      });
+    });
+    describe('setAsCanceled', async () => {
+      it('Should set the booking as canceled', async () => {
+        const booking = new Booking(validBookingDB);
+        await booking.setAsCanceled();
+        expect(booking).to.have.property('status', BOOKING_STATUS.canceled);
+      });
+    });
+    describe('setAsApproved', async () => {
+      it('Should set the booking as approved', async () => {
+        const booking = new Booking(validBookingDB);
+        await booking.setAsApproved();
+        expect(booking).to.have.property('status', BOOKING_STATUS.approved);
+      });
+    });
+    describe('generate', () => {
+      it('Should generate no error using validBooking data', async () => {
+        const booking = Booking.generate(validBookingWithEthPrice);
+        const validation = await booking.validateSync();
+        expect(validation).to.be.a('undefined');
+        expect(booking).to.have.property('bookingHash');
+        expect(booking.bookingHash).to.be.a('string');
+        expect(booking).to.have.property('guestEthAddress', validBookingWithEthPrice.guestEthAddress);
+        expect(booking.guestEthAddress).to.be.a('string');
+        expect(booking).to.have.property('paymentAmount');
+        expect(booking.paymentAmount).to.be.a('number');
+        expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
+        expect(booking.paymentType).to.be.a('string');
+        expect(booking).to.have.property('paymentTx', validBookingWithEthPrice.paymentTx);
+        expect(booking.paymentTx).to.be.a('string');
+        expect(booking).to.have.property('signatureTimestamp');
+        expect(booking.signatureTimestamp).to.be.a('number');
+        expect(booking).to.have.property('encryptedPersonalInfo');
+        expect(booking.encryptedPersonalInfo).to.be.a('string');
+        expect(booking).to.have.property('roomType');
+        expect(booking.roomType).to.be.a('string');
+        expect(booking).to.have.property('status', BOOKING_STATUS.pending);
+      });
     });
   });
 });

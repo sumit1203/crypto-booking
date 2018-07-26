@@ -56,7 +56,7 @@ describe('Booking controller', () => {
     }
   });
 
-  it('Should read a booking', async () => {
+  it('Should read a booking using id', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice);
     await dbBooking.save();
     const booking = await readBooking({ id: dbBooking._id });
@@ -77,6 +77,28 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('to', validBookingWithEthPrice.to);
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);
     expect(booking).to.have.property('emailSent', false);
+  });
+
+  it('Should read a booking using bookingHash', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    await dbBooking.save();
+    const booking = await readBooking({ bookingHash: dbBooking.bookingHash });
+    expect(booking).to.have.property('_id');
+    expect(booking).to.have.property('bookingHash');
+    expect(booking.bookingHash).to.be.a('string');
+    expect(booking).to.have.property('guestEthAddress', validBookingWithEthPrice.guestEthAddress);
+    expect(booking).to.have.property('paymentAmount');
+    expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
+    expect(booking).to.have.property('signatureTimestamp');
+    expect(booking.signatureTimestamp).to.have.a('number');
+    expect(booking).to.have.property('personalInfo');
+    expect(booking.personalInfo).to.have.property('name', validBookingWithEthPrice.personalInfo.name);
+    expect(booking.personalInfo).to.have.property('email', validBookingWithEthPrice.personalInfo.email);
+    expect(booking.personalInfo).to.have.property('birthday', validBookingWithEthPrice.personalInfo.birthday);
+    expect(booking.personalInfo).to.have.property('phone', validBookingWithEthPrice.personalInfo.phone);
+    expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
+    expect(booking).to.have.property('to', validBookingWithEthPrice.to);
+    expect(booking).to.have.property('from', validBookingWithEthPrice.from);
   });
 
   it('Should return null if the id not exists', async () => {
