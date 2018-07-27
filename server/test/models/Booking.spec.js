@@ -4,6 +4,8 @@ const { expect } = require('chai');
 const { Booking } = require('../../src/models/Booking');
 const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../../src/constants');
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
+const { AES, enc } = require('crypto-js');
+const { web3 } = require('../../src/services/web3');
 
 function basicValidationExpect (validation, field) {
   expect(validation).to.have.property('errors');
@@ -212,8 +214,35 @@ describe('Booking model', () => {
     });
   });
   describe('methods', () => {
-    xdescribe('encryptPersonalInfo', () => {});
-    xdescribe('decryptPersonalInfo', () => {});
+    describe('encryptPersonalInfo', () => {
+      it('Should encode to hex and encrypt personal info', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, booking.bookingHash);
+        expect(booking).to.have.property('encryptedPersonalInfo');
+        const bytes = AES.decrypt(booking.encryptedPersonalInfo, booking.bookingHash);
+        const encodedPersonalInfo = bytes.toString(enc.Utf8);
+        expect(web3.utils.isHex(encodedPersonalInfo)).to.be.equal(true);
+        const decryptPersonalInfo = JSON.parse(web3.utils.hexToString(encodedPersonalInfo));
+        expect(decryptPersonalInfo).to.be.deep.equal(validBookingWithEthPrice.personalInfo);
+      });
+    });
+    describe('decryptPersonalInfo', () => {
+      it('Should decode personal info', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, booking.bookingHash);
+        const decryptPersonalInfo = booking.decryptPersonalInfo(booking.bookingHash);
+        expect(decryptPersonalInfo).to.be.deep.equal(validBookingWithEthPrice.personalInfo);
+      });
+      it('Should return an empty object on invalid bookingHash', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, booking.bookingHash);
+        const decryptPersonalInfo = booking.decryptPersonalInfo('fakeBookinHash');
+        expect(decryptPersonalInfo).to.be.deep.equal({});
+      });
+    });
     xdescribe('generateBookingHash', () => {});
     xdescribe('generatePaymentAmount', () => {});
     xdescribe('getWeiPerNight', () => {});
