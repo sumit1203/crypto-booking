@@ -80,7 +80,7 @@ class BookingSection extends React.Component {
 
         const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo};
 
-        const response = await fetch('http://localhost:3001/api/booking', {
+        const response = await fetch(process.env.SIGNER_API+'/api/booking', {
             method: 'POST',
             body: JSON.stringify(data),
             headers:{
