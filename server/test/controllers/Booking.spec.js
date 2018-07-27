@@ -8,7 +8,8 @@ const {
   createBooking,
   readBooking,
   confirmationEmailSentBooking,
-  changesEmailSentBooking } = require('../../src/controllers/Booking');
+  changesEmailSentBooking,
+  sendBookingInfoByEmail } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 
 after(() => {
@@ -120,5 +121,11 @@ describe('Booking controller', () => {
     const booking = await changesEmailSentBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking.changesEmailSent).to.be.at.least(changesEmailSent);
+  });
+  xit('Should send an email information', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    await dbBooking.save();
+    const sent = await sendBookingInfoByEmail(dbBooking.bookingHash);
+    expect(sent).to.be.equal(true);
   });
 });
