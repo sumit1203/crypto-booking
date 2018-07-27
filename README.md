@@ -1,27 +1,17 @@
-# Crypto booking app
-[WIP]
+# Crypto Booking
 
-## App configuration
-Create a new `.env` file with the following fields.
+This repository contains all the necessary solutions to offer hotel rooms in exchange of ETH or Lif tokens. It is compound by a web app, server signer and smart contracts, it connects directly to WT api, the hotel need to be deployed in one of WT networks.
 
-```bash
-WHITELIST=11.22.33.44,55.66.77.88
-SERVER_PORT=3001
-```
+For more info read the [docs](https://docs.google.com/document/d/1ERV07bu1K4tpnZh7aZhA4Z4MlDQteVH2TwDk5AvWM7w/edit?usp=sharing)
 
-## Install
-```bash
-$ npm i
-```
+## App
+ The web app to show hotel inventory from WT api is located inside of the [app](https://github.com/windingtree/crypto-booking/tree/develop/app)
+directory
 
-## Test
-Start the server
-```bash
-$ npm test
-```
+## Server
+ The server to sign offers and manage bookings is located inside of the [server](https://github.com/windingtree/crypto-booking/tree/develop/server)
+directory
 
-## Run
-Start the server
-```bash
-$ npm start
-```
+## Smart contracts
+ The smart contracts to manage rooms availability is located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking/tree/develop/smart-contracts)
+directory

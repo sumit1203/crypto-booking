@@ -56,6 +56,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.production
 
 # test and key files
 keys/*.json
@@ -63,9 +64,3 @@ test/utils/temp-keys/*
 
 # IDE
 .idea/
-
-# truffle
-smart-contracts/build
-
-# ETH keys
-smart-contracts/keys.json
