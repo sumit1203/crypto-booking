@@ -5,7 +5,7 @@
   "directories": {
     "server": "server",
     "app": "app",
-    "contracts": "smart-contracts"
+    "contracts": "contracts"
   },
   "keywords": [
     "winding-tree",
