@@ -1,7 +1,7 @@
 {
   "name": "crypto-booking-contracts",
-  "version": "0.0.1",
-  "description": "Smart contracts to book rooms using crypto",
+  "version": "0.1.0",
+  "description": "Smart contracts to book rooms using crypto.",
   "directories": {
     "test": "test"
   },
@@ -13,15 +13,6 @@
     "deploy-ropsten": "./node_modules/.bin/truffle migrate --network ropsten --reset",
     "contract-flattener": "node_modules/.bin/truffle-flattener contracts/BookingPoC.sol > build/BookingPocFlattened.sol"
   },
-  "publishConfig": {
-    "access": "public",
-    "tag": "next"
-  },
-  "keywords": [
-    "winding-tree",
-    "smart-contracts"
-  ],
-  "main": "index.js",
   "author": "Winding Tree Developers <dev@windingtree.com>",
   "license": "GPL-3.0-only",
   "dependencies": {

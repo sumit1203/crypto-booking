@@ -1,8 +1,7 @@
 {
-  "name": "crypto-booking-app",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "name": "crypto-booking-server",
+  "version": "0.1.0",
+  "description": "Nodejs server to sign room offers and manage bookings.",
   "scripts": {
     "start": "NODE_ENV=production node ./src/index.js",
     "dev": "NODE_ENV=develop node --inspect ./src/index.js",
@@ -11,16 +10,6 @@
     "deploy": "now --token $NOW_TOKEN",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/windingtree/crypto-booking-app.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/windingtree/crypto-booking-app/issues"
-  },
-  "homepage": "https://github.com/windingtree/crypto-booking-app#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
