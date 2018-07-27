@@ -5,13 +5,13 @@ This repository contains all the necessary solutions to offer hotel rooms in exc
 For more info read the [docs](https://docs.google.com/document/d/1ERV07bu1K4tpnZh7aZhA4Z4MlDQteVH2TwDk5AvWM7w/edit?usp=sharing)
 
 ## App
- The web app to show hotel inventory from WT api is located inside of the [app](https://github.com/windingtree/crypto-booking-app/tree/develop/app)
+ The web app to show hotel inventory from WT api is located inside of the [app](https://github.com/windingtree/crypto-booking/tree/develop/app)
 directory
 
 ## Server
- The server to sign offers and manage bookings is located inside of the [server](https://github.com/windingtree/crypto-booking-app/tree/develop/server)
+ The server to sign offers and manage bookings is located inside of the [server](https://github.com/windingtree/crypto-booking/tree/develop/server)
 directory
 
 ## Smart contracts
- The smart contracts to manage rooms availability is located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking-app/tree/develop/smart-contracts)
+ The smart contracts to manage rooms availability is located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking/tree/develop/smart-contracts)
 directory
