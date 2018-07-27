@@ -17,7 +17,7 @@ jobs:
     install: true
     if: tag IS present
     script:
-    - npm install -g now && npm i -g truffle
+    - npm i -g now && npm i -g truffle
     - cd contracts && truffle compile
     - echo 'Deploying to NOW'
     - cd server && npm run deploy && npm run alias
