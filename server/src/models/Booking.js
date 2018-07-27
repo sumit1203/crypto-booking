@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const { AES, enc } = require('crypto-js');
 const Schema = mongoose.Schema;
 const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
   BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
+const { encrypt, decrypt } = require('../services/crypto');
 
 const Booking = new Schema({
   bookingHash: {
@@ -97,22 +97,25 @@ Booking.method({
     }
     personalInfo = JSON.stringify(personalInfo);
     const hexEncoded = web3.utils.stringToHex(personalInfo);
-    this.encryptedPersonalInfo = AES.encrypt(hexEncoded, bookingHash).toString();
+
+    this.encryptedPersonalInfo = encrypt(hexEncoded, bookingHash).toString();
   },
   decryptPersonalInfo: function (bookingHash) {
-    let bytes;
     let encodedPersonalInfo;
     try {
-      bytes = AES.decrypt(this.encryptedPersonalInfo, bookingHash);
-      encodedPersonalInfo = bytes.toString(enc.Utf8);
+      encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, bookingHash);
     } catch (e) {
       encodedPersonalInfo = null;
     }
     if (!web3.utils.isHex(encodedPersonalInfo)) {
       return {};
     }
-    const personalInfo = web3.utils.hexToString(encodedPersonalInfo);
-    return JSON.parse(personalInfo);
+    try {
+      const personalInfo = web3.utils.hexToString(encodedPersonalInfo);
+      return JSON.parse(personalInfo);
+    } catch (e) {
+      return {};
+    }
   },
   generateBookingHash: function () {
     const randomCode = Math.floor((1 + Math.random()) * 10000);
