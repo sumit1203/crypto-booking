@@ -1,5 +1,5 @@
 const express = require('express');
-const { createBooking, readBooking, deleteBooking } = require('../controllers/Booking');
+const { createBooking, readBooking, deleteBooking, sendBookingInfoByEmail } = require('../controllers/Booking');
 
 const { sendInstructions } = require('../services/mail');
 
@@ -32,6 +32,15 @@ router.get(`${bookingUrl}/:bookingHash`, async (req, res, next) => {
     const booking = await readBooking({ bookingHash: req.params.bookingHash });
     if (!booking) return next();
     res.json(booking);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.post(`${bookingUrl}/emailInfo`, async (req, res, next) => {
+  try {
+    const sent = await sendBookingInfoByEmail(req.body.bookingHash);
+    res.json({ status: sent });
   } catch (e) {
     return next(e);
   }

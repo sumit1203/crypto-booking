@@ -82,6 +82,26 @@ describe('Booking API', () => {
     });
   });
 
+  xdescribe('POST /api/booking/emailInfo', () => {
+    it('Should read a booking', async () => {
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      await dbBooking.save();
+      const body = { bookingHash: dbBooking.bookingHash };
+      const response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+      expect(response).to.have.property('status', 'sent');
+    });
+    it('Should propagate data errors', async () => {
+      try {
+        const body = { bookingHash: 'invalid booking' };
+        await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+        throw new Error('should not be called');
+      } catch (e) {
+        expect(e).to.have.property('error');
+        expect(e.error).to.have.property('code', '#notFound');
+      }
+    });
+  });
+
   describe('DELETE /api/booking/:id', () => {
     it('Should delete a booking', async () => {
       const dbBooking = BookingModel.generate(validBookingWithEthPrice);
