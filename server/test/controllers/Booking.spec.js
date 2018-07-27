@@ -37,7 +37,7 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('roomType');
     expect(booking.roomType).to.be.a('string');
     expect(booking).to.have.property('confirmationEmailSent', false);
-    expect(booking).to.have.property('lastChange');
+    expect(booking).to.have.property('changesEmailSent');
     expect(offerSignature).to.not.be.an('undefined');
   });
 
@@ -73,16 +73,12 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
     expect(booking).to.have.property('signatureTimestamp');
     expect(booking.signatureTimestamp).to.have.a('number');
-    expect(booking).to.have.property('personalInfo');
-    expect(booking.personalInfo).to.have.property('name', validBookingWithEthPrice.personalInfo.name);
-    expect(booking.personalInfo).to.have.property('email', validBookingWithEthPrice.personalInfo.email);
-    expect(booking.personalInfo).to.have.property('birthday', validBookingWithEthPrice.personalInfo.birthday);
-    expect(booking.personalInfo).to.have.property('phone', validBookingWithEthPrice.personalInfo.phone);
+    expect(booking.personalInfo).to.be.deep.equal({});
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
     expect(booking).to.have.property('to', validBookingWithEthPrice.to);
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);
     expect(booking).to.have.property('confirmationEmailSent', false);
-    expect(booking).to.have.property('lastChange');
+    expect(booking).to.have.property('changesEmailSent');
   });
 
   it('Should read a booking using bookingHash', async () => {
@@ -116,13 +112,13 @@ describe('Booking controller', () => {
     await dbBooking.save();
     const booking = await confirmationEmailSentBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', true);
-    expect(booking).to.have.property('lastChange');
+    expect(booking).to.have.property('changesEmailSent');
   });
   it('Should set changesEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice);
-    const { lastChange } = await dbBooking.save();
+    const { changesEmailSent } = await dbBooking.save();
     const booking = await changesEmailSentBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', false);
-    expect(booking.lastChange).to.be.at.least(lastChange);
+    expect(booking.changesEmailSent).to.be.at.least(changesEmailSent);
   });
 });

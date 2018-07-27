@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { AES, enc } = require('crypto-js');
 const Schema = mongoose.Schema;
 const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
   BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
@@ -72,7 +73,7 @@ const Booking = new Schema({
     type: Boolean,
     default: false,
   },
-  lastChange: {
+  changesEmailSent: {
     type: Number,
     default: function () {
       return Date.now() / 1000;
@@ -87,19 +88,31 @@ const Booking = new Schema({
 });
 
 Booking.method({
-  encryptPersonalInfo: function (personalInfo) {
+  encryptPersonalInfo: function (personalInfo, bookingHash) {
     if (typeof personalInfo !== 'object') {
       throw handleApplicationError('invalidPersonalInfo');
     }
-    personalInfo = JSON.stringify(personalInfo);
-    this.encryptedPersonalInfo = web3.utils.stringToHex(personalInfo);
-  },
-  decryptPersonalInfo: function () {
-    if (!web3.utils.isHex(this.encryptedPersonalInfo)) {
-      throw handleApplicationError('invalidEncryptedPersonalInfo');
+    if (!bookingHash) {
+      throw handleApplicationError('noBookingHash');
     }
-    let decoded = web3.utils.hexToString(this.encryptedPersonalInfo);
-    return JSON.parse(decoded);
+    personalInfo = JSON.stringify(personalInfo);
+    const hexEncoded = web3.utils.stringToHex(personalInfo);
+    this.encryptedPersonalInfo = AES.encrypt(hexEncoded, bookingHash).toString();
+  },
+  decryptPersonalInfo: function (bookingHash) {
+    let bytes;
+    let encodedPersonalInfo;
+    try {
+      bytes = AES.decrypt(this.encryptedPersonalInfo, bookingHash);
+      encodedPersonalInfo = bytes.toString(enc.Utf8);
+    } catch (e) {
+      encodedPersonalInfo = null;
+    }
+    if (!web3.utils.isHex(encodedPersonalInfo)) {
+      return {};
+    }
+    const personalInfo = web3.utils.hexToString(encodedPersonalInfo);
+    return JSON.parse(personalInfo);
   },
   generateBookingHash: function () {
     const randomCode = Math.floor((1 + Math.random()) * 10000);
@@ -154,8 +167,8 @@ Booking.statics.generate = function (data) {
   const { personalInfo, ethPrice, ...rest } = data;
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
-  booking.encryptPersonalInfo(personalInfo);
   booking.generateBookingHash();
+  booking.encryptPersonalInfo(personalInfo, booking.bookingHash);
   booking.generatePaymentAmount(ethPrice);
   return booking;
 };
