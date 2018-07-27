@@ -1,8 +1,7 @@
 {
-  "name": "crypto-booking",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "name": "crypto-booking-app",
+  "version": "0.1.0",
+  "description": "Web app to show hotel inventory from WT api.",
   "scripts": {
     "test": "eslint .",
     "start": "NODE_ENV=development webpack-dev-server",
@@ -10,7 +9,6 @@
     "deploy": "now deploy --public",
     "now-start": "NODE_ENV=production serve --single ./public"
   },
-  "author": "windingtree",
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",

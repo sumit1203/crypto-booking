@@ -1,0 +1,25 @@
+{
+  "name": "crypto-booking-app",
+  "version": "0.1.0",
+  "description": "Book rooms using crypto with signed offers from hotel owners.",
+  "directories": {
+    "server": "server",
+    "app": "front-app",
+    "contracts": "smart-contracts"
+  },
+  "keywords": [
+    "winding-tree",
+    "smart-contracts",
+    "hotel", "travel",
+    "cryptocurrency"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/windingtree/crypto-booking-app.git"
+  },
+  "author": "Winding Tree Developers <dev@windingtree.com>",
+  "bugs": {
+    "url": "https://github.com/windingtree/crypto-booking-app/issues"
+  },
+  "homepage": "https://github.com/windingtree/crypto-booking-app#readme",
+}
