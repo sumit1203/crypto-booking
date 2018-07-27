@@ -1,7 +1,16 @@
 const { join } = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const precss = require('precss');
 const postcssCssnext = require('postcss-cssnext');
+
+const devMode = process.env.NODE_ENV === 'development';
+
+const miniCssLoader = {
+  loader: MiniCssExtractPlugin.loader,
+    options: {
+        publicPath: '../public/css'
+    }
+}
 
 const rules = [{
   test: /.jsx?$/,
@@ -9,15 +18,16 @@ const rules = [{
   exclude: /node_modules/,
 }, {
   test: /\.scss$/,
-  use: ExtractTextPlugin.extract({
-    fallback: 'style-loader',
-    use: [{
+  use: [
+    devMode ? 'style-loader' : miniCssLoader,
+    {
       loader: 'css-loader',
       options: {
         sourceMap: true,
         importLoaders: 2,
       },
-    },           {
+    },
+    {
       loader: 'postcss-loader',
       options: {
         sourceMap: true,
@@ -28,13 +38,13 @@ const rules = [{
           ];
         },
       }
-    },{
+    },
+    {
       loader: 'sass-loader',
       options: {
         sourceMap: true,
       },
     }],
-  }),
 }, {
   test: /\.css$/,
   use: [{

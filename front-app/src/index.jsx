@@ -1,26 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
+import { hot } from 'react-hot-loader'
 import App from './routes';
 import 'windingtree-ui/src/css/app.scss';
 
-const render = (Component) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
-    document.getElementById('root'),
-  );
+const HotReloadedComponent = hot(module)(App)
 
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('service-worker.js').catch(() => {});
-    });
-  }
-};
+ReactDOM.render(
+    <HotReloadedComponent />,
+  document.getElementById('root')
+);
 
-render(App);
-
-if (module.hot) {
-  module.hot.accept();
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
 }

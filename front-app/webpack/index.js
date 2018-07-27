@@ -1,10 +1,10 @@
 const { resolve } = require('path');
 
-const vendor = require('./vendor');
 const rules = require('./rules');
 const plugins = require('./plugins');
 const devServer = require('./dev-server');
 const devtool = require('./devtool');
+const optimization = require('./optimization');
 
 const settings = {
   resolve: {
@@ -13,23 +13,22 @@ const settings = {
   context: resolve(__dirname, '..'),
   entry: {
     app: [
-      'react-hot-loader/patch',
       'babel-polyfill',
       './src/index'
     ],
-    vendor,
   },
   output: {
-    filename: '[name].[hash].js',
+    filename: 'js/[name].[hash].js',
     path: resolve(__dirname, '..', 'public'),
   },
   module: {
     rules,
   },
-  mode: process.env.NODE_ENV,
   plugins,
   devServer,
   devtool,
+  optimization,
+  mode: process.env.NODE_ENV
 };
 
 module.exports = settings;

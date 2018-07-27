@@ -1,6 +1,6 @@
 import React from 'react';
 import Web3 from 'web3';
-import BookingPoC  from '../../../../smart-contracts/build/contracts/BookingPoC.json';
+import BookingPoC  from '../../abis/BookingPoC.json';
 import RoomBooking from './RoomBooking';
 import CheckEmail from './CheckEmail';
 import FullyBooked from './FullyBooked';

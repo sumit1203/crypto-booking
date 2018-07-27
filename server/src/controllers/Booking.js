@@ -55,10 +55,22 @@ async function deleteBooking (filter) {
   return null;
 }
 
-async function emailSentBooking (id) {
+async function confirmationEmailSentBooking (id) {
   const bookingModel = await BookingModel.findById(id).exec();
-  bookingModel.emailSent = true;
+  bookingModel.confirmationEmailSent = true;
   return bookingModel.save();
 }
 
-module.exports = { readBooking, createBooking, deleteBooking, emailSentBooking };
+async function changesEmailSentBooking (id) {
+  const bookingModel = await BookingModel.findById(id).exec();
+  bookingModel.changesEmailSent = Date.now() / 1000;
+  return bookingModel.save();
+}
+
+module.exports = {
+  readBooking,
+  createBooking,
+  deleteBooking,
+  confirmationEmailSentBooking,
+  changesEmailSentBooking,
+};

@@ -1,12 +1,14 @@
+require('./models');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cron = require('node-cron');
 
 const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
-require('./models');
 const routes = require('./routes');
+const { checkEtherumUpdates } = require('./services/ethereum-listener');
 
 const app = express();
 app.use(cors());
@@ -49,6 +51,9 @@ app.use((err, req, res, next) => {
   });
 });
 
+const ethereunListenerCron = cron.schedule('* * * * *', checkEtherumUpdates);
+
 module.exports = {
   app,
+  ethereunListenerCron,
 };

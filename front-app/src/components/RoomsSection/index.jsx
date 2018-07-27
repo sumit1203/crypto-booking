@@ -2,7 +2,7 @@ import React from 'react';
 import Web3 from 'web3';
 import imgRoom1 from '../../img/content/hotel-rooms/hotel-room-01.jpg';
 import imgRoom4 from '../../img/content/hotel-rooms/hotel-room-04.jpg';
-import BookingPoC  from '../../../../smart-contracts/build/contracts/BookingPoC.json';
+import BookingPoC  from '../../abis/BookingPoC.json';
 
 class RoomsSection extends React.Component {
   constructor(props) {
