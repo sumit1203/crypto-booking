@@ -3,6 +3,7 @@ const BookingModel = mongoose.model('Booking');
 const { fetchEthPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo } = require('../services/mail');
+const { handleApplicationError } = require('../errors');
 /**
   * Creates a new Booking in the db and returns an instance of Booking
   * @param {Object} {publicKey, guestEthAddress, payment, personalInfo}
@@ -69,12 +70,14 @@ async function changesEmailSentBooking (id) {
 
 async function sendBookingInfoByEmail (bookingHash) {
   const booking = await readBooking({ bookingHash });
-  if (!booking) return false;
+  if (!booking) {
+    throw handleApplicationError('sendBookingInfoFail');
+  }
+
   await sendBookingInfo(booking, {
     from: process.env.MAILGUN_FROM_EMAIL,
     to: process.env.MAILGUN_TO_EMAIL,
   });
-  return true;
 }
 
 module.exports = {
@@ -83,5 +86,5 @@ module.exports = {
   deleteBooking,
   confirmationEmailSentBooking,
   changesEmailSentBooking,
-  sendBookingInfoByEmail
+  sendBookingInfoByEmail,
 };

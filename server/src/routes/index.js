@@ -39,8 +39,8 @@ router.get(`${bookingUrl}/:bookingHash`, async (req, res, next) => {
 
 router.post(`${bookingUrl}/emailInfo`, async (req, res, next) => {
   try {
-    const sent = await sendBookingInfoByEmail(req.body.bookingHash);
-    res.json({ status: sent });
+    await sendBookingInfoByEmail(req.body.bookingHash);
+    res.json({ status: 'ok' });
   } catch (e) {
     return next(e);
   }
