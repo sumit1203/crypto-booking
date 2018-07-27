@@ -72,7 +72,7 @@ const Booking = new Schema({
     type: Boolean,
     default: false,
   },
-  lastChange: {
+  changesEmailSent: {
     type: Number,
     default: function () {
       return Date.now() / 1000;
