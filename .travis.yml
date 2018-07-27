@@ -12,7 +12,7 @@ jobs:
     - npm run test-server
   - stage: deploy-server
     install: true
-    branch: release/server
+    if: branch = release/server
     script:
     - npm i -g now
     - echo 'Deploying to NOW'
