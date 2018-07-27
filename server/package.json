@@ -41,6 +41,10 @@
   "engines": {
     "node": "10.6.0"
   },
+  "now": {
+  "name": "crypto-booking-server",
+  "alias": "crypto-booking-server.windingtree.com"
+  },
   "nyc": {
     "exclude": [
       "scripts/",
