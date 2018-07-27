@@ -1,15 +1,17 @@
-# Crypto booking app
+# Crypto Booking
 
-The Crypto booking app is a simple web app that uses the Winding Tree services to enable bookings of a hotel rooms with
-Ether or Lif tokens payment. The web app works only with a specific hotel that has all his content published in a
-WT hotel index deployed on an ETH testnet network.
+This repository contains all the necessary solutions to offer hotel rooms in exchange of ETH or Lif tokens. It is compound by a web app, server signer and smart contracts, it connects directly to WT api, the hotel need to be deployed in one of WT networks.
 
-For mor info read the [docs](https://docs.google.com/document/d/1ERV07bu1K4tpnZh7aZhA4Z4MlDQteVH2TwDk5AvWM7w/edit?usp=sharing)
+For more info read the [docs](https://docs.google.com/document/d/1ERV07bu1K4tpnZh7aZhA4Z4MlDQteVH2TwDk5AvWM7w/edit?usp=sharing)
 
-## Smart contracts
- Are located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking-app/tree/develop/smart-contracts)
+## App
+ The web app to show hotel inventory from WT api is located inside of the [app](https://github.com/windingtree/crypto-booking-app/tree/develop/app)
 directory
 
 ## Server
- Are located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking-app/tree/develop/server)
+ The server to sign offers and manage bookings is located inside of the [server](https://github.com/windingtree/crypto-booking-app/tree/develop/server)
+directory
+
+## Smart contracts
+ The smart contracts to manage rooms availability is located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking-app/tree/develop/smart-contracts)
 directory
