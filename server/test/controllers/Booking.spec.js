@@ -73,11 +73,7 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
     expect(booking).to.have.property('signatureTimestamp');
     expect(booking.signatureTimestamp).to.have.a('number');
-    expect(booking).to.have.property('personalInfo');
-    expect(booking.personalInfo).to.have.property('name', validBookingWithEthPrice.personalInfo.name);
-    expect(booking.personalInfo).to.have.property('email', validBookingWithEthPrice.personalInfo.email);
-    expect(booking.personalInfo).to.have.property('birthday', validBookingWithEthPrice.personalInfo.birthday);
-    expect(booking.personalInfo).to.have.property('phone', validBookingWithEthPrice.personalInfo.phone);
+    expect(booking.personalInfo).to.be.deep.equal({});
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
     expect(booking).to.have.property('to', validBookingWithEthPrice.to);
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);

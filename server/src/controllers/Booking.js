@@ -11,9 +11,8 @@ async function createBooking (data) {
   data.ethPrice = await fetchEthPrice();
   const bookingModel = BookingModel.generate(data);
   await bookingModel.save();
-  const booking = _prepareForExport(bookingModel);
+  const booking = _prepareForExport(bookingModel, bookingModel.bookingHash);
   booking.weiPerNight = bookingModel.getWeiPerNight(data.ethPrice);
-  booking.personalInfo = bookingModel.decryptPersonalInfo();
   const { signatureData, offerSignature } = await signOffer(booking, await readKey());
 
   return {
@@ -23,9 +22,9 @@ async function createBooking (data) {
   };
 }
 
-function _prepareForExport (bookingModel) {
+function _prepareForExport (bookingModel, bookingHash) {
   const booking = bookingModel.toObject();
-  booking.personalInfo = bookingModel.decryptPersonalInfo();
+  booking.personalInfo = bookingModel.decryptPersonalInfo(bookingHash);
   return booking;
 }
 
@@ -43,7 +42,7 @@ async function readBooking (filter) {
   if (filter.bookingHash) {
     const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
     if (!bookingModel) return null;
-    return _prepareForExport(bookingModel);
+    return _prepareForExport(bookingModel, filter.bookingHash);
   }
   return null;
 }
