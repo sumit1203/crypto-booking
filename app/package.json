@@ -6,8 +6,7 @@
     "test": "eslint .",
     "start": "NODE_ENV=development webpack-dev-server",
     "build": "NODE_ENV=production webpack --mode=production",
-    "deploy": "now deploy --public",
-    "now-start": "NODE_ENV=production serve --single ./public"
+    "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
