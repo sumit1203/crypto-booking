@@ -4,6 +4,7 @@ const { expect } = require('chai');
 const {
   sendRawEmail,
   sendConfirmation,
+  sendBookingInfo,
 } = require('../../src/services/mail');
 const { testHtmlBody } = require('../utils/test-data');
 
@@ -50,6 +51,26 @@ describe('Mail service', () => {
         subject: '[TEST] Confirmation email',
       };
       await sendConfirmation(data, mailInfo);
+    } catch (e) {
+      expect(false);
+    }
+  });
+  xit('Should send a booking information email', async () => {
+    try {
+      const data = {
+        roomType: 'Room type 1',
+        nights: [1, 2],
+        personalInfo: {
+          email: 'some@email.com',
+          fullName: 'Some Fullname',
+        },
+      };
+      const mailInfo = {
+        from: FROM,
+        to: TO,
+        subject: '[TEST] information email',
+      };
+      await sendBookingInfo(data, mailInfo);
     } catch (e) {
       expect(false);
     }
