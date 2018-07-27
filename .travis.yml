@@ -9,15 +9,11 @@ jobs:
   include:
   - stage: test
     script:
-    - npm i -g truffle
-    - npm run test-app
     - npm run test-server
-    - npm run test-contracts
-  - stage: deploy
+  - stage: deploy-server
     install: true
-    if: tag IS present
+    branch: release/server
     script:
-    - npm i -g now && npm i -g truffle
-    - cd contracts && truffle compile
+    - npm i -g now
     - echo 'Deploying to NOW'
     - cd server && npm run deploy && npm run alias
