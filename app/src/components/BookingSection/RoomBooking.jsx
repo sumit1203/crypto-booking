@@ -2,7 +2,7 @@ import React from 'react';
 
 // import lifToken from 'windingtree-media-web/custom-icons/svg/wt-icon--lif-token.svg';
 import payment from 'windingtree-media-web/custom-icons/svg/wt-icon--payment.svg';
-
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default class RoomBooking extends React.Component {
 
@@ -210,12 +210,8 @@ export default class RoomBooking extends React.Component {
 
                   </div>
                 </div>
-
-                {/* NOTE: Replace withthe real captcha. Remove the classes */}
-                <div className="h4 lead badge badge-light">
-                  [CAPTCHA]
-                </div>
-
+                {/* TODO replace the sitekey when we register a domain for the app */}
+                  <ReCAPTCHA className='' sitekey='xxxxxxxxx' theme='light' onChange={(a) => console.log(a, 'called')}/>
               </div>
 
 
