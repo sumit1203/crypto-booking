@@ -105,9 +105,9 @@ const validBooking = {
   paymentType: 'eth',
   roomType: 'double',
   personalInfo: {
-    name: 'Some name',
+    fullName: 'Some name',
     email: 'email@email.com',
-    birthday: '17/12/1987',
+    birthDate: '1987-12-17',
     phone: '+11111111111',
   },
   from: 1,
@@ -120,9 +120,9 @@ const validBookingWithEthPrice = {
   paymentTx: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e234553',
   roomType: 'double',
   personalInfo: {
-    name: 'Some name',
+    fullName: 'Some name',
     email: 'email@email.com',
-    birthday: '17/12/1987',
+    birthDate: '1987-12-17',
     phone: '+11111111111',
   },
   from: 1,
