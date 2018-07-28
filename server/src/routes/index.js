@@ -1,6 +1,6 @@
 const express = require('express');
 const { createBooking, readBooking, deleteBooking } = require('../controllers/Booking');
-
+const { BOOKING_POC_ADDRESS } = require('../config');
 const { sendInstructions } = require('../services/mail');
 
 const router = express.Router();
@@ -13,7 +13,7 @@ router.post(`${bookingUrl}`, async (req, res, next) => {
       booking,
       offerSignature,
       signatureData,
-      contractAddress: process.env.BOOKING_POC_ADDRESS,
+      contractAddress: BOOKING_POC_ADDRESS,
     };
 
     sendInstructions(data, {

@@ -5,6 +5,7 @@ const {
   bookingChangeBody,
 } = require('./html-generator');
 const { bookingPoc } = require('./web3');
+const { BOOKING_POC_ADDRESS } = require('../config');
 
 const mailgunClient = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
 
@@ -49,7 +50,7 @@ const sendInstructions = async ({ booking, offerSignature, signatureData, contra
       signatureData.roomType, nights, signatureData.bookingHash
     ).encodeABI();
 
-    const html = instructionsBody(booking.paymentAmount, process.env.BOOKING_POC_ADDRESS, txData);
+    const html = instructionsBody(booking.paymentAmount, BOOKING_POC_ADDRESS, txData);
     return mailgunClient.messages().send({ from, to, subject, html });
   } catch (e) {
     console.log(e);
