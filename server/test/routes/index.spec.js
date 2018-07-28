@@ -3,9 +3,10 @@ require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const mongoose = require('mongoose');
 const request = require('request-promise-native');
+const { SERVER_PORT } = require('../../src/config');
 
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
-const apiUrl = `http://localhost:${process.env.SERVER_PORT}/api`;
+const apiUrl = `http://localhost:${SERVER_PORT}/api`;
 let server;
 let BookingModel;
 before(async () => {

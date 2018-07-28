@@ -3,4 +3,5 @@ module.exports = {
   WHITELIST: '*',
   SERVER_PORT: 3001,
   STARTING_BLOCK: 3668521,
+  MONGODB_URI: process.env.MONGODB_URI || 'localhost:27017/crypto-booking-test',
 };
