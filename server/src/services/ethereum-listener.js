@@ -2,8 +2,9 @@ const { bookingPoc } = require('./web3');
 const { readBooking, changesEmailSentBooking, confirmationEmailSentBooking } = require('../controllers/Booking');
 const { sendConfirmation, sendBookingChange } = require('./mail.js');
 const { codeGenerator } = require('./secret-codes.js');
+const { STARTING_BLOCK } = require('../config');
 
-let _nextBlockToProcess = process.env.STARTING_BLOCK;
+let _nextBlockToProcess = STARTING_BLOCK;
 
 const onBookingDone = async (event) => {
   const booking = readBooking({ bookingHash: event.returnValues.bookingHash });
