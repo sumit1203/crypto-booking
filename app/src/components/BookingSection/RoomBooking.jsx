@@ -56,9 +56,9 @@ export default class RoomBooking extends React.Component {
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Preffered room type </h5>
                   <div className="btn-group btn-group--switch" role="group" aria-label="Room type">
-                    <input id="twin" name="type" type="radio" value="twin" onChange={onRoomTypeChange} required defaultChecked={true}/>
+                    <input id="twin" name="type" type="radio" autoComplete="off" value="twin" onChange={onRoomTypeChange} required defaultChecked={true}/>
                     <label htmlFor="twin" className="col-6"> Twin Room </label>
-                    <input id="double" name="type" type="radio" value="twin" onChange={onRoomTypeChange} required/>
+                    <input id="double" name="type" type="radio" autoComplete="off" value="twin" onChange={onRoomTypeChange} required/>
                     <label htmlFor="double" className="col-6"> Double Room </label>
                   </div>
                   {/* NOTE: Change the messages depending on room availability */}
@@ -84,16 +84,16 @@ export default class RoomBooking extends React.Component {
                   <section className="row text-center px-2 pb-2">
                     <div className="col text-left">
                       <label htmlFor="fullName"> <b>Full Name</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="fullName" type="text" onChange={onFullNameChange} placeholder='Pedrotti Capone' required/>
+                      <input className="form-control form-control-lg mb-1" id="fullName" type="text" autoComplete="off" onChange={onFullNameChange} placeholder='Pedrotti Capone' required/>
                       <label htmlFor="birthDate"> <b>Birth Dat</b>e </label>
-                      <input className="form-control form-control-lg" id="birthDate" type="date" onChange={onBirthDateChange} />
+                      <input className="form-control form-control-lg" id="birthDate" type="date" autoComplete="off" onChange={onBirthDateChange} />
                     </div>
 
                     <div className="col text-left">
                       <label htmlFor="email"> <b>Email</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="email" type="email" onChange={onEmailChange} placeholder='someGuy@windingtree.com' required/>
+                      <input className="form-control form-control-lg mb-1" id="email" type="email" autoComplete="off" onChange={onEmailChange} placeholder='someGuy@windingtree.com' required/>
                       <label htmlFor="phone"> <b>Phone Number</b> </label>
-                      <input className="form-control form-control-lg" id="phone" type="tel" onChange={onPhoneChange} placeholder='+54 011 1135989272'/>
+                      <input className="form-control form-control-lg" id="phone" type="tel" autoComplete="off" onChange={onPhoneChange} placeholder='+54 011 1135989272'/>
                     </div>
                   </section>
 
@@ -118,7 +118,7 @@ export default class RoomBooking extends React.Component {
                           : this.setState({modalConfirm: true})
                       }
                     }
-                    > BOOK </button>
+                    > Proceed with booking </button>
                     <br/>
                     <button style={{marginTop: '0.5em'}} className="btn btn-sm btn-link btn-light text-dark" onClick={
                       (e)=>{
@@ -138,7 +138,7 @@ export default class RoomBooking extends React.Component {
         </div>
 
 
-
+        {/* MODAL CONFIRM PAYMENT */}
         <div className="modal" id="modalConfirm" tabIndex="-1" role="dialog" style={modalConfirm ? {display: 'block', position: 'static'} : {}}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -201,6 +201,7 @@ export default class RoomBooking extends React.Component {
                               id="guestAddress"
                               className="form-control form-control-lg w-100"
                               style={{width: 450}}
+                              autoComplete="off"
                               onChange={onAddressChange} placeholder='0xe99356bde974bbe08721d77712168fa070aa8da2'
                               required
                             />
@@ -232,6 +233,8 @@ export default class RoomBooking extends React.Component {
           </div>
         </div>
 
+
+        {/* MODAL RULES */}
         <div className="modal" id="modalRules" tabIndex="-2" role="dialog" style={modalRules ? {display: 'block', position: 'static'} : {}}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -268,9 +271,7 @@ export default class RoomBooking extends React.Component {
                   </li>
                 </ul>
 
-
               </div>
-
 
               <div className="modal-footer">
                 <button type="button" className="btn btn-primary" data-dismiss="modal">Accept</button>
@@ -279,6 +280,56 @@ export default class RoomBooking extends React.Component {
           </div>
         </div>
 
+        {/* MODAL GENERIC MESSAGES */}
+        <div className="modal" id="modalMessage" tabIndex="-2" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+
+              <div className="modal-header">
+                <h5 className="modal-title">Sorry, we are fully booked</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <i className="mdi mdi-close"></i>
+                </button>
+              </div>
+
+              <div className="modal-body">
+                <p className="mb-1">There are no more rooms available.</p>
+              </div>
+
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary" data-dismiss="modal">Ok</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        {/* MODAL GENERIC MESSAGES */}
+        <div className="modal" id="modalMessage2" tabIndex="-2" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+
+              <div className="modal-header">
+                <h5 className="modal-title">Please, check your email</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <i className="mdi mdi-close"></i>
+                </button>
+              </div>
+
+              <div className="modal-body">
+                <p className="mb-1">We sent the payment instructions to your email address.</p>
+                <h5 className="mb-1">Make sure you see this ETH address in the email from us!</h5>
+                <p className="badge badge-info p-1 w-100">
+                  <span className="h4 lead text-white">02Edsf4684sdf13weKLJdfwf54sd56f4d56sf4</span>
+                </p>
+              </div>
+
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary">Ok</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </article>
     );
