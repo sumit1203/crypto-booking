@@ -31,11 +31,6 @@ module.exports = {
     short: 'No guest Ethereum address provided.',
     long: 'The field guestEthAddress is required.',
   },
-  noPublicKey: {
-    status: 409,
-    short: 'No public key provided.',
-    long: 'The field publicKey is required.',
-  },
   minAmount: {
     status: 409,
     short: 'Invalid minimun amount of payment.',
@@ -76,6 +71,26 @@ module.exports = {
     short: 'Invalid personal information.',
     long: 'The personalInfo must be an object.',
   },
+  invalidPersonalInfoEmail: {
+    status: 409,
+    short: 'Invalid email in personal information.',
+    long: 'The property personalInfo.email must be a valid email.',
+  },
+  invalidPersonalInfoFullName: {
+    status: 409,
+    short: 'Invalid full name in personal information.',
+    long: 'The property personalInfo.fullName is required.',
+  },
+  invalidPersonalInfoPhone: {
+    status: 409,
+    short: 'Invalid phone in personal information.',
+    long: 'The property personalInfo.phone is required.',
+  },
+  invalidPersonalInfoBirthDate: {
+    status: 409,
+    short: 'Invalid birthDate in personal information.',
+    long: 'The property personalInfo.birthdate is required.',
+  },
   duplicateBooking: {
     status: 409,
     short: 'Duplicate booking.',
@@ -88,7 +103,7 @@ module.exports = {
   },
   noTo: {
     status: 409,
-    short: 'No propery "To" provided.',
+    short: 'No property "To" provided.',
     long: '"to" is required.',
   },
   fromOutOfRange: {
@@ -98,7 +113,7 @@ module.exports = {
   },
   noFrom: {
     status: 409,
-    short: 'No propery "from" provided.',
+    short: 'No property "from" provided.',
     long: '"from" is required.',
   },
   noRoomType: {
@@ -108,12 +123,12 @@ module.exports = {
   },
   noStatus: {
     status: 409,
-    short: 'No propery "status" provided.',
+    short: 'No property "status" provided.',
     long: '"from" is required.',
   },
   invalidStatus: {
     status: 409,
-    short: 'Invalid propery "status" provided.',
+    short: 'Invalid property "status" provided.',
     long: `"status" could be ${Object.keys(BOOKING_STATUS).join(', ').toLowerCase()}.`,
   },
 };

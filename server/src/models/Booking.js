@@ -6,6 +6,18 @@ const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
 const { encrypt, decrypt } = require('../services/crypto');
 
+// from https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+function _isEmail (email) {
+  // eslint-disable-next-line no-useless-escape
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function _isBirthDate (birthDate) {
+  const re = /^\d{4}-\d{2}-\d{2}$/;
+  return re.test(String(birthDate));
+}
+
 const Booking = new Schema({
   bookingHash: {
     type: String,
@@ -91,6 +103,18 @@ Booking.method({
   encryptPersonalInfo: function (personalInfo, bookingHash) {
     if (typeof personalInfo !== 'object') {
       throw handleApplicationError('invalidPersonalInfo');
+    }
+    if (!personalInfo.email || !_isEmail(personalInfo.email)) {
+      throw handleApplicationError('invalidPersonalInfoEmail');
+    }
+    if (!personalInfo.fullName) {
+      throw handleApplicationError('invalidPersonalInfoFullName');
+    }
+    if (!personalInfo.phone) {
+      throw handleApplicationError('invalidPersonalInfoPhone');
+    }
+    if (!personalInfo.birthDate || !_isBirthDate(personalInfo.birthDate)) {
+      throw handleApplicationError('invalidPersonalInfoBirthDate');
     }
     if (!bookingHash) {
       throw handleApplicationError('noBookingHash');
