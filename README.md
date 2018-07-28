@@ -15,3 +15,15 @@ directory
 ## Smart contracts
  The smart contracts to manage rooms availability is located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking/tree/develop/smart-contracts)
 directory
+
+## Release
+### Server
+
+This are steps for create a new server release
+
+- Update version in `server/package.json`
+- Merge branch into `develop`
+- Merge `develop` into `master`
+- Merge `master` into `release/server`
+
+ This will trigger the deploy in `Travis-CI`

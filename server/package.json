@@ -8,12 +8,12 @@
     "test": "rimraf .nyc_output && NODE_ENV=test ./node_modules/.bin/nyc --reporter=text ./node_modules/mocha/bin/mocha test/**/*.spec.js --timeout 20000",
     "lint": "eslint src test",
     "deploy": "now --token $NOW_TOKEN",
+    "alias": "now alias --token=$NOW_TOKEN",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
-    "crypto-js": "^3.1.9-1",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-rate-limit": "^2.11.0",
@@ -41,6 +41,10 @@
   },
   "engines": {
     "node": "10.6.0"
+  },
+  "now": {
+  "name": "crypto-booking-server",
+  "alias": "crypto-booking-server.windingtree.com"
   },
   "nyc": {
     "exclude": [
