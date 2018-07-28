@@ -5,9 +5,9 @@ const {
   bookingChangeBody,
 } = require('./html-generator');
 const { bookingPoc } = require('./web3');
-const { BOOKING_POC_ADDRESS } = require('../config');
+const { BOOKING_POC_ADDRESS, MAILGUN_API_KEY, MAILGUN_DOMAIN } = require('../config');
 
-const mailgunClient = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
+const mailgunClient = mailgun({ apiKey: MAILGUN_API_KEY, domain: MAILGUN_DOMAIN });
 
 const sendRawEmail = async (from = process.env.MAILGUN_FROM_EMAIL, to, subject, html) => {
   try {
