@@ -37,14 +37,15 @@
     "eslint-plugin-standard": "^3.1.0",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "sinon": "^6.1.4"
   },
   "engines": {
     "node": "10.6.0"
   },
   "now": {
-  "name": "crypto-booking-server",
-  "alias": "crypto-booking-server.windingtree.com"
+    "name": "crypto-booking-server",
+    "alias": "crypto-booking-server.windingtree.com"
   },
   "nyc": {
     "exclude": [
