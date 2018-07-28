@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { hot } from 'react-hot-loader'
 import App from './routes';
 import 'windingtree-ui/src/css/app.scss';
 
-const HotReloadedComponent = hot(module)(App)
-
 ReactDOM.render(
-    <HotReloadedComponent />,
+    <App />,
   document.getElementById('root')
 );
 
