@@ -102,10 +102,8 @@ export default class RoomBooking extends React.Component {
                   </section>
                 </div>
                 <section className="text-center">
-                  {/* FINAL PRICE */}
-                  {/* NOTE: This should be visible after selecting the dated for the reservation */}
                   {price && <PriceLabel value={price}/>}
-                  <button className="btn btn-primary btn-lg" type="submit">BOOK</button>
+                  <button className="btn btn-primary btn-lg" type="submit">Proceed with booking</button>
                     <br/>
                     <button style={{marginTop: '0.5em'}} className="btn btn-sm btn-link btn-light text-dark" onClick={this.showRulesModal}>
                       Hotel rules
