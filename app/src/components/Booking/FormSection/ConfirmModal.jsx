@@ -41,7 +41,7 @@ class ConfirmModal extends React.Component {
                 </button>
               </div>
               <div className="modal-body">
-                <p className="mb-1"> Select your preffered paymen method.</p>
+                <p className="mb-1"> Select your preffered payment method.</p>
                 <div className="row mb-1">
                   <div className="col-sm-8">
                     <div className="row no-gutters mb-1">
