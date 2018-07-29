@@ -1,6 +1,10 @@
 const express = require('express');
 const { createBooking, readBooking, deleteBooking } = require('../controllers/Booking');
-const { BOOKING_POC_ADDRESS } = require('../config');
+const {
+  BOOKING_POC_ADDRESS,
+  MAILGUN_FROM_EMAIL,
+  MAILGUN_TO_EMAIL,
+} = require('../config');
 const { sendInstructions } = require('../services/mail');
 
 const router = express.Router();
@@ -17,8 +21,8 @@ router.post(`${bookingUrl}`, async (req, res, next) => {
     };
 
     sendInstructions(data, {
-      from: process.env.MAILGUN_FROM_EMAIL,
-      to: process.env.MAILGUN_TO_EMAIL,
+      from: MAILGUN_FROM_EMAIL,
+      to: MAILGUN_TO_EMAIL,
       subject: 'Hotel reservation instructions',
     });
     res.json(data);

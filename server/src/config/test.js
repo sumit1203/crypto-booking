@@ -8,4 +8,7 @@ module.exports = {
   MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN || 'sandboxexample.mailgun.org',
   MAILGUN_FROM_EMAIL: process.env.MAILGUN_FROM_EMAIL || 'example@windingtree.com',
   MAILGUN_TO_EMAIL: process.env.MAILGUN_TO_EMAIL || 'example@windingtree.com',
+  OWNER_PRIVATE_KEY: process.env.OWNER_PRIVATE_KEY || '0x4259ac86777aa87b3e24006fe6bc98a9c726c3618b18541716a8acc1a7161fa2',
+  OWNER_ADDRESS: process.env.OWNER_ADDRESS || '0xD037aB9025d43f60a31b32A82E10936f07484246',
+  WEB3_PROVIDER: process.env.WEB3_PROVIDER || 'http://localhost:8545',
 };
