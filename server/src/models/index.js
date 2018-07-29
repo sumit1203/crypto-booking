@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const { MONGODB_URI } = require('../config');
-if (!process.env.MONGODB_URI) {
+if (!MONGODB_URI) {
   throw new Error('No MongoDB URI provided, please add the env variable MONGODB_URI');
 }
 
