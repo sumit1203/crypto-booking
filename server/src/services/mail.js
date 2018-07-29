@@ -5,8 +5,9 @@ const {
   bookingChangeBody,
 } = require('./html-generator');
 const { bookingPoc } = require('./web3');
+const { BOOKING_POC_ADDRESS, MAILGUN_API_KEY, MAILGUN_DOMAIN } = require('../config');
 
-const mailgunClient = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
+const mailgunClient = mailgun({ apiKey: MAILGUN_API_KEY, domain: MAILGUN_DOMAIN });
 
 const sendRawEmail = async (from = process.env.MAILGUN_FROM_EMAIL, to, subject, html) => {
   try {
@@ -49,7 +50,7 @@ const sendInstructions = async ({ booking, offerSignature, signatureData, contra
       signatureData.roomType, nights, signatureData.bookingHash
     ).encodeABI();
 
-    const html = instructionsBody(booking.paymentAmount, process.env.BOOKING_POC_ADDRESS, txData);
+    const html = instructionsBody(booking.paymentAmount, BOOKING_POC_ADDRESS, txData);
     return mailgunClient.messages().send({ from, to, subject, html });
   } catch (e) {
     console.log(e);

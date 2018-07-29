@@ -1,10 +1,11 @@
 const { handleApplicationError } = require('../errors');
+const { WHITELIST } = require('../config');
 
 const validateIPWhiteList = function (req, res, next) {
-  if (process.env.WHITELIST === '*') {
+  if (WHITELIST === '*') {
     return next();
   }
-  const whiteList = process.env.WHITELIST.split(',');
+  const whiteList = WHITELIST.split(',');
   let ip = req.ip ||
             req.headers['x-forwarded-for'] ||
             req.connection.remoteAddress ||

@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cron = require('node-cron');
 
+const { BOOKING_POC_ADDRESS } = require('./constants');
 const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
     docs: 'https://github.com/windingtree/crypto-booking-app#readme',
     info: 'https://github.com/windingtree/crypto-booking-app#',
     version,
+    bookingPoC: BOOKING_POC_ADDRESS,
   };
   res.status(200).json(response);
 });
