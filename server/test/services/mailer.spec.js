@@ -1,57 +1,47 @@
 /* eslint-env mocha */
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
+const mailgun = require('mailgun-js');
+const sinon = require('sinon');
+const { MAILGUN_TO_EMAIL, MAILGUN_FROM_EMAIL } = require('../../src/config');
+
 const {
   sendRawEmail,
   sendConfirmation,
+  sendBookingChange,
 } = require('../../src/services/mail');
-const { testHtmlBody } = require('../utils/test-data');
-
-const TO = process.env.MAILGUN_TO_EMAIL;
-const FROM = process.env.MAILGUN_FROM_EMAIL;
+const { testHtmlBody, events } = require('../utils/test-data');
 
 describe('Mail service', () => {
-  xit('Should send an email', async () => {
-    try {
-      await sendRawEmail(FROM, TO, 'Test email', testHtmlBody('User'));
-    } catch (e) {
-      expect(false);
-    }
-  });
+  let sandbox;
 
-  it('Should Throw with invalid from', async () => {
-    try {
-      await sendRawEmail('wrongFrom', TO, 'Test email', testHtmlBody('User'));
-    } catch (e) {
-      expect(e).to.have.property('message', '\'from\' parameter is not a valid address. please check documentation');
-    }
+  before(() => {
+    sandbox = sinon.createSandbox();
   });
-
-  it('Should Throw with invalid from', async () => {
-    try {
-      await sendRawEmail(FROM, 'wrongTo', 'Test email', testHtmlBody('User'));
-    } catch (e) {
-      expect(e).to.have.property('message', '\'to\' parameter is not a valid address. please check documentation');
-    }
+  beforeEach(() => {
+    sandbox.stub(mailgun({ apiKey: 'foo', domain: 'bar' }).Mailgun.prototype, 'messages')
+      .returns({
+        send: (data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }),
+      });
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+  it('Should send an email', async () => {
+    await sendRawEmail(MAILGUN_FROM_EMAIL, MAILGUN_TO_EMAIL, 'Test email', testHtmlBody('User'));
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
   });
 
   it('Should send a confirmation email', async () => {
-    try {
-      const data = {
-        roomType: 'Room type 1',
-        nights: [123, 124],
-        room: 2,
-        guest: '0x0011..123',
-        bookingHash: '0x00980',
-      };
-      const mailInfo = {
-        from: FROM,
-        to: TO,
-        subject: '[TEST] Confirmation email',
-      };
-      await sendConfirmation(data, mailInfo);
-    } catch (e) {
-      expect(false);
-    }
+    await sendConfirmation(events.BookingDone, 'asd 123 fgh');
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
+  });
+
+  it('Should send a booking change email', async () => {
+    await sendBookingChange(events.BookingChanged, 'asd 123 fgh');
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
   });
 });

@@ -5,6 +5,10 @@ cache:
   directories:
     - "node_modules" # This will tell Travis CI to cache the dependencies
     - "$HOME/.npm"
+services:
+  - mongodb
+before_script:
+  - sleep 15      
 jobs:
   include:
   - stage: test
