@@ -3,9 +3,12 @@ require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const mongoose = require('mongoose');
 const request = require('request-promise-native');
+const sinon = require('sinon');
+const mailgun = require('mailgun-js');
+const { SERVER_PORT } = require('../../src/config');
 
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
-const apiUrl = `http://localhost:${process.env.SERVER_PORT}/api`;
+const apiUrl = `http://localhost:${SERVER_PORT}/api`;
 let server;
 let BookingModel;
 before(async () => {
@@ -19,10 +22,20 @@ after(async () => {
   await mongoose.connection.close();
 });
 describe('Booking API', () => {
+  let sandbox;
+  before(() => {
+    sandbox = sinon.createSandbox();
+  });
   afterEach(async function () {
     await BookingModel.remove({}).exec();
+    sandbox.restore();
   });
-
+  beforeEach(function () {
+    sandbox.stub(mailgun({ apiKey: 'foo', domain: 'bar' }).Mailgun.prototype, 'messages')
+      .returns({
+        send: (data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }),
+      });
+  });
   describe('POST /api/booking', () => {
     it('Should create a valid booking', async () => {
       const body = validBooking;
@@ -35,10 +48,12 @@ describe('Booking API', () => {
       expect(booking).to.have.property('signatureTimestamp');
       expect(booking.signatureTimestamp).to.have.a('number');
       expect(booking).to.have.property('personalInfo');
-      expect(booking.personalInfo).to.have.property('name', validBooking.personalInfo.name);
+      expect(booking.personalInfo).to.have.property('fullName', validBooking.personalInfo.fullName);
       expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
-      expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
+      expect(booking.personalInfo).to.have.property('birthDate', validBooking.personalInfo.birthDate);
       expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
+      const sendFake = sandbox.getFakes()[0];
+      expect(sendFake).to.have.property('calledOnce', true);
     });
     it('Should propagate data errors', async () => {
       const body = Object.assign({}, validBooking, { roomType: -1 });
@@ -66,9 +81,9 @@ describe('Booking API', () => {
       expect(booking).to.have.property('signatureTimestamp');
       expect(booking.signatureTimestamp).to.have.a('number');
       expect(booking).to.have.property('personalInfo');
-      expect(booking.personalInfo).to.have.property('name', validBooking.personalInfo.name);
+      expect(booking.personalInfo).to.have.property('fullName', validBooking.personalInfo.fullName);
       expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
-      expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
+      expect(booking.personalInfo).to.have.property('birthDate', validBooking.personalInfo.birthDate);
       expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
     });
     it('Should propagate data errors', async () => {

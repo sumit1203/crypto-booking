@@ -105,9 +105,9 @@ const validBooking = {
   paymentType: 'eth',
   roomType: 'double',
   personalInfo: {
-    name: 'Some name',
+    fullName: 'Some name',
     email: 'email@email.com',
-    birthday: '17/12/1987',
+    birthDate: '1987-12-17',
     phone: '+11111111111',
   },
   from: 1,
@@ -120,9 +120,9 @@ const validBookingWithEthPrice = {
   paymentTx: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e234553',
   roomType: 'double',
   personalInfo: {
-    name: 'Some name',
+    fullName: 'Some name',
     email: 'email@email.com',
-    birthday: '17/12/1987',
+    birthDate: '1987-12-17',
     phone: '+11111111111',
   },
   from: 1,
@@ -140,10 +140,36 @@ const validBookingDB = {
   to: 4,
 };
 
+const events = {
+  BookingChanged: {
+    transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
+    blockNumber: '123',
+    returnValues: {
+      roomType: 'double',
+      nights: [1, 2, 3, 4],
+      room: '1',
+      newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
+      bookingHash: 'someHash',
+    },
+  },
+  BookingDone: {
+    transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
+    blockNumber: '123',
+    returnValues: {
+      roomType: 'double',
+      nights: [1, 2, 3, 4],
+      room: '1',
+      newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
+      guest: 'someHash',
+    },
+  },
+};
+
 module.exports = {
   testHtmlBody,
   validBooking,
   validBookingDB,
   validBookingWithEthPrice,
   ToPlainObjectTestClass,
+  events,
 };
