@@ -106,12 +106,11 @@ class ConfirmModal extends React.Component {
                   </div>
                 </div>
                 {/* TODO replace the sitekey when we register a domain for the app */}
-                {/*<ReCAPTCHA className='' sitekey='xxxxxxxxx' theme='light'/>*/}
+                <ReCAPTCHA sitekey='xxxxxxxxx' theme='light'/>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-dismiss="modal">Cancel</button>
                 <button type="submit" className="btn btn-primary">Confirm</button>
-                {/* NOTE: After confirming Thank you, you will get booking confirmation and payment detais on your email. */}
               </div>
             </form>
           </div>
@@ -122,7 +121,7 @@ class ConfirmModal extends React.Component {
 }
 
 ConfirmModal.propTypes = {
-  price: PropTypes.string.isRequired,
+  price: PropTypes.number,
   onSubmit: PropTypes.func.isRequired
 }
 

@@ -8,8 +8,10 @@ const { MAILGUN_TO_EMAIL, MAILGUN_FROM_EMAIL } = require('../../src/config');
 const {
   sendRawEmail,
   sendConfirmation,
+  sendBookingInfo,
   sendBookingChange,
 } = require('../../src/services/mail');
+
 const { testHtmlBody, events } = require('../utils/test-data');
 
 describe('Mail service', () => {
@@ -41,6 +43,24 @@ describe('Mail service', () => {
 
   it('Should send a booking change email', async () => {
     await sendBookingChange(events.BookingChanged, 'asd 123 fgh');
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
+  });
+  it('Should send a booking information email', async () => {
+    const data = {
+      roomType: 'Room type 1',
+      nights: [1, 2],
+      personalInfo: {
+        email: 'some@email.com',
+        fullName: 'Some Fullname',
+      },
+    };
+    const mailInfo = {
+      from: MAILGUN_FROM_EMAIL,
+      to: MAILGUN_TO_EMAIL,
+      subject: '[TEST] information email',
+    };
+    await sendBookingInfo(data, mailInfo);
     const sendFake = sandbox.getFakes()[0];
     expect(sendFake).to.have.property('calledOnce', true);
   });
