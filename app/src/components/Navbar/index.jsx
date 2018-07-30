@@ -4,7 +4,7 @@ export default class Navbar extends React.Component {
 
   render() {
     return (
-      <nav className="navbar navbar-light bg-white navbar-expand-lg XXXnavbar--toggle-bg" id="navbar" style={{opacity: 1}}>
+      <nav className="navbar navbar-light bg-white navbar-expand-lg" id="navbar" style={{opacity: 1}}>
         <div className="container">
 
           <a href="https://windingtree.com" className="navbar-brand d-block">Winding Tree</a>
@@ -17,18 +17,13 @@ export default class Navbar extends React.Component {
             <ul className="navbar-nav ml-auto" id="navbar-nav">
 
               <li className="nav-item h5">
-                <a href="/" className="nav-link">
+                <a href="#paying-with-lif" className="nav-link">
                 Paying with Lif
                 </a>
               </li>
               <li className="nav-item h5">
-                <a href="/" className="nav-link">
+                <a href="#my-booking" className="nav-link">
                 My booking
-                </a>
-              </li>
-              <li className="nav-item h5">
-                <a href="/" className="nav-link">
-                FAQ
                 </a>
               </li>
 

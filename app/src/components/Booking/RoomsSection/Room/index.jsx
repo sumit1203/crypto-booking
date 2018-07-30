@@ -28,7 +28,7 @@ class Room extends React.Component {
           <p>
             <b>Price in Lif</b>: {price * 0.8}$/night
           </p>
-          <a href="#BookARoom" className="btn  btn-secondary mt-1" onClick={this.onClick}>
+          <a href="#book-a-room" className="btn  btn-secondary mt-1" onClick={this.onClick}>
             {isFull ? 'these rooms are fully booked' : 'Book this room'}
           </a>
           <a href="#" className="float-right mt-2">

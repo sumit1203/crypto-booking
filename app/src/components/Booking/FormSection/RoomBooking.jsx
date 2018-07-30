@@ -53,7 +53,7 @@ export default class RoomBooking extends React.Component {
     } = this.props;
 
     return (
-      <article id='BookARoom' className="section-wrapper bg-light py-3 py-md-5">
+      <article id='book-a-room' className="section-wrapper bg-light py-3 py-md-5">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-10 col-lg-8">
