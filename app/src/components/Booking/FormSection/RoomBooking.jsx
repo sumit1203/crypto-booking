@@ -85,15 +85,15 @@ export default class RoomBooking extends React.Component {
                   <section className="row text-center px-2 pb-2">
                     <div className="col text-left">
                       <label htmlFor="fullName"> <b>Full Name</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="fullName" type="text" onChange={onFullNameChange} placeholder='Pedrotti Capone' required/>
+                      <input className="form-control form-control-lg mb-1" id="fullName" type="text" onChange={onFullNameChange} required/>
                       <label htmlFor="birthDate"> <b>Birth Dat</b>e </label>
                       <input className="form-control form-control-lg" id="birthDate" type="date" onChange={onBirthDateChange} required/>
                     </div>
                     <div className="col text-left">
                       <label htmlFor="email"> <b>Email</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="email" type="email" onChange={onEmailChange} placeholder='someGuy@windingtree.com' required/>
+                      <input className="form-control form-control-lg mb-1" id="email" type="email" onChange={onEmailChange} required/>
                       <label htmlFor="phone"> <b>Phone Number</b> </label>
-                      <input className="form-control form-control-lg" id="phone" type="tel" onChange={onPhoneChange} placeholder='+54 011 1135989272' required/>
+                      <input className="form-control form-control-lg" id="phone" type="tel" onChange={onPhoneChange} required/>
                     </div>
                   </section>
                 </div>
@@ -132,4 +132,3 @@ RoomBooking.propTypes = {
   onPhoneChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 }
-
