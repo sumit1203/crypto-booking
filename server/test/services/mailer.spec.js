@@ -46,24 +46,22 @@ describe('Mail service', () => {
     const sendFake = sandbox.getFakes()[0];
     expect(sendFake).to.have.property('calledOnce', true);
   });
-  xit('Should send a booking information email', async () => {
-    try {
-      const data = {
-        roomType: 'Room type 1',
-        nights: [1, 2],
-        personalInfo: {
-          email: 'some@email.com',
-          fullName: 'Some Fullname',
-        },
-      };
-      const mailInfo = {
-        from: MAILGUN_FROM_EMAIL,
-        to: MAILGUN_TO_EMAIL,
-        subject: '[TEST] information email',
-      };
-      await sendBookingInfo(data, mailInfo);
-    } catch (e) {
-      expect(false);
-    }
+  it('Should send a booking information email', async () => {
+    const data = {
+      roomType: 'Room type 1',
+      nights: [1, 2],
+      personalInfo: {
+        email: 'some@email.com',
+        fullName: 'Some Fullname',
+      },
+    };
+    const mailInfo = {
+      from: MAILGUN_FROM_EMAIL,
+      to: MAILGUN_TO_EMAIL,
+      subject: '[TEST] information email',
+    };
+    await sendBookingInfo(data, mailInfo);
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
   });
 });

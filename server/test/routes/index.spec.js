@@ -97,13 +97,13 @@ describe('Booking API', () => {
     });
   });
 
-  xdescribe('POST /api/booking/emailInfo', () => {
+  describe('POST /api/booking/emailInfo', () => {
     it('Should read a booking', async () => {
       const dbBooking = BookingModel.generate(validBookingWithEthPrice);
       await dbBooking.save();
       const body = { bookingHash: dbBooking.bookingHash };
       const response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
-      expect(response).to.have.property('status', 'sent');
+      expect(response).to.have.property('status', 'ok');
     });
     it('Should propagate data errors', async () => {
       try {
@@ -112,7 +112,7 @@ describe('Booking API', () => {
         throw new Error('should not be called');
       } catch (e) {
         expect(e).to.have.property('error');
-        expect(e.error).to.have.property('code', '#notFound');
+        expect(e.error).to.have.property('code', '#sendBookingInfoFail');
       }
     });
   });

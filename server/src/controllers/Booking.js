@@ -75,7 +75,7 @@ async function sendBookingInfoByEmail (bookingHash) {
     throw handleApplicationError('sendBookingInfoFail');
   }
 
-  await sendBookingInfo(booking, {
+  return sendBookingInfo(booking, {
     from: MAILGUN_FROM_EMAIL,
     to: MAILGUN_TO_EMAIL,
   });
