@@ -1,6 +1,11 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery';
+import 'popper.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import { hot } from "react-hot-loader"
 
 const LoadableHome = Loadable({
     loader: () => import(
@@ -21,4 +26,4 @@ const Routes = () => (
 
 );
 
-export default Routes;
+export default hot(module)(Routes);

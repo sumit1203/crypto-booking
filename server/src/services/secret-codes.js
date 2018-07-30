@@ -1,5 +1,9 @@
 const crypto = require('crypto');
 const { web3 } = require('./web3');
+const {
+  OWNER_PRIVATE_KEY,
+  OWNER_ADDRESS,
+} = require('../config');
 
 const codeGenerator = async (data, secret) => {
   const hmac = crypto.createHmac('sha256', secret);
@@ -12,8 +16,8 @@ const codeGenerator = async (data, secret) => {
 const readKey = async () => {
   // TODO: Store encrypted
   const key = {
-    privateKey: process.env.OWNER_PRIVATE_KEY,
-    address: process.env.OWNER_ADDRESS,
+    privateKey: OWNER_PRIVATE_KEY,
+    address: OWNER_ADDRESS,
   };
   return key;
 };
