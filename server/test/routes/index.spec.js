@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const mongoose = require('mongoose');
 const request = require('request-promise-native');
 const sinon = require('sinon');
-const mailgun = require('mailgun-js');
+const sgMail = require('@sendgrid/mail');
 const { SERVER_PORT } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
 
@@ -34,10 +34,8 @@ describe('Booking API', () => {
   });
   beforeEach(function () {
     throttling.turnOffThrottling();
-    sandbox.stub(mailgun({ apiKey: 'foo', domain: 'bar' }).Mailgun.prototype, 'messages')
-      .returns({
-        send: (data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }),
-      });
+    sandbox.stub(sgMail, 'send')
+      .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
   });
   describe('POST /api/booking', () => {
     it('Should create a valid booking', async () => {

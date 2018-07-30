@@ -1,4 +1,4 @@
-const mailgun = require('mailgun-js');
+const sgMail = require('@sendgrid/mail');
 const {
   confirmationBody,
   instructionsBody,
@@ -9,16 +9,15 @@ const { handleApplicationError } = require('../errors');
 const { bookingPoc } = require('./web3');
 const {
   BOOKING_POC_ADDRESS,
-  MAILGUN_API_KEY,
-  MAILGUN_DOMAIN,
-  MAILGUN_FROM_EMAIL,
+  MAIL_API_KEY,
+  FROM_EMAIL,
 } = require('../config');
 
-const mailgunClient = mailgun({ apiKey: MAILGUN_API_KEY, domain: MAILGUN_DOMAIN });
+sgMail.setApiKey(MAIL_API_KEY);
 
-const sendRawEmail = async (from = MAILGUN_FROM_EMAIL, to, subject, html) => {
+const sendRawEmail = async (from = FROM_EMAIL, to, subject, html) => {
   try {
-    return mailgunClient.messages().send({ from, to, subject, html });
+    return sgMail.send({ to, from, subject, html });
   } catch (e) {
     // TODO: Handle errors
     throw e;
@@ -28,7 +27,7 @@ const sendRawEmail = async (from = MAILGUN_FROM_EMAIL, to, subject, html) => {
 const sendConfirmation = async (event, secretCode, to) => {
   try {
     const html = confirmationBody(event, secretCode);
-    return mailgunClient.messages().send({ from: MAILGUN_FROM_EMAIL, to, subject: 'Hotel confirmation for EthBerlin', html });
+    return sgMail.send({ from: FROM_EMAIL, to, subject: 'Hotel confirmation for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
     throw e;
@@ -38,7 +37,7 @@ const sendConfirmation = async (event, secretCode, to) => {
 const sendBookingChange = async (event, secretCode, to) => {
   try {
     const html = bookingChangeBody(event, secretCode);
-    return mailgunClient.messages().send({ from: MAILGUN_FROM_EMAIL, to, subject: 'Hotel changes for EthBerlin', html });
+    return sgMail.send({ from: FROM_EMAIL, to, subject: 'Hotel changes for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
     throw e;
@@ -58,7 +57,7 @@ const sendInstructions = async ({ booking, offerSignature, signatureData, contra
     ).encodeABI();
 
     const html = instructionsBody(booking.paymentAmount, BOOKING_POC_ADDRESS, txData);
-    return mailgunClient.messages().send({ from, to, subject, html });
+    return sgMail.send({ from, to, subject, html });
   } catch (e) {
     console.log(e);
     // TODO: Handle errors
@@ -75,7 +74,7 @@ const sendBookingInfo = async (booking, { from, to }) => {
     }
     const html = informationBody({ personalInfo, nights, roomType });
 
-    return mailgunClient.messages().send({ from, to, subject: 'Hotel information for EthBerlin', html });
+    return sgMail.send({ from, to, subject: 'Hotel information for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
     throw handleApplicationError('sendBookingInfoFail', e);
