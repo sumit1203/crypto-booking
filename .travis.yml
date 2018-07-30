@@ -8,7 +8,7 @@ cache:
 services:
   - mongodb
 before_script:
-  - sleep 15      
+  - sleep 15
 jobs:
   include:
   - stage: test
@@ -16,7 +16,7 @@ jobs:
     - npm run test-server
   - stage: deploy-server
     install: true
-    if: branch = release/server
+    if: branch = release/server AND type = push
     script:
     - npm i -g now
     - echo 'Deploying to NOW'
