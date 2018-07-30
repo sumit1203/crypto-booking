@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react';
 import Web3 from 'web3';
+import Loader from '../Loader';
 import BookingPoC  from '../../abis/BookingPoC.json';
 import RoomsSection from './RoomsSection'
 import FormSection from './FormSection'
@@ -68,7 +69,11 @@ export default class BookingContainer extends React.Component {
 
   render () {
     const {isLoading, selectedRoom, roomTypes} = this.state
-    if (isLoading) return null // TODO should render a loading component
+
+    if (isLoading) return  (
+      <Loader block={200} label="Loading..."/>
+    )
+
     return (
       <Fragment>
         <RoomsSection onRoomTypeChange={this.onRoomTypeChange} roomTypes={roomTypes}/>
