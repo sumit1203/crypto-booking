@@ -4,6 +4,7 @@ const { fetchEthPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
+const { MAILGUN_TO_EMAIL, MAILGUN_FROM_EMAIL } = require('../config');
 /**
   * Creates a new Booking in the db and returns an instance of Booking
   * @param {Object} {publicKey, guestEthAddress, payment, personalInfo}
@@ -75,8 +76,8 @@ async function sendBookingInfoByEmail (bookingHash) {
   }
 
   await sendBookingInfo(booking, {
-    from: process.env.MAILGUN_FROM_EMAIL,
-    to: process.env.MAILGUN_TO_EMAIL,
+    from: MAILGUN_FROM_EMAIL,
+    to: MAILGUN_TO_EMAIL,
   });
 }
 
