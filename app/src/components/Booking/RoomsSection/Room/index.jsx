@@ -23,12 +23,12 @@ class Room extends React.Component {
             {description}
           </p>
           <p>
-            <b>Price in USD</b>: {price}$/night
+            <b>Price in EUR</b>: {price}$/night
           </p>
           <p>
             <b>Price in Lif</b>: {price * 0.8}$/night
           </p>
-          <a href="#BookARoom" className={`btn btn-secondary mt-1 ${isFull && 'disabled'}`}
+          <a href="#book-a-room" className={`btn btn-secondary mt-1 ${isFull && 'disabled'}`}
             style={isFull && {textDecoration: 'line-through', opacity: .5}}
             onClick={this.onClick}>
             Book this room
