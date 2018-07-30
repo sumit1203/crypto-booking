@@ -18,23 +18,18 @@ export default class RoomBooking extends React.Component {
     this.props.onSubmit(data)
   }
 
-  onRoomTypeChange = e => {
-    const {onRoomTypeChange, roomTypes} = this.props
-    onRoomTypeChange(roomTypes.find(room => room.id === e.target.value))
-  }
-
   onSubmit = (e) => {
     e.preventDefault()
     $('#modalConfirm').modal('show')
   }
 
   renderRoomTypes = () => {
-    const {roomTypes, selectedRoom} = this.props
+    const {roomTypes, selectedRoom, onRoomTypeChange} = this.props
     return roomTypes.map(room => {
      return (
        <Fragment key={room.id}>
-         <input id={room.id} name="type" type="radio" value={room.id} onChange={this.onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-         <label htmlFor={room.id} className="col">{room.name}</label>
+         <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
+         <label htmlFor={room.id} className="col-6">{room.name}</label>
        </Fragment>)
     })
   }
@@ -42,6 +37,7 @@ export default class RoomBooking extends React.Component {
   render() {
     const {
       toDateMin,
+      fromDateMax,
       from,
       price,
       onFromDateChange,
@@ -67,7 +63,7 @@ export default class RoomBooking extends React.Component {
                 {/*TODO: in case one of the options is unavailable use the class "disabled" and the attribute "disabled" on that item*/}
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Preffered room type </h5>
-                  <div className="btn-group btn-group--switch" role="group" aria-label="Room type">
+                  <div className="btn-group btn-group--switch w-100" role="group" aria-label="Room type">
                     {this.renderRoomTypes()}
                   </div>
                   {/* NOTE: Change the messages depending on room availability */}
@@ -77,7 +73,7 @@ export default class RoomBooking extends React.Component {
                   <h5 className="mb-1"> Reservation date </h5>
                   <div className="form-row">
                     <div className="col-12 col-sm-6 mb-1 mb-sm-0">
-                      <input className="form-control form-control-lg" type="date" min="2018-09-06" max="2018-09-09" onChange={onFromDateChange} value={from} required/>
+                      <input className="form-control form-control-lg" type="date" min="2018-09-06" max={fromDateMax} onChange={onFromDateChange} value={from} required/>
                     </div>
                     <div className=" col-12 col-sm-6">
                       <input className="form-control form-control-lg" type="date" name="to" min={toDateMin} max="2018-09-10" onChange={onToDateChange} required/>
@@ -91,13 +87,13 @@ export default class RoomBooking extends React.Component {
                       <label htmlFor="fullName"> <b>Full Name</b> </label>
                       <input className="form-control form-control-lg mb-1" id="fullName" type="text" onChange={onFullNameChange} placeholder='Pedrotti Capone' required/>
                       <label htmlFor="birthDate"> <b>Birth Dat</b>e </label>
-                      <input className="form-control form-control-lg" id="birthDate" type="date" onChange={onBirthDateChange} />
+                      <input className="form-control form-control-lg" id="birthDate" type="date" onChange={onBirthDateChange} required/>
                     </div>
                     <div className="col text-left">
                       <label htmlFor="email"> <b>Email</b> </label>
                       <input className="form-control form-control-lg mb-1" id="email" type="email" onChange={onEmailChange} placeholder='someGuy@windingtree.com' required/>
                       <label htmlFor="phone"> <b>Phone Number</b> </label>
-                      <input className="form-control form-control-lg" id="phone" type="tel" onChange={onPhoneChange} placeholder='+54 011 1135989272'/>
+                      <input className="form-control form-control-lg" id="phone" type="tel" onChange={onPhoneChange} placeholder='+54 011 1135989272' required/>
                     </div>
                   </section>
                 </div>
@@ -122,9 +118,10 @@ export default class RoomBooking extends React.Component {
 
 RoomBooking.propTypes = {
   toDateMin: PropTypes.string.isRequired,
+  fromDateMax: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
   selectedRoom: roomType,
-  price: PropTypes.string,
+  price: PropTypes.number,
   roomTypes: PropTypes.arrayOf(roomType).isRequired,
   onRoomTypeChange: PropTypes.func.isRequired,
   onFromDateChange: PropTypes.func.isRequired,

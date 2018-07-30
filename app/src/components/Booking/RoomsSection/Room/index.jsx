@@ -23,7 +23,7 @@ class Room extends React.Component {
             {description}
           </p>
           <p>
-            <b>Price in USD</b>: {price}$/night
+            <b>Price in EUR</b>: {price}$/night
           </p>
           <p>
             <b>Price in Lif</b>: {price * 0.8}$/night

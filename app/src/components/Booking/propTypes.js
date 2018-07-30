@@ -5,6 +5,6 @@ export const roomType = PropTypes.shape({
   isFull: PropTypes.bool,
   description: PropTypes.string,
   name: PropTypes.string,
-  price: PropTypes.string,
+  price: PropTypes.number,
   images: PropTypes.arrayOf(PropTypes.string),
 })
