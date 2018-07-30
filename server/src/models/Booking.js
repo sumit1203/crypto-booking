@@ -29,7 +29,7 @@ const Booking = new Schema({
   },
   roomType: {
     type: String,
-    enum: [BOOKING_ROOM_TYPES.double, BOOKING_ROOM_TYPES.twin],
+    enum: BOOKING_ROOM_TYPES,
     required: [true, 'noRoomType'],
   },
   from: {

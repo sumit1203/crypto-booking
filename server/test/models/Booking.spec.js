@@ -104,18 +104,16 @@ describe('Booking model', () => {
   });
 
   describe('roomType', () => {
-    const allowedRoomTypes = Object.keys(BOOKING_ROOM_TYPES);
-    const allowedRoomTypesString = allowedRoomTypes.join(', ').toLowerCase();
+    const allowedRoomTypesString = BOOKING_ROOM_TYPES.join(', ').toLowerCase();
     it(`Should allow to set roomType as ${allowedRoomTypesString}`, () => {
-      for (const types of allowedRoomTypes) {
+      BOOKING_ROOM_TYPES.forEach((type) => {
         const booking = new Booking(validBookingDB);
-        booking.roomType = types;
+        booking.roomType = type;
         const validation = booking.validateSync();
         expect(validation).to.be.a('undefined');
-        expect(booking.roomType).to.be.equal(types);
-      }
+        expect(booking.roomType).to.be.equal(type);
+      });
     });
-
     it(`Should throw an error if roomType is not ${allowedRoomTypesString}`, () => {
       const booking = new Booking(validBookingDB);
       booking.roomType = 'some other room';
