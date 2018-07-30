@@ -103,7 +103,7 @@ const validBooking = {
   guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
   paymentAmount: 0.1,
   paymentType: 'eth',
-  roomType: 'double',
+  roomType: 'pure-cozy',
   personalInfo: {
     fullName: 'Some name',
     email: 'email@email.com',
@@ -118,7 +118,7 @@ const validBookingWithEthPrice = {
   paymentAmount: 0.1,
   paymentType: 'eth',
   paymentTx: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e234553',
-  roomType: 'double',
+  roomType: 'pure-cozy',
   personalInfo: {
     fullName: 'Some name',
     email: 'email@email.com',
@@ -134,7 +134,7 @@ const validBookingDB = {
   guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
   paymentAmount: 0.1,
   paymentType: 'eth',
-  roomType: 'double',
+  roomType: 'pure-cozy',
   encryptedPersonalInfo: '0x7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
   from: 1,
   to: 4,
@@ -145,7 +145,7 @@ const events = {
     transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
     blockNumber: '123',
     returnValues: {
-      roomType: 'double',
+      roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],
       room: '1',
       newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
@@ -156,7 +156,7 @@ const events = {
     transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
     blockNumber: '123',
     returnValues: {
-      roomType: 'double',
+      roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],
       room: '1',
       newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
