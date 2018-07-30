@@ -16,7 +16,7 @@ export default class HeroSection extends React.Component {
                 <p className="col-md-10 mb-2 text-white h1">
                   Book a room and save <span className="font--alt">20%</span> with Winding Tree
                 </p>
-                <a href="#RoomSection" className="btn btn-primary btn-lg">
+                <a href="#pick-room" className="btn btn-primary btn-lg">
                   <span className="h5">Book with discount</span>
                 </a>
               </div>
