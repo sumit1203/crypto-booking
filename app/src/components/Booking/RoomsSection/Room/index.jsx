@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classnames from 'classnames'
 import { roomType } from '../../propTypes'
 
 class Room extends React.Component {
@@ -26,8 +27,8 @@ class Room extends React.Component {
           <p> <b>Price in ETH</b>: {price}€/night </p>
           <p> <b>Price in Lif</b>: {price * 0.8}€/night </p>
 
-          <a href="#book-a-room" className={`btn btn-secondary mt-1 ${isFull && 'disabled'}`}
-            style={isFull && {textDecoration: 'line-through', opacity: .5}}
+          <a href="#book-a-room" className={classnames('btn btn-secondary',  'mt-1',{'disabled': isFull})}
+            style={isFull ? {textDecoration: 'line-through', opacity: 0.5}: {}}
             onClick={this.onClick}>
             Book this room
           </a>
