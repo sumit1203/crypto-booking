@@ -36,13 +36,13 @@ describe('Mail service', () => {
   });
 
   it('Should send a confirmation email', async () => {
-    await sendConfirmation(events.BookingDone, 'asd 123 fgh');
+    await sendConfirmation(events.BookingDone, 'asd 123 fgh', toEmail);
     const sendFake = sandbox.getFakes()[0];
     expect(sendFake).to.have.property('calledOnce', true);
   });
 
   it('Should send a booking change email', async () => {
-    await sendBookingChange(events.BookingChanged, 'asd 123 fgh');
+    await sendBookingChange(events.BookingChanged, 'asd 123 fgh', toEmail);
     const sendFake = sandbox.getFakes()[0];
     expect(sendFake).to.have.property('calledOnce', true);
   });

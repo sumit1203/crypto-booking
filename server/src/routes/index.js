@@ -3,7 +3,6 @@ const { createBooking, readBooking, deleteBooking, sendBookingInfoByEmail } = re
 const {
   BOOKING_POC_ADDRESS,
   FROM_EMAIL,
-  TO_EMAIL,
 } = require('../config');
 const { createThrottlingInstance } = require('../middlewares/throttling');
 const { sendInstructions } = require('../services/mail');
@@ -23,7 +22,7 @@ router.post(`${bookingUrl}`, async (req, res, next) => {
 
     sendInstructions(data, {
       from: FROM_EMAIL,
-      to: TO_EMAIL,
+      to: booking.personalInfo.email,
       subject: 'Hotel reservation instructions',
     });
     res.json(data);

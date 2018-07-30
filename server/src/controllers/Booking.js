@@ -77,7 +77,7 @@ async function sendBookingInfoByEmail (bookingHash) {
 
   return sendBookingInfo(booking, {
     from: FROM_EMAIL,
-    to: TO_EMAIL,
+    to: booking.personalInfo.email,
   });
 }
 
