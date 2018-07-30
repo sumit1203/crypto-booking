@@ -136,6 +136,7 @@ class FormSection extends React.Component {
   render () {
     const {from, instructions, isFull, price, toDateMin, fromDateMax} = this.state
     const {selectedRoom, roomTypes} = this.props
+    console.log(instructions, isFull)
     if (isFull) return <FullyBooked/>
     if (instructions) return <CheckEmail paymentAmount={instructions.value}
                                          contract={instructions.to}
