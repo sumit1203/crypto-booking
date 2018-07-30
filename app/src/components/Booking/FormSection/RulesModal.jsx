@@ -12,7 +12,7 @@ const RulesModal = () => (
         </div>
 
         <div className="modal-body">
-          <p className="mb-1">These are the hotel rules:</p>
+          <p className="mb-1">These are th hotel rules:</p>
 
           <ul>
             <li>
@@ -22,16 +22,16 @@ const RulesModal = () => (
               <b>Check out time</b>: 11-00
             </li>
             <li>
-              <b>Breakfast</b>: Not included
+              <b>Breakfast</b>: included
             </li>
             <li>
-              <b>Pets allowed</b>: No
+              <b>Pets allowed</b>: no
             </li>
             <li>
               <b>Hotel phone</b>: +49 12 3234 654
             </li>
             <li>
-              <b>Hotel address</b>: Invalidenstraße 31, 10115 Berlin, Germany
+              <b>Hotel address</b>: Berlin, strasse ..
             </li>
           </ul>
         </div>
