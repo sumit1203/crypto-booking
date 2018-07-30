@@ -69,13 +69,13 @@ export default class RoomBooking extends React.Component {
                       <i className="mdi mdi-account mdi-48px text-dark mr-1" style={{marginTop: -17}}/>
                       <div className="media-body">
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked/>
-                          <label className="form-check-label" for="exampleRadios1">&nbsp; One person
+                          <input className="form-check-input" type="radio" name="guests" id="guests1" value="guests1" checked/>
+                          <label className="form-check-label" for="guests1">&nbsp; One person
                           </label>
                         </div>
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2"/>
-                          <label className="form-check-label" for="exampleRadios2">&nbsp; Two persons
+                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2"/>
+                          <label className="form-check-label" for="guests2">&nbsp; Two persons
                           </label>
                         </div>
                       </div>
@@ -108,15 +108,15 @@ export default class RoomBooking extends React.Component {
                   <section className="row text-center px-2 pb-2">
                     <div className="col text-left">
                       <label htmlFor="fullName"> <b>Full Name</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="fullName" autoComplete="off" type="text" onChange={onFullNameChange} placeholder='Pedrotti Capone' required/>
+                      <input className="form-control form-control-lg mb-1" id="fullName" autoComplete="off" type="text" onChange={onFullNameChange} required/>
                       <label htmlFor="birthDate"> <b>Birth Dat</b>e </label>
                       <input className="form-control form-control-lg" id="birthDate" autoComplete="off" type="date" onChange={onBirthDateChange} required/>
                     </div>
                     <div className="col text-left">
                       <label htmlFor="email"> <b>Email</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="email" autoComplete="off" type="email" onChange={onEmailChange} placeholder='someGuy@windingtree.com' required/>
+                      <input className="form-control form-control-lg mb-1" id="email" autoComplete="off" type="email" onChange={onEmailChange} required/>
                       <label htmlFor="phone"> <b>Phone Number</b> </label>
-                      <input className="form-control form-control-lg" id="phone" autoComplete="off" type="tel" onChange={onPhoneChange} placeholder='+54 011 1135989272' required/>
+                      <input className="form-control form-control-lg" id="phone" autoComplete="off" type="tel" onChange={onPhoneChange} required/>
                     </div>
                   </section>
                 </div>
@@ -155,4 +155,3 @@ RoomBooking.propTypes = {
   onPhoneChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 }
-
