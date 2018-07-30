@@ -225,6 +225,56 @@ describe('Booking model', () => {
         const decryptPersonalInfo = JSON.parse(web3.utils.hexToString(encodedPersonalInfo));
         expect(decryptPersonalInfo).to.be.deep.equal(validBookingWithEthPrice.personalInfo);
       });
+      it('Should throw and error if personalInfo is not an object', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        const invalidPersonalInfo = 'somePersonalInfo';
+        try {
+          booking.encryptPersonalInfo(invalidPersonalInfo, booking.bookingHash);
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidPersonalInfo');
+        }
+      });
+      it('Should throw and error if an invalid email is given', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        const invalidPersonalInfo = { ...validBookingWithEthPrice.personalInfo, email: 'invalidEmail' };
+        try {
+          booking.encryptPersonalInfo(invalidPersonalInfo, booking.bookingHash);
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidPersonalInfoEmail');
+        }
+      });
+      it('Should throw and error if an invalid fullName is given', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        const invalidPersonalInfo = { ...validBookingWithEthPrice.personalInfo, fullName: 'invalidFullName' };
+        try {
+          booking.encryptPersonalInfo(invalidPersonalInfo, booking.bookingHash);
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidPersonalInfoFullName');
+        }
+      });
+      it('Should throw and error if an invalid phone is given', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        const invalidPersonalInfo = { ...validBookingWithEthPrice.personalInfo, phone: 'invalidPhone' };
+        try {
+          booking.encryptPersonalInfo(invalidPersonalInfo, booking.bookingHash);
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidPersonalInfoPhone');
+        }
+      });
+      it('Should throw and error if an invalid birthDate is given', () => {
+        const booking = new Booking(validBookingDB);
+        booking.bookingHash = 'someHash';
+        const invalidPersonalInfo = { ...validBookingWithEthPrice.personalInfo, birthDate: '17/12/1987' };
+        try {
+          booking.encryptPersonalInfo(invalidPersonalInfo, booking.bookingHash);
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidPersonalInfoBirthDate');
+        }
+      });
     });
     describe('decryptPersonalInfo', () => {
       it('Should decode personal info', () => {

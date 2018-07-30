@@ -48,9 +48,9 @@ describe('Booking API', () => {
       expect(booking).to.have.property('signatureTimestamp');
       expect(booking.signatureTimestamp).to.have.a('number');
       expect(booking).to.have.property('personalInfo');
-      expect(booking.personalInfo).to.have.property('name', validBooking.personalInfo.name);
+      expect(booking.personalInfo).to.have.property('fullName', validBooking.personalInfo.fullName);
       expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
-      expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
+      expect(booking.personalInfo).to.have.property('birthDate', validBooking.personalInfo.birthDate);
       expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
       const sendFake = sandbox.getFakes()[0];
       expect(sendFake).to.have.property('calledOnce', true);
@@ -81,9 +81,9 @@ describe('Booking API', () => {
       expect(booking).to.have.property('signatureTimestamp');
       expect(booking.signatureTimestamp).to.have.a('number');
       expect(booking).to.have.property('personalInfo');
-      expect(booking.personalInfo).to.have.property('name', validBooking.personalInfo.name);
+      expect(booking.personalInfo).to.have.property('fullName', validBooking.personalInfo.fullName);
       expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
-      expect(booking.personalInfo).to.have.property('birthday', validBooking.personalInfo.birthday);
+      expect(booking.personalInfo).to.have.property('birthDate', validBooking.personalInfo.birthDate);
       expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
     });
     it('Should propagate data errors', async () => {
