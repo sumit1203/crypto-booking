@@ -32,7 +32,9 @@ class FormSection extends React.Component {
       birthDate: null,
       email: null,
       phone: null,
-      instructions: null
+      instructions: null,
+      toDateMin: '2018-09-07',
+      fromDateMax: '2018-09-09'
     }
   }
 
@@ -44,12 +46,19 @@ class FormSection extends React.Component {
     return (new Date(date)).getUTCDate() - 5
   }
 
+  _addDay = (date, num) => {
+    const fromDate = new Date(date)
+    const nextDate = fromDate.setUTCDate(fromDate.getUTCDate() + num)
+    return _formatDate(nextDate)
+  }
   onFromDateChange = (e) => {
-    this.setState({from: e.target.value}, this.computePrice)
+    const from  = e.target.value
+    this.setState({from, toDateMin: this._addDay(from, 1)}, this.computePrice)
   }
 
   onToDateChange = (e) => {
-    this.setState({to: e.target.value}, this.computePrice)
+    const to = e.target.value
+    this.setState({to, fromDateMax: this._addDay(to, -1)}, this.computePrice)
   }
   onFullNameChange = (e) => {
     this.setState({fullName: e.target.value})
@@ -64,14 +73,21 @@ class FormSection extends React.Component {
     this.setState({phone: e.target.value})
   }
 
-  computePrice = () => {
+  onRoomTypeChange = e => {
+    const {onRoomTypeChange, roomTypes} = this.props
+    const selectedRoom = roomTypes.find(room => room.id === e.target.value)
+    this.computePrice(selectedRoom)
+    onRoomTypeChange(selectedRoom)
+  }
+
+  computePrice = (roomType = this.props.selectedRoom) => {
     const {from, to} = this.state;
-    const {price} = this.props.selectedRoom;
+    const {price} = roomType;
     if (!from || !to) return
     const fromDate = new Date(from);
     const toDate = new Date(to);
     const daysCount = (new Date (toDate - fromDate)).getDate()
-    const total = 80 * daysCount // TODO here we should replace 80 by price when price had been added on the endpoint
+    const total = price * daysCount
     this.setState({price: total})
   }
 
@@ -115,23 +131,21 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const {from, instructions, isFull, price} = this.state
-    const {onRoomTypeChange, selectedRoom, roomTypes} = this.props
+    const {from, instructions, isFull, price, toDateMin, fromDateMax} = this.state
+    const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked/>
     if (instructions) return <CheckEmail paymentAmount={instructions.value}
                                          contract={instructions.to}
                                          offerSignature={instructions.data}/>
-    const fromDate = new Date(from)
-    const nextDate = fromDate.setUTCDate(fromDate.getUTCDate() + 1)
-    const toDateMin = _formatDate(nextDate)
     return (
       <RoomBooking
         from={from}
         roomTypes={roomTypes}
         selectedRoom={selectedRoom}
         toDateMin={toDateMin}
+        fromDateMax={fromDateMax}
         price={price}
-        onRoomTypeChange={onRoomTypeChange}
+        onRoomTypeChange={this.onRoomTypeChange}
         onFromDateChange={this.onFromDateChange}
         onToDateChange={this.onToDateChange}
         onFullNameChange={this.onFullNameChange}

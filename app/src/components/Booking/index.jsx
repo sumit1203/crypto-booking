@@ -4,6 +4,11 @@ import BookingPoC  from '../../abis/BookingPoC.json';
 import RoomsSection from './RoomsSection'
 import FormSection from './FormSection'
 
+const PRICES_BY_ROOMTYPE = {
+  'pure-cozy': 150,
+  'white-brown-comfort': 160
+}
+
 export default class BookingContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -23,7 +28,8 @@ export default class BookingContainer extends React.Component {
       const mappedRooms = await Object.values(roomTypes).reduce(async (acc, room) => {
         acc = await acc
         const isFull = (await this._availability(bookingPoC, room.id)).some(availabilityFlag => !!parseInt(availabilityFlag))
-        return [...acc, {...room, isFull}]
+        const price = PRICES_BY_ROOMTYPE[room.id]
+        return [...acc, {...room, isFull, price}]
       }, [])
       this.setState({isLoading: false, roomTypes: mappedRooms});
     }catch (e) {
