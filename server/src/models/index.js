@@ -1,12 +1,12 @@
 // Bring Mongoose into the app
 const mongoose = require('mongoose');
 const fs = require('fs');
-
-if (!process.env.MONGODB_URI) {
+const { MONGODB_URI } = require('../config');
+if (!MONGODB_URI) {
   throw new Error('No MongoDB URI provided, please add the env variable MONGODB_URI');
 }
 
-const dbURI = `mongodb://${process.env.MONGODB_URI}`;
+const dbURI = `mongodb://${MONGODB_URI}`;
 
 // Create the database connection
 mongoose.connect(dbURI);

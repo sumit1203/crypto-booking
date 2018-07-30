@@ -140,10 +140,36 @@ const validBookingDB = {
   to: 4,
 };
 
+const events = {
+  BookingChanged: {
+    transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
+    blockNumber: '123',
+    returnValues: {
+      roomType: 'double',
+      nights: [1, 2, 3, 4],
+      room: '1',
+      newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
+      bookingHash: 'someHash',
+    },
+  },
+  BookingDone: {
+    transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
+    blockNumber: '123',
+    returnValues: {
+      roomType: 'double',
+      nights: [1, 2, 3, 4],
+      room: '1',
+      newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
+      guest: 'someHash',
+    },
+  },
+};
+
 module.exports = {
   testHtmlBody,
   validBooking,
   validBookingDB,
   validBookingWithEthPrice,
   ToPlainObjectTestClass,
+  events,
 };
