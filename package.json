@@ -1,7 +1,13 @@
 {
   "name": "crypto-booking-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Book rooms using crypto with signed offers from hotel owners.",
+  "scripts": {
+    "test": "npm run test-app && npm run test-server && npm run test-contracts",
+    "test-app": "cd app && npm ci && npm test && cd ..",
+    "test-server" : "cd server && npm ci && npm test && cd ..",
+    "test-contracts" : "cd contracts && npm ci && npm test && cd .."
+  },
   "directories": {
     "server": "server",
     "app": "app",
