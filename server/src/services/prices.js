@@ -5,7 +5,7 @@ const fetchEthPrice = async (unit = 'EUR') => {
   const res = await (await fetch(PRICE_URL)).json();
 
   // TODO: Add support for eur
-  const price = parseFloat(res[0].price_usd);
+  const price = parseFloat(res[0].price_eur);
   return price;
 };
 
