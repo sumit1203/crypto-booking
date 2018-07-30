@@ -15,19 +15,17 @@ class Room extends React.Component {
           <h5 className="card-title h4">
             {name}
             <small className="float-right">
-              <b>${price * 0.8}/Night</b>
+              <b>€{price * 0.8}/Night</b>
             </small>
           </h5>
           <hr className="my-1"/>
           <p className="card-text">
             {description}
           </p>
-          <p>
-            <b>Price in EUR</b>: {price}$/night
-          </p>
-          <p>
-            <b>Price in Lif</b>: {price * 0.8}$/night
-          </p>
+
+          <p> <b>Price in ETH</b>: {price}€/night </p>
+          <p> <b>Price in Lif</b>: {price * 0.8}€/night </p>
+
           <a href="#book-a-room" className={`btn btn-secondary mt-1 ${isFull && 'disabled'}`}
             style={isFull && {textDecoration: 'line-through', opacity: .5}}
             onClick={this.onClick}>
