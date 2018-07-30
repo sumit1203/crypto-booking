@@ -11,7 +11,7 @@ const {
   BOOKING_POC_ADDRESS,
   MAILGUN_API_KEY,
   MAILGUN_DOMAIN,
-  MAILGUN_FROM_EMAIL
+  MAILGUN_FROM_EMAIL,
 } = require('../config');
 
 const mailgunClient = mailgun({ apiKey: MAILGUN_API_KEY, domain: MAILGUN_DOMAIN });

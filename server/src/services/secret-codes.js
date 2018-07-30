@@ -1,17 +1,17 @@
-const crypto = require('crypto');
 const { web3 } = require('./web3');
 const {
   OWNER_PRIVATE_KEY,
   OWNER_ADDRESS,
 } = require('../config');
 
-const codeGenerator = async (data, secret) => {
-  const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(`${data} ${secret}`);
-  const digest = hmac.digest('base64');
-  const code = digest.slice(0, 9);
-  return code;
-};
+// This funtion will be updated
+// const codeGenerator = async (data, secret) => {
+//   const hmac = crypto.createHmac('sha256', secret);
+//   hmac.update(`${data} ${secret}`);
+//   const digest = hmac.digest('base64');
+//   const code = digest.slice(0, 9);
+//   return code;
+// };
 
 const readKey = async () => {
   // TODO: Store encrypted
@@ -46,7 +46,7 @@ const signOffer = async (booking, key) => {
 };
 
 module.exports = {
-  codeGenerator,
+  // codeGenerator,
   signOffer,
   readKey,
 };
