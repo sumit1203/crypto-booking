@@ -63,7 +63,7 @@ export default class RoomBooking extends React.Component {
                 {/*TODO: in case one of the options is unavailable use the class "disabled" and the attribute "disabled" on that item*/}
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Preffered room type </h5>
-                  <div className="btn-group btn-group--switch" role="group" aria-label="Room type">
+                  <div className="btn-group btn-group--switch w-100" role="group" aria-label="Room type">
                     {this.renderRoomTypes()}
                   </div>
                   {/* NOTE: Change the messages depending on room availability */}
@@ -121,7 +121,7 @@ RoomBooking.propTypes = {
   fromDateMax: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
   selectedRoom: roomType,
-  price: PropTypes.string,
+  price: PropTypes.number,
   roomTypes: PropTypes.arrayOf(roomType).isRequired,
   onRoomTypeChange: PropTypes.func.isRequired,
   onFromDateChange: PropTypes.func.isRequired,

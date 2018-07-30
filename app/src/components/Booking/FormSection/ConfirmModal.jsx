@@ -121,7 +121,7 @@ class ConfirmModal extends React.Component {
 }
 
 ConfirmModal.propTypes = {
-  price: PropTypes.string.isRequired,
+  price: PropTypes.number,
   onSubmit: PropTypes.func.isRequired
 }
 

@@ -34,7 +34,8 @@ class FormSection extends React.Component {
       phone: null,
       instructions: null,
       toDateMin: '2018-09-07',
-      fromDateMax: '2018-09-09'
+      fromDateMax: '2018-09-09',
+      price: null
     }
   }
 
@@ -83,7 +84,7 @@ class FormSection extends React.Component {
   computePrice = (roomType = this.props.selectedRoom) => {
     const {from, to} = this.state;
     const {price} = roomType;
-    if (!from || !to) return
+    if (!from || !to || !price) return
     const fromDate = new Date(from);
     const toDate = new Date(to);
     const daysCount = (new Date (toDate - fromDate)).getDate()
@@ -101,12 +102,14 @@ class FormSection extends React.Component {
       nights.push(i)
     }
     const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call()
+    console.log('al smart ==> ', availableRooms)
     if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
       this.setState({isFull: true})
       return
     }
     const personalInfo = {fullName, birthDate, phone, email}
     const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo}
+    console.log('al server ==> ', data)
     const response = await fetch(process.env.SIGNER_API + '/api/booking', {
       method: 'POST',
       body: JSON.stringify(data),
