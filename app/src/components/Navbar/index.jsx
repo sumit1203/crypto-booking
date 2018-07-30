@@ -23,7 +23,7 @@ export default class Navbar extends React.Component {
               </li>
               <li className="nav-item h5">
                 <a href="#my-booking" className="nav-link">
-                My booking
+                My Booking
                 </a>
               </li>
 
@@ -35,4 +35,3 @@ export default class Navbar extends React.Component {
     )
   }
 }
-
