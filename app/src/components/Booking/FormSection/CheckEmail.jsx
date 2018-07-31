@@ -1,9 +1,13 @@
 import React from 'react';
 import $ from 'jquery'
+import PropTypes from 'prop-types'
 
 class CheckEmail extends React.Component {
   componentDidMount() {
     $('#checkEmail').modal('show')
+    $('#checkEmail').on('hidden.bs.modal', () => {
+      this.props.onClose()
+    })
   }
 
   render() {
@@ -27,7 +31,7 @@ class CheckEmail extends React.Component {
               </p>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary">Ok</button>
+              <button type="button" className="btn btn-primary" data-dismiss="modal">Ok</button>
             </div>
           </div>
         </div>
@@ -36,5 +40,8 @@ class CheckEmail extends React.Component {
   }
 }
 
+CheckEmail.propTypes = {
+  onClose: PropTypes.func.isRequired
+}
 
 export default CheckEmail;

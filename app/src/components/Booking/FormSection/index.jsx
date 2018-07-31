@@ -102,12 +102,14 @@ class FormSection extends React.Component {
       nights.push(i)
     }
     const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call()
+    console.log(availableRooms)
     if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
       this.setState({isFull: true})
       return
     }
     const personalInfo = {fullName, birthDate, phone, email}
     const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo}
+    console.log(data)
     const response = await fetch(process.env.SIGNER_API + '/api/booking', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -131,11 +133,17 @@ class FormSection extends React.Component {
     })
   }
 
+  onCloseModal = () => {
+    console.log('asdasasd')
+    this.setState({isFull: null, instructions: null})
+  }
+
   render () {
     const {from, instructions, isFull, price, toDateMin, fromDateMax} = this.state
     const {selectedRoom, roomTypes} = this.props
-    if (isFull) return <FullyBooked/>
-    if (instructions) return <CheckEmail paymentAmount={instructions.value}
+    if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
+    if (instructions) return <CheckEmail onClose={this.onCloseModal}
+                                         paymentAmount={instructions.value}
                                          contract={instructions.to}
                                          offerSignature={instructions.data}/>
     return (

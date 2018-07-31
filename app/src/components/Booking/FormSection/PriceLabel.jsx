@@ -11,7 +11,7 @@ const PriceLabel = ({value}) => (
 )
 
 PriceLabel.propTypes = {
-  value: PropTypes.string
+  value: PropTypes.number
 }
 
 export default PriceLabel
