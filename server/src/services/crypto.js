@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const bitcoin = require('bitcoinjs-lib');
-const SHA3 = require('sha3');
+const { web3 } = require('./web3');
 const {
   MASTER_KEY,
 } = require('../config');
@@ -19,15 +19,9 @@ function _getExtendedKeyByIndex (index = 0) {
 
 function _getKeyPair (index) {
   const child = _getExtendedKeyByIndex(index);
-  const privateKey = _generateSha3(child.toBase58());
-  const publicKey = _generateSha3(child.neutered().toBase58());
+  const privateKey = web3.utils.sha3(child.toBase58());
+  const publicKey = web3.utils.sha3(child.neutered().toBase58());
   return { privateKey, publicKey };
-}
-
-function _generateSha3 (value) {
-  let d = new SHA3.SHA3Hash();
-  d.update(value);
-  return d.digest('hex');
 }
 
 function setCryptoIndex (value) {

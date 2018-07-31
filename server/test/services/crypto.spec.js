@@ -8,7 +8,10 @@ const {
   getKeyPair,
 } = require('../../src/services/crypto');
 
-describe.only('Crypto service', () => {
+describe('Crypto service', () => {
+  beforeEach(() => {
+    setCryptoIndex(0);
+  });
   describe('getCryptoIndex', () => {
     it('Should return the global crypto index', () => {
       expect(getCryptoIndex()).to.be.equal(0);
@@ -23,9 +26,6 @@ describe.only('Crypto service', () => {
     });
   });
   describe('generateKeyPair', () => {
-    beforeEach(() => {
-      setCryptoIndex(0);
-    });
     it('Should generate a key pair from the MASTER_KEY', async () => {
       const { publicKey, privateKey, index } = generateKeyPair();
       expect(publicKey).to.be.an('string');
