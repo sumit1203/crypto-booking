@@ -6,13 +6,13 @@ import logoOpenledger from "../../img/content/cards/openledger.png";
 import logoForkdelta from "../../img/content/cards/forkdelta.png";
 
 const LifSection = () => (
-  <article className="py-3 py-md-5">
+  <article className="py-3 py-md-5" id="paying-with-lif">
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-8">
 
           <h2 className="mb-2 mb-md-4 text-center">
-            Paying by Lif
+            Paying with Lif
           </h2>
           <p className="lead mb-2 mb-md-3 text-center text-md-left">
               There were 24,976,541.45 Lífs generated and distributed between team and backers. No&nbsp;new token generation expected, so&nbsp;the only way to&nbsp;get Lífs is&nbsp;to&nbsp;buy from existing holders on&nbsp;cryptocurrency exchanges.

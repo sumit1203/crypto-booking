@@ -23,9 +23,9 @@ const Footer = () => (
 
               <div className="col-6 col-sm-6 col-md-6 col-lg-8">
                 <nav className="nav flex-column small mb-1">
-                  <a href="/" className="nav-link px-0 text-white text--alpha-inverse">Book a room</a>
-                  <a href="/" className="nav-link px-0 text-white text--alpha-inverse">Paying with Lif</a>
-                  <a href="/" className="nav-link px-0 text-white text--alpha-inverse">My booking</a>
+                  <a href="#book-a-room" className="nav-link px-0 text-white text--alpha-inverse">Book a room</a>
+                  <a href="#paying-with-lif" className="nav-link px-0 text-white text--alpha-inverse">Paying with Lif</a>
+                  <a href="#my-booking" className="nav-link px-0 text-white text--alpha-inverse">My booking</a>
                 </nav>
               </div>
 

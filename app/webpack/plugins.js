@@ -6,7 +6,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CompressionPlugin = require("compression-webpack-plugin")
 const isProduction = process.env.NODE_ENV === 'production';
 
 const public = 'public';
@@ -41,7 +40,6 @@ if (isProduction) {
       debug: false,
     }),
     new OptimizeCSSAssetsPlugin(),
-    new CompressionPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/),
     new MiniCssExtractPlugin({
         filename: 'css/[contenthash].css',

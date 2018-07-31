@@ -4,8 +4,9 @@ const { expect } = require('chai');
 const mongoose = require('mongoose');
 const request = require('request-promise-native');
 const sinon = require('sinon');
-const mailgun = require('mailgun-js');
+const sgMail = require('@sendgrid/mail');
 const { SERVER_PORT } = require('../../src/config');
+const throttling = require('../../src/middlewares/throttling');
 
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const apiUrl = `http://localhost:${SERVER_PORT}/api`;
@@ -29,12 +30,12 @@ describe('Booking API', () => {
   afterEach(async function () {
     await BookingModel.remove({}).exec();
     sandbox.restore();
+    throttling.turnOnThrottling();
   });
   beforeEach(function () {
-    sandbox.stub(mailgun({ apiKey: 'foo', domain: 'bar' }).Mailgun.prototype, 'messages')
-      .returns({
-        send: (data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }),
-      });
+    throttling.turnOffThrottling();
+    sandbox.stub(sgMail, 'send')
+      .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
   });
   describe('POST /api/booking', () => {
     it('Should create a valid booking', async () => {
@@ -93,6 +94,45 @@ describe('Booking API', () => {
       } catch (e) {
         expect(e).to.have.property('error');
         expect(e.error).to.have.property('code', '#notFound');
+      }
+    });
+  });
+
+  describe('POST /api/booking/emailInfo', () => {
+    it('Should read a booking', async () => {
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      await dbBooking.save();
+      const body = { bookingHash: dbBooking.bookingHash };
+      const response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+      expect(response).to.have.property('status', 'ok');
+    });
+    it('Should propagate data errors', async () => {
+      try {
+        const body = { bookingHash: 'invalid booking' };
+        await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+        throw new Error('should not be called');
+      } catch (e) {
+        expect(e).to.have.property('error');
+        expect(e.error).to.have.property('code', '#sendBookingInfoFail');
+      }
+    });
+    it('should respond with 429 when throttling limit is exceeded', async () => {
+      throttling.turnOnThrottling();
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      await dbBooking.save();
+      const body = { bookingHash: dbBooking.bookingHash };
+      let response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+      expect(response).to.have.property('status', 'ok');
+      response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+      expect(response).to.have.property('status', 'ok');
+      response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+      expect(response).to.have.property('status', 'ok');
+      try {
+        await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
+        throw new Error('should not be called');
+      } catch (e) {
+        expect(e).to.have.property('error');
+        expect(e.error).to.have.property('code', '#rateLimit');
       }
     });
   });

@@ -7,45 +7,24 @@ emails with the necessary information for a correct booking.
 ```bash
 $ npm i
 ```
-#### Run
-Add an `.env` file corresponding to the current environment.
 
-Run server in production mode
-```bash
-$ npm start
-```
-
-### Test
-#### Test env
-First step is add an `.env` file to `test/utils/`. Ex.
+### .env
+You need 2 `.env` files. One for test and other for running the server.
+Test env must be located at `./test/utils/.env`.
 
 ```bash
 WHITELIST=11.22.33.44,55.66.77.88       
 SERVER_PORT=3001
-SECRET=secret
-MAILGUN_API_KEY=long-random-secret-key
-MAILGUN_DOMAIN=some.domain.org
-MAILGUN_FROM_EMAIL=from@example.com
-MAILGUN_TO_EMAIL=to@example.com
+MAIL_API_KEY=long-random-secret-key
+FROM_EMAIL=from@example.com
+TO_EMAIL=to@example.com
 WEB3_PROVIDER=https://ropsten.infura.io/v3/1234567890
 BOOKING_POC_ADDRESS=0x123...321
 MONGODB_URI=localhost/db-name
-```
-
-## Dev
-### Dev .env
-Create a new `.env` file with the the following fields.
-
-```bash
-WHITELIST=11.22.33.44,55.66.77.88       
-SERVER_PORT=3001
-SECRET=secret
-MAILGUN_API_KEY=long-random-secret-key
-MAILGUN_DOMAIN=some.domain.org
-MAILGUN_FROM_EMAIL=from@example.com
-WEB3_PROVIDER=https://ropsten.infura.io/v3/1234567890
-BOOKING_POC_ADDRESS=0x123...321
-MONGODB_URI=localhost/db-name
+SERVER_PORT=3005
+OWNER_PRIVATE_KEY=0x4259ac86777aa87b3e24006fe6bc98a9c726c3618b18541716a8acc1a7161fa2
+OWNER_ADDRESS=0xD037aB9025d43f60a31b32A82E10936f07484246
+STARTING_BLOCK=3668521
 ```
 
 ### Run dev mode
@@ -53,3 +32,20 @@ Run server in develop mode
 ```bash
 $ npm run dev
 ```
+
+## Deploy
+
+Deploy are managed by `Travis CI`. Pushing to `release/server` will trigger a deploy stage.
+Merge to `release/server` are  allowed only from mater.
+Travis must contain this secret variables
+- BOOKING_POC_ADDRESS
+- FROM_EMAIL
+- MAIL_API_KEY
+- MONGODB_URI
+- NOW_TOKEN
+- OWNER_ADDRESS
+- OWNER_PRIVATE_KEY
+- SERVER_PORT
+- STARTING_BLOCK
+- WEB3_PROVIDER
+- WHITELIST
