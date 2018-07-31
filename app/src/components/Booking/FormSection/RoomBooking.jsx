@@ -28,8 +28,11 @@ export default class RoomBooking extends React.Component {
     return roomTypes.map(room => {
      return (
        <Fragment key={room.id}>
-         <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-         <label htmlFor={room.id} className="col-6">{room.name}</label>
+        <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
+        <label htmlFor={room.id} className="col-6">
+          {selectedRoom.id === room.id && <i className="mdi mdi-check-circle"/>}
+          &nbsp;{room.name}
+        </label>
        </Fragment>)
     })
   }
