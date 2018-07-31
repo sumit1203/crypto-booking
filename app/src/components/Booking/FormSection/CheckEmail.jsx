@@ -25,9 +25,9 @@ class CheckEmail extends React.Component {
             <div className="modal-body">
               <p className="mb-1">We sent the payment instructions to your email address.</p>
               <h5 className="mb-1">Make sure you see this ETH address in the email from us!</h5>
-              <h5 className="mb-1">Please, send {paymentAmount} Eth to {contract}, with this data:</h5>
+              <h5 className="mb-1">Please, send <span className="font--alt">{paymentAmount}</span> Eth to <span className="font--alt">{contract}</span>, with this data:</h5>
               <p className="badge badge-info w-100">
-                <input className="h4 lead w-100 text-white bg-transparent border-0" value={offerSignature} readOnly/>
+                <input className="h4 lead w-100 text-white bg-transparent border-0 font--alt" value={offerSignature} readOnly/>
               </p>
             </div>
             <div className="modal-footer">
