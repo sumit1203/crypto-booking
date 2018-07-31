@@ -25,6 +25,6 @@ jobs:
     install: true
     if: branch = release/app AND type = push
     script:
-    - npm i -g now
+    - npm i -g now serve
     - echo 'Deploying to NOW'
     - cd app && npm run deploy-now
