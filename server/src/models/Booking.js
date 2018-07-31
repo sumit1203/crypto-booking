@@ -100,7 +100,7 @@ const Booking = new Schema({
 });
 
 Booking.method({
-  encryptPersonalInfo: function (personalInfo, bookingHash) {
+  encryptPersonalInfo: function (personalInfo, privateKey) {
     if (typeof personalInfo !== 'object') {
       throw handleApplicationError('invalidPersonalInfo');
     }
@@ -116,18 +116,18 @@ Booking.method({
     if (!personalInfo.birthDate || !_isBirthDate(personalInfo.birthDate)) {
       throw handleApplicationError('invalidPersonalInfoBirthDate');
     }
-    if (!bookingHash) {
-      throw handleApplicationError('noBookingHash');
+    if (!privateKey) {
+      throw handleApplicationError('noPrivateKey');
     }
     personalInfo = JSON.stringify(personalInfo);
     const hexEncoded = web3.utils.stringToHex(personalInfo);
 
-    this.encryptedPersonalInfo = encrypt(hexEncoded, bookingHash).toString();
+    this.encryptedPersonalInfo = encrypt(hexEncoded, privateKey).toString();
   },
-  decryptPersonalInfo: function (bookingHash) {
+  decryptPersonalInfo: function (privateKey) {
     let encodedPersonalInfo;
     try {
-      encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, bookingHash);
+      encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, privateKey);
     } catch (e) {
       encodedPersonalInfo = null;
     }
@@ -140,10 +140,6 @@ Booking.method({
     } catch (e) {
       return {};
     }
-  },
-  generateBookingHash: function () {
-    const randomCode = Math.floor((1 + Math.random()) * 10000);
-    this.bookingHash = web3.utils.sha3(`${randomCode}${Date.now()}`);
   },
   generatePaymentAmount: function (ethPrice) {
     if (typeof ethPrice !== 'number') {
@@ -191,11 +187,10 @@ Booking.post('save', function (error, doc, next) {
 });
 
 Booking.statics.generate = function (data) {
-  const { personalInfo, ethPrice, ...rest } = data;
+  const { personalInfo, ethPrice, privateKey, ...rest } = data;
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
-  booking.generateBookingHash();
-  booking.encryptPersonalInfo(personalInfo, booking.bookingHash);
+  booking.encryptPersonalInfo(personalInfo, privateKey);
   booking.generatePaymentAmount(ethPrice);
   return booking;
 };

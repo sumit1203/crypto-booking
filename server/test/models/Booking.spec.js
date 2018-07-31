@@ -277,20 +277,17 @@ describe('Booking model', () => {
     describe('decryptPersonalInfo', () => {
       it('Should decode personal info', () => {
         const booking = new Booking(validBookingDB);
-        booking.bookingHash = 'someHash';
-        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, booking.bookingHash);
-        const decryptPersonalInfo = booking.decryptPersonalInfo(booking.bookingHash);
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, validBookingWithEthPrice.privateKey);
+        const decryptPersonalInfo = booking.decryptPersonalInfo(validBookingWithEthPrice.privateKey);
         expect(decryptPersonalInfo).to.be.deep.equal(validBookingWithEthPrice.personalInfo);
       });
       it('Should return an empty object on invalid bookingHash', () => {
         const booking = new Booking(validBookingDB);
-        booking.bookingHash = 'someHash';
-        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, booking.bookingHash);
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, validBookingWithEthPrice.privateKey);
         const decryptPersonalInfo = booking.decryptPersonalInfo('fakeBookinHash');
         expect(decryptPersonalInfo).to.be.deep.equal({});
       });
     });
-    xdescribe('generateBookingHash', () => {});
     xdescribe('generatePaymentAmount', () => {});
     xdescribe('getWeiPerNight', () => {});
     describe('setAsPending', () => {
