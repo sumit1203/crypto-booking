@@ -131,11 +131,16 @@ class FormSection extends React.Component {
     })
   }
 
+  onCloseModal = () => {
+    this.setState({isFull: null, instructions: null})
+  }
+
   render () {
     const {from, instructions, isFull, price, toDateMin, fromDateMax} = this.state
     const {selectedRoom, roomTypes} = this.props
-    if (isFull) return <FullyBooked/>
-    if (instructions) return <CheckEmail paymentAmount={instructions.value}
+    if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
+    if (instructions) return <CheckEmail onClose={this.onCloseModal}
+                                         paymentAmount={instructions.value}
                                          contract={instructions.to}
                                          offerSignature={instructions.data}/>
     return (

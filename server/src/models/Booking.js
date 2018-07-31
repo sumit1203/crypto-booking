@@ -145,7 +145,7 @@ Booking.method({
     if (typeof ethPrice !== 'number') {
       throw handleApplicationError('invalidEthPrice');
     }
-    this.paymentAmount = (ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / ethPrice) + 0.00001;
+    this.paymentAmount = ((ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / ethPrice) + 0.0001).toFixed(4);
   },
   getWeiPerNight: function (ethPrice) {
     if (typeof ethPrice !== 'number') {

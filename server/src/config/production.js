@@ -10,4 +10,5 @@ module.exports = {
   OWNER_ADDRESS: process.env.OWNER_ADDRESS,
   WEB3_PROVIDER: process.env.WEB3_PROVIDER,
   MASTER_KEY: process.env.MASTER_KEY,
+  GIT_REV: process.env.GIT_REV,
 };

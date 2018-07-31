@@ -10,4 +10,5 @@ module.exports = {
   OWNER_ADDRESS: process.env.OWNER_ADDRESS || '0xD037aB9025d43f60a31b32A82E10936f07484246',
   WEB3_PROVIDER: process.env.WEB3_PROVIDER || 'http://localhost:8545',
   MASTER_KEY: process.env.MASTER_KEY,
+  GIT_REV: process.env.GIT_REV,
 };

@@ -16,7 +16,7 @@ class Room extends React.Component {
           <h5 className="card-title h4">
             {name}
             <small className="float-right">
-              <b>€{price * 0.8}/Night</b>
+              <b>{price * 0.8} €/Night</b>
             </small>
           </h5>
           <hr className="my-1"/>
@@ -32,7 +32,7 @@ class Room extends React.Component {
             onClick={this.onClick}>
             Book this room
           </a>
-          <a href="#" className="float-right mt-1 pl-1 border-left">
+          <a href="#paying-with-lif" className="float-right mt-1 pl-1 border-left">
             How to pay<br/> with Lif?
           </a>
           <p style={{marginTop: 5}}>
