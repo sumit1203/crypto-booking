@@ -6,6 +6,11 @@ module.exports = {
     short: 'Something went wrong.',
     long: 'Something went wrong. Please contact the administrator.',
   },
+  noMasterKey: {
+    status: 500,
+    short: 'No master key provided',
+    long: 'A master key must be setted for encrypt info'
+  },
   invalidEncryptedPersonalInfo: {
     status: 500,
     short: 'Invalid encrypted personal information.',
