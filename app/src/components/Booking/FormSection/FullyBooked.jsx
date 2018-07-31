@@ -1,10 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import $ from 'jquery'
 
 class FullyBooked extends React.Component {
   componentDidMount() {
     $('#fullyBooked').modal('show')
+    $('#fullyBooked').on('hidden.bs.modal', function () {
+      this.props.onClose()
+    })
   }
+
   render() {
     return (
       <div className="modal" id="fullyBooked" tabIndex="-2" role="dialog">
@@ -30,6 +35,10 @@ class FullyBooked extends React.Component {
       </div>
     )
   }
+}
+
+FullyBooked.propTypes = {
+  onClose: PropTypes.func.isRequired
 }
 
 export default FullyBooked

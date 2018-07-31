@@ -32,7 +32,7 @@ class Room extends React.Component {
             onClick={this.onClick}>
             Book this room
           </a>
-          <a href="#" className="float-right mt-1 pl-1 border-left">
+          <a href="#paying-with-lif" className="float-right mt-1 pl-1 border-left">
             How to pay<br/> with Lif?
           </a>
           <p style={{marginTop: 5}}>
