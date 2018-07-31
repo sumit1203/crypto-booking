@@ -17,7 +17,7 @@ const rules = [{
   loader: 'babel-loader',
   exclude: /node_modules/,
 }, {
-  test: /\.scss$/,
+  test: /\.s?css$/,
   use: [
     devMode ? 'style-loader' : miniCssLoader,
     {
@@ -45,29 +45,7 @@ const rules = [{
         sourceMap: true,
       },
     }],
-}, {
-  test: /\.css$/,
-  use: [{
-    loader: 'style-loader',
-  }, {
-    loader: 'css-loader',
-    options: {
-      sourceMap: true,
-      importLoaders: 2,
-    },
-  },{
-    loader: 'postcss-loader',
-    options: {
-      sourceMap: true,
-      plugins() {
-        return [
-          precss,
-          postcssCssnext,
-        ];
-      },
-    }
-  }],
-}, {
+},{
   test: /\.(woff2|woff|ttf|eot|svg)(\?.*$|$)/,
   loader: 'file-loader?name=fonts/[name].[ext]',
   include: [

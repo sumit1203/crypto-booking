@@ -2,7 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import PropTypes from 'prop-types'
 import payment from 'windingtree-media-web/custom-icons/svg/wt-icon--payment.svg'
-import ReCAPTCHA from 'react-google-recaptcha'
+// import ReCAPTCHA from 'react-google-recaptcha'
 
 class ConfirmModal extends React.Component {
   constructor (props) {
@@ -41,7 +41,7 @@ class ConfirmModal extends React.Component {
                 </button>
               </div>
               <div className="modal-body">
-                <p className="mb-1"> Select your preffered payment method.</p>
+                <p className="mb-1"> Select your preferred payment method.</p>
                 <div className="row mb-1">
                   <div className="col-sm-8">
                     <div className="row no-gutters mb-1">
@@ -94,6 +94,7 @@ class ConfirmModal extends React.Component {
                           <input
                             type="text"
                             id="guestAddress"
+                            autoComplete="off"
                             className="form-control form-control-lg w-100"
                             style={{width: 450}}
                             onChange={this.onAddressChange}
@@ -106,7 +107,7 @@ class ConfirmModal extends React.Component {
                   </div>
                 </div>
                 {/* TODO replace the sitekey when we register a domain for the app */}
-                <ReCAPTCHA sitekey='xxxxxxxxx' theme='light'/>
+                {/*<ReCAPTCHA sitekey='xxxxxxxxx' theme='light'/>*/}
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-dismiss="modal">Cancel</button>
