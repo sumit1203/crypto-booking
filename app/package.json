@@ -7,7 +7,7 @@
     "start": "NODE_ENV=development webpack-dev-server",
     "build": "NODE_ENV=production webpack --mode=production",
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
-    "deploy-now": "now --team windingtree --token $NOW_TOKEN NODE_ENV=production -e HOTEL_URL -e WEB3_PROVIDER -e BOOKING_POC_ADDRESS -e SIGNER_API"
+    "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN -e HOTEL_URL -e WEB3_PROVIDER -e BOOKING_POC_ADDRESS -e SIGNER_API"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
