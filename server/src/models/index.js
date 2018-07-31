@@ -14,7 +14,7 @@ mongoose.connect(dbURI);
 // CONNECTION EVENTS
 // When successfully connected
 mongoose.connection.on('connected', function () {
-  console.info(`Mongoose default connection open to ${dbURI}`);
+  console.info('Mongoose default connection open');
 });
 
 // If the connection throws an error
