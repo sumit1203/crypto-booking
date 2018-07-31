@@ -28,8 +28,11 @@ export default class RoomBooking extends React.Component {
     return roomTypes.map(room => {
      return (
        <Fragment key={room.id}>
-         <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-         <label htmlFor={room.id} className="col-6">{room.name}</label>
+        <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
+        <label htmlFor={room.id} className="col-6">
+          {selectedRoom.id === room.id && <i className="mdi mdi-check-circle"/>}
+          &nbsp;{room.name}
+        </label>
        </Fragment>)
     })
   }
@@ -60,9 +63,32 @@ export default class RoomBooking extends React.Component {
                 </p>
               </header>
               <form onSubmit={this.onSubmit}>
+
+                <section>
+
+                  <h5 className="mb-1 text-center">Guests</h5>
+                  <div className="row justify-content-center">
+                    <div className="media mb-2">
+                      <i className="mdi mdi-account mdi-48px text-dark mr-1" style={{marginTop: -17}}/>
+                      <div className="media-body">
+                        <div className="form-check">
+                          <input className="form-check-input" type="radio" name="guests" id="guests1" value="guests1" checked/>
+                          <label className="form-check-label" for="guests1">&nbsp; One person
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2"/>
+                          <label className="form-check-label" for="guests2">&nbsp; Two persons
+                          </label>
+                        </div>
+                      </div>
+                   </div>
+                  </div>
+                </section>
+
                 {/*TODO: in case one of the options is unavailable use the class "disabled" and the attribute "disabled" on that item*/}
                 <section className="text-center mb-2">
-                  <h5 className="mb-1"> Preffered room type </h5>
+                  <h5 className="mb-1"> Preferred room type </h5>
                   <div className="btn-group btn-group--switch w-100" role="group" aria-label="Room type">
                     {this.renderRoomTypes()}
                   </div>
@@ -85,15 +111,15 @@ export default class RoomBooking extends React.Component {
                   <section className="row text-center px-2 pb-2">
                     <div className="col text-left">
                       <label htmlFor="fullName"> <b>Full Name</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="fullName" type="text" onChange={onFullNameChange} required/>
+                      <input className="form-control form-control-lg mb-1" id="fullName" autoComplete="off" type="text" onChange={onFullNameChange} required/>
                       <label htmlFor="birthDate"> <b>Birth Dat</b>e </label>
-                      <input className="form-control form-control-lg" id="birthDate" type="date" onChange={onBirthDateChange} required/>
+                      <input className="form-control form-control-lg" id="birthDate" autoComplete="off" type="date" onChange={onBirthDateChange} required/>
                     </div>
                     <div className="col text-left">
                       <label htmlFor="email"> <b>Email</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="email" type="email" onChange={onEmailChange} required/>
+                      <input className="form-control form-control-lg mb-1" id="email" autoComplete="off" type="email" onChange={onEmailChange} required/>
                       <label htmlFor="phone"> <b>Phone Number</b> </label>
-                      <input className="form-control form-control-lg" id="phone" type="tel" onChange={onPhoneChange} required/>
+                      <input className="form-control form-control-lg" id="phone" autoComplete="off" type="tel" onChange={onPhoneChange} required/>
                     </div>
                   </section>
                 </div>

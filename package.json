@@ -5,7 +5,7 @@
   "scripts": {
     "test": "npm run test-app && npm run test-server && npm run test-contracts",
     "test-app": "cd app && npm ci && npm test && cd ..",
-    "test-server" : "cd server && npm ci && npm test && cd ..",
+    "test-server" : "cd server && npm ci && npm test && npm run coverage && cd ..",
     "test-contracts" : "cd contracts && npm ci && npm test && cd .."
   },
   "directories": {
