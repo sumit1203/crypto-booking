@@ -41,7 +41,7 @@ class ConfirmModal extends React.Component {
                 </button>
               </div>
               <div className="modal-body">
-                <p className="mb-1"> Select your preffered payment method.</p>
+                <p className="mb-1"> Select your preferred payment method.</p>
                 <div className="row mb-1">
                   <div className="col-sm-8">
                     <div className="row no-gutters mb-1">
@@ -94,6 +94,7 @@ class ConfirmModal extends React.Component {
                           <input
                             type="text"
                             id="guestAddress"
+                            autoComplete="off"
                             className="form-control form-control-lg w-100"
                             style={{width: 450}}
                             onChange={this.onAddressChange}
