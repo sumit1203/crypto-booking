@@ -1,6 +1,8 @@
 /* eslint-env mocha */
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
+const sgMail = require('@sendgrid/mail');
+const sinon = require('sinon');
 require('../../src/models');
 const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
@@ -8,7 +10,8 @@ const {
   createBooking,
   readBooking,
   confirmationEmailSentBooking,
-  changesEmailSentBooking } = require('../../src/controllers/Booking');
+  changesEmailSentBooking,
+  sendBookingInfoByEmail } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 
 after(() => {
@@ -16,6 +19,17 @@ after(() => {
 });
 
 describe('Booking controller', () => {
+  let sandbox;
+  before(() => {
+    sandbox = sinon.createSandbox();
+  });
+  beforeEach(() => {
+    sandbox.stub(sgMail, 'send')
+      .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
   afterEach(async function () {
     await BookingModel.remove({}).exec();
   });
@@ -120,5 +134,10 @@ describe('Booking controller', () => {
     const booking = await changesEmailSentBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking.changesEmailSent).to.be.at.least(changesEmailSent);
+  });
+  it('Should send an email information', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    await dbBooking.save();
+    await sendBookingInfoByEmail(dbBooking.bookingHash);
   });
 });

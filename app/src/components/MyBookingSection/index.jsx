@@ -27,7 +27,7 @@ export default class MyBookingSection extends React.Component {
 
   render () {
     return (
-      <article className="py-3 py-md-5 border-bottom">
+      <article className="py-3 py-md-5 border-bottom" id="my-booking">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-8 text-center">

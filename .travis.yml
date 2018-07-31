@@ -21,3 +21,10 @@ jobs:
     - npm i -g now
     - echo 'Deploying to NOW'
     - cd server && npm run deploy && npm run alias
+  - stage: deploy-app
+    install: true
+    if: branch = release/app AND type = push
+    script:
+    - npm i -g now
+    - echo 'Deploying to NOW'
+    - cd app && npm run deploy-now

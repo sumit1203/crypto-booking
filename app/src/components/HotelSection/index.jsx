@@ -1,4 +1,5 @@
 import React from 'react';
+import Loader from '../Loader';
 import Hotel from './Hotel';
 
 class HotelContainer extends React.Component {
@@ -22,7 +23,9 @@ class HotelContainer extends React.Component {
 
   render() {
     const { hotelData, isLoading } = this.state;
-    if (isLoading) return null; // TODO here should be some Loading component
+    if (isLoading) return  (
+      <Loader block={200} label="Loading..."/>
+    )
     return (
       <Hotel
         name={hotelData.name}

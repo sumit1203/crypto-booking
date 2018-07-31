@@ -8,7 +8,7 @@ class RoomsSection extends React.Component {
   render () {
     const {roomTypes, onRoomTypeChange} = this.props
     return (
-      <article id='RoomSection' className="section-wrapper bg--gradient-toright pt-1 pb-4 text-center text-md-left">
+      <article id="pick-room" className="section-wrapper bg--gradient-toright pt-1 pb-4 text-center text-md-left">
         <div className="container">
           <div className="row">
             <div className="col">
