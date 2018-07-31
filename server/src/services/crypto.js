@@ -8,7 +8,7 @@ const {
 const { handleApplicationError } = require('../errors');
 let cryptoIndex = 0;
 
-function _getExtendedKeyByIndex (index = 0) {
+function _getExtendedKeyByIndex (index) {
   if (!MASTER_KEY) {
     throw handleApplicationError('noMasterKey');
   }
@@ -44,9 +44,13 @@ function generateKeyPair () {
 }
 
 function getKeyPair (publicKeyToValidate, index) {
+  const emptyPair = { privateKey: null, publicKey: null };
+  if (typeof index !== 'number') {
+    return emptyPair;
+  }
   const { privateKey, publicKey } = _getKeyPair(index);
   if (publicKeyToValidate !== publicKey) {
-    return { privateKey: null, publicKey: null };
+    return emptyPair;
   }
   return { privateKey, publicKey };
 }
