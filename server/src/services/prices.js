@@ -10,5 +10,5 @@ const fetchEthPrice = async (unit = 'EUR') => {
 };
 
 module.exports = {
-  fetchEthPrice,
+  fetchEthPrice
 };
