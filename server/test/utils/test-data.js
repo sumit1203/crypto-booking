@@ -141,7 +141,7 @@ const validBookingWithEthPrice = {
   },
   from: 1,
   to: 4,
-  ethPrice: 1,
+  cryptoPrice: 1,
 };
 const validBookingDB = {
   bookingHash: 'some public key',

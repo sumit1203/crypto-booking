@@ -150,17 +150,17 @@ Booking.method({
     const randomCode = Math.floor((1 + Math.random()) * 10000);
     this.bookingHash = web3.utils.sha3(`${randomCode}${Date.now()}`);
   },
-  generatePaymentAmount: function (ethPrice) {
-    if (typeof ethPrice !== 'number') {
-      throw handleApplicationError('invalidEthPrice');
+  generatePaymentAmount: function (cryptoPrice) {
+    if (typeof cryptoPrice !== 'number') {
+      throw handleApplicationError('invalidCryptoPrice');
     }
-    this.paymentAmount = ((ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / ethPrice) + 0.0001).toFixed(4);
+    this.paymentAmount = ((ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / cryptoPrice) + 0.0001).toFixed(4);
   },
-  getWeiPerNight: function (ethPrice) {
-    if (typeof ethPrice !== 'number') {
-      throw handleApplicationError('invalidEthPrice');
+  getWeiPerNight: function (cryptoPrice) {
+    if (typeof cryptoPrice !== 'number') {
+      throw handleApplicationError('invalidCryptoPrice');
     }
-    return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / ethPrice).toString(), 'ether');
+    return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / cryptoPrice).toString(), 'ether');
   },
   setAsPending: function () {
     this.status = BOOKING_STATUS.pending;
@@ -196,12 +196,12 @@ Booking.post('save', function (error, doc, next) {
 });
 
 Booking.statics.generate = function (data) {
-  const { personalInfo, ethPrice, ...rest } = data;
+  const { personalInfo, cryptoPrice, ...rest } = data;
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
   booking.generateBookingHash();
   booking.encryptPersonalInfo(personalInfo, booking.bookingHash);
-  booking.generatePaymentAmount(ethPrice);
+  booking.generatePaymentAmount(cryptoPrice);
   return booking;
 };
 

@@ -15,8 +15,9 @@ router.post(`${bookingUrl}`, async (req, res, next) => {
   try {
     const { signatureData, booking, offerSignature } = await createBooking(req.body);
     const nights = [];
-    for (let i = booking.from; i <= booking.to; i++)
+    for (let i = booking.from; i <= booking.to; i++) {
       nights.push(i);
+    }
 
     const data = {
       txs: getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights),
