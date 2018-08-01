@@ -1,13 +1,15 @@
 {
   "name": "crypto-booking-app",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Web app to show hotel inventory from WT api.",
   "scripts": {
     "test": "eslint .",
     "start": "NODE_ENV=development webpack-dev-server",
     "build": "NODE_ENV=production webpack --mode=production",
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
-    "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN -e HOTEL_URL -e WEB3_PROVIDER -e BOOKING_POC_ADDRESS -e SIGNER_API"
+    "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
+    "now-start": "serve --single ./public",
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -21,7 +23,6 @@
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "cssnano": "^4.0.2",
-    "dotenv-webpack": "^1.5.7",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
@@ -38,6 +39,7 @@
     "postcss-loader": "^2.1.6",
     "precss": "^3.1.2",
     "sass-loader": "^7.0.3",
+    "serve": "^9.2.0",
     "style-loader": "^0.21.0",
     "webpack": "^4.16.1",
     "webpack-bundle-analyzer": "^2.13.1",
@@ -59,13 +61,12 @@
     "react-loadable": "^5.4.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "serve": "^9.2.0",
     "web3": "^1.0.0-beta.34",
     "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets",
     "windingtree-ui": "git+https://github.com/windingtree/wt-ui.git#develop"
   },
   "now": {
     "name": "crypto-booking",
-    "alias": "crypto-booking.windingtree.com"
+    "alias": "booking.windingtree.com"
   }
 }

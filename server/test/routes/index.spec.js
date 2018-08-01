@@ -148,3 +148,16 @@ describe('Booking API', () => {
     });
   });
 });
+
+describe('GET /', () => {
+  it('Should return valid fields', async () => {
+    const body = validBooking;
+    const resp = await request({ url: `http://localhost:${SERVER_PORT}/`, method: 'GET', json: true, body });
+    expect(resp).to.have.property('docs');
+    expect(resp).to.have.property('info');
+    expect(resp).to.have.property('info');
+    expect(resp).to.have.property('version');
+    expect(resp).to.have.property('bookingPoC');
+    expect(resp).to.have.property('commit');
+  });
+});

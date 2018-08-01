@@ -8,6 +8,7 @@ import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
+import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
 
 function _formatDate (date) {
   const d = new Date(date)
@@ -24,7 +25,7 @@ function _formatDate (date) {
 class FormSection extends React.Component {
   constructor (props) {
     super(props)
-    this.web3 = new Web3(process.env.WEB3_PROVIDER)
+    this.web3 = new Web3(WEB3_PROVIDER)
     this.state = {
       from: '2018-09-06',
       to: null,
@@ -40,7 +41,7 @@ class FormSection extends React.Component {
   }
 
   componentDidMount () {
-    this.bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, process.env.BOOKING_POC_ADDRESS)
+    this.bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS)
   }
 
   _mapDateToInteger = (date) => {
@@ -108,7 +109,7 @@ class FormSection extends React.Component {
     }
     const personalInfo = {fullName, birthDate, phone, email}
     const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo}
-    const response = await fetch(process.env.SIGNER_API + '/api/booking', {
+    const response = await fetch(SIGNER_API + '/api/booking', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {

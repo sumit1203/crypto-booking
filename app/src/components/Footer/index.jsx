@@ -32,12 +32,12 @@ const Footer = () => (
               <div className="col-6 col-sm-6 col-md-6 col-lg-4">
                 <div className="row">
                   <div className="col-8">
-                    <a href="/startups-and-developers.html" className="nav-link px-0 text--alpha-inverse">
+                    <a href="https://ethberlin.com" className="nav-link px-0 text--alpha-inverse">
                       <img src={logoEB} alt="ETH Berlin" className="img-fluid"/>
                     </a>
                   </div>
                   <div className="col-4">
-                    <a href="/startups-and-developers.html" className="nav-link px-0 text--alpha-inverse">
+                    <a href="https://www.hotel-i31.de" className="nav-link px-0 text--alpha-inverse">
                       <img src={logoI31} alt="I-31 Hotel" className="img-fluid"/>
                     </a>
                   </div>

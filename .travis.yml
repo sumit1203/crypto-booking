@@ -27,4 +27,4 @@ jobs:
     script:
     - npm i -g now
     - echo 'Deploying to NOW'
-    - cd app && npm run deploy-now
+    - cd app && npm run deploy-now && npm run alias
