@@ -10,4 +10,6 @@ module.exports = {
   OWNER_ADDRESS: process.env.OWNER_ADDRESS,
   WEB3_PROVIDER: process.env.WEB3_PROVIDER,
   GIT_REV: process.env.GIT_REV,
+  RECAPTCHA_SECRET: process.env.RECAPTCHA_SECRET,
+  IS_RECAPTCHA_ON: true,
 };
