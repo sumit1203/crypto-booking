@@ -6,7 +6,6 @@
     "test": "eslint .",
     "start": "NODE_ENV=development webpack-dev-server",
     "build": "NODE_ENV=production webpack --mode=production",
-    "now-start": "NODE_ENV=production serve --single ./public",
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
     "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
     "now-start": "serve --single ./public"
@@ -23,7 +22,6 @@
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "cssnano": "^4.0.2",
-    "dotenv-webpack": "^1.5.7",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
