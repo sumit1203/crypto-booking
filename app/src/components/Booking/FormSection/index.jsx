@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
 
-import {roomType} from '../propTypes'
+import { roomType } from '../propTypes'
 
 import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
@@ -36,7 +36,8 @@ class FormSection extends React.Component {
       instructions: null,
       toDateMin: '2018-09-07',
       fromDateMax: '2018-09-09',
-      price: null
+      price: null,
+      guestCount: '1'
     }
   }
 
@@ -54,7 +55,7 @@ class FormSection extends React.Component {
     return _formatDate(nextDate)
   }
   onFromDateChange = (e) => {
-    const from  = e.target.value
+    const from = e.target.value
     this.setState({from, toDateMin: this._addDay(from, 1)}, this.computePrice)
   }
 
@@ -75,6 +76,10 @@ class FormSection extends React.Component {
     this.setState({phone: e.target.value})
   }
 
+  onGuestCountChange = (e) => {
+    this.setState({guestCount: e.target.value})
+  }
+
   onRoomTypeChange = e => {
     const {onRoomTypeChange, roomTypes} = this.props
     const selectedRoom = roomTypes.find(room => room.id === e.target.value)
@@ -83,18 +88,18 @@ class FormSection extends React.Component {
   }
 
   computePrice = (roomType = this.props.selectedRoom) => {
-    const {from, to} = this.state;
-    const {price} = roomType;
+    const {from, to} = this.state
+    const {price} = roomType
     if (!from || !to || !price) return
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    const daysCount = (new Date (toDate - fromDate)).getDate()
+    const fromDate = new Date(from)
+    const toDate = new Date(to)
+    const daysCount = (new Date(toDate - fromDate)).getDate()
     const total = price * daysCount
     this.setState({price: total})
   }
 
-  onSubmit = async ({paymentType, guestEthAddress}) => {
-    const {from, to, fullName, birthDate, email, phone} = this.state
+  onSubmit = async ({paymentType, guestEthAddress, captchaToken}) => {
+    const {from, to, fullName, birthDate, email, phone, guestCount} = this.state
     const {id: roomType} = this.props.selectedRoom
     const mappedFromDate = this._mapDateToInteger(from)
     const mappedToDate = this._mapDateToInteger(to) - 1
@@ -107,8 +112,16 @@ class FormSection extends React.Component {
       this.setState({isFull: true})
       return
     }
-    const personalInfo = {fullName, birthDate, phone, email}
-    const data = {paymentType, roomType, from: mappedFromDate, to: mappedToDate, guestEthAddress, personalInfo}
+    const data = {
+      'g-recaptcha-response': captchaToken,
+      paymentType,
+      guestCount,
+      roomType,
+      from: mappedFromDate,
+      to: mappedToDate,
+      guestEthAddress,
+      personalInfo: {fullName, birthDate, phone, email}
+    }
     const response = await fetch(SIGNER_API + '/api/booking', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -137,7 +150,7 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const {from, instructions, isFull, price, toDateMin, fromDateMax} = this.state
+    const {from, instructions, isFull, price, toDateMin, fromDateMax, guestCount} = this.state
     const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
     if (instructions) return <CheckEmail onClose={this.onCloseModal}
@@ -152,6 +165,8 @@ class FormSection extends React.Component {
         toDateMin={toDateMin}
         fromDateMax={fromDateMax}
         price={price}
+        guestCount={guestCount}
+        onGuestCountChange={this.onGuestCountChange}
         onRoomTypeChange={this.onRoomTypeChange}
         onFromDateChange={this.onFromDateChange}
         onToDateChange={this.onToDateChange}
