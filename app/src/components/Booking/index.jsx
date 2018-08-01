@@ -4,6 +4,7 @@ import Loader from '../Loader';
 import BookingPoC  from '../../abis/BookingPoC.json';
 import RoomsSection from './RoomsSection'
 import FormSection from './FormSection'
+import { WEB3_PROVIDER, HOTEL_URL, BOOKING_POC_ADDRESS } from '../../config'
 
 const PRICES_BY_ROOMTYPE = {
   'pure-cozy': 150,
@@ -13,7 +14,7 @@ const PRICES_BY_ROOMTYPE = {
 export default class BookingContainer extends React.Component {
   constructor(props) {
     super(props)
-    this.web3 = new Web3(process.env.WEB3_PROVIDER);
+    this.web3 = new Web3(WEB3_PROVIDER);
     this.state = {
       isLoading: true,
       roomTypes: [],
@@ -22,9 +23,9 @@ export default class BookingContainer extends React.Component {
   }
 
   async componentDidMount() {
-      const bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, process.env.BOOKING_POC_ADDRESS);
+      const bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
     try {
-      const roomTypesResponse = await fetch(`${process.env.HOTEL_URL}/roomTypes`);
+      const roomTypesResponse = await fetch(`${HOTEL_URL}/roomTypes`);
       const roomTypes = await roomTypesResponse.json();
       const mappedRooms = await Object.values(roomTypes).reduce(async (acc, room) => {
         acc = await acc
