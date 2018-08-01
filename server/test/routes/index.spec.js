@@ -7,6 +7,10 @@ const sinon = require('sinon');
 const sgMail = require('@sendgrid/mail');
 const { SERVER_PORT } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
+const {
+  turnOffRecaptcha,
+  turnOnRecaptcha,
+} = require('../../src/middlewares/recaptcha');
 
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const apiUrl = `http://localhost:${SERVER_PORT}/api`;
@@ -38,6 +42,33 @@ describe('Booking API', () => {
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
   });
   describe('POST /api/booking', () => {
+    describe('Recaptcha', () => {
+      before(async () => {
+        turnOnRecaptcha();
+      });
+      after(async () => {
+        turnOffRecaptcha();
+      });
+      it('Should throw with #noRecaptcha', async () => {
+        try {
+          const body = validBooking;
+          await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+        } catch (e) {
+          expect(e).to.have.property('error');
+          expect(e.error).to.have.property('code', '#noRecaptcha');
+        }
+      });
+      it('Should throw with #recaptcha', async () => {
+        try {
+          const body = validBooking;
+          body['g-recaptcha-response'] = 'wrongRecaptcha';
+          await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+        } catch (e) {
+          expect(e).to.have.property('error');
+          expect(e.error).to.have.property('code', '#recaptcha');
+        }
+      });
+    });
     it('Should create a valid booking', async () => {
       const body = validBooking;
       const { booking } = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
