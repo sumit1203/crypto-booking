@@ -45,7 +45,7 @@ function generateKeyPair () {
 
 function getKeyPair (publicKeyToValidate, index) {
   const emptyPair = { privateKey: null, publicKey: null };
-  if (typeof index !== 'number') {
+  if (typeof index !== 'number' || isNaN(index)) {
     return emptyPair;
   }
   const { privateKey, publicKey } = _getKeyPair(index);
