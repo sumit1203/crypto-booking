@@ -1,6 +1,8 @@
 import React from 'react';
 import Loader from '../Loader';
 import Hotel from './Hotel';
+import { HOTEL_URL } from '../../config'
+
 
 class HotelContainer extends React.Component {
   constructor(props) {
@@ -12,7 +14,7 @@ class HotelContainer extends React.Component {
 
   async componentDidMount() {
     try {
-      const response = await fetch(process.env.HOTEL_URL);
+      const response = await fetch(HOTEL_URL);
       const hotelData = await response.json();
       this.setState({ isLoading: false, hotelData });
     } catch (e) {

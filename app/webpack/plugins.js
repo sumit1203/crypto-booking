@@ -1,6 +1,5 @@
 const { resolve, join } = require('path');
 const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -24,7 +23,6 @@ const cleanOptions = {
 };
 
 const plugins = [
-  new Dotenv(),
   new webpack.EnvironmentPlugin(),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new HtmlWebpackPlugin({
