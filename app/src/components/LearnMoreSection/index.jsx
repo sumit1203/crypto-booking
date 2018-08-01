@@ -16,7 +16,7 @@ const LearnMoreSection = () => (
             Learn more about Winding Tree
           </h2>
           <p className="mb-1 mb-md-2 text-white">
-            Check our website and meet oru engineers on ETH Berlin
+            Check our website and meet our engineers on ETH Berlin
           </p>
           <footer>
             <a href="https://windingtree.com" className="btn btn-outline-light">

@@ -12,7 +12,7 @@ const RulesModal = () => (
         </div>
 
         <div className="modal-body">
-          <p className="mb-1">These are th hotel rules:</p>
+          <p className="mb-1">By booking you agree to the following terms and conditions:</p>
 
           <ul>
             <li>

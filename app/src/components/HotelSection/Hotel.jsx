@@ -27,7 +27,7 @@ export default class Hotel extends React.Component {
               </p>
               <p className="text-white">
                 <b>For more info please check</b>
-                  <a className="text-light" href={url}>&nbsp;
+                  <a className="ml-1 btn btn-sm btn-secondary" href={url}>&nbsp;
                     {/* REFERENCE: https://www.hotel-i31.de/ */}
                     {url}
                   </a>
