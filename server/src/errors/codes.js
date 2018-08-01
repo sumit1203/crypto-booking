@@ -131,4 +131,14 @@ module.exports = {
     short: 'Invalid property "status" provided.',
     long: `"status" could be ${Object.keys(BOOKING_STATUS).join(', ').toLowerCase()}.`,
   },
+  noGuestCount: {
+    status: 409,
+    short: 'No property "guestCount" provided.',
+    long: '"guestCount" is required.',
+  },
+  guestCountOutOfRange: {
+    status: 409,
+    short: 'Property "guestCount" out of range.',
+    long: '"guestCount" must be a number between 1 and 2',
+  },
 };
