@@ -113,6 +113,20 @@ const validBooking = {
   from: 1,
   to: 4,
 };
+const validLifBooking = {
+  guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
+  paymentAmount: 0.1,
+  paymentType: 'lif',
+  roomType: 'pure-cozy',
+  personalInfo: {
+    fullName: 'Some name',
+    email: 'email@email.com',
+    birthDate: '1987-12-17',
+    phone: '+1111111111111',
+  },
+  from: 1,
+  to: 4,
+};
 const validBookingWithEthPrice = {
   guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
   paymentAmount: 0.1,
@@ -170,6 +184,7 @@ const toEmail = process.env.TO_EMAIL || 'example@windingtree.com';
 module.exports = {
   testHtmlBody,
   validBooking,
+  validLifBooking,
   validBookingDB,
   validBookingWithEthPrice,
   ToPlainObjectTestClass,

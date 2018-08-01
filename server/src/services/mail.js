@@ -6,7 +6,7 @@ const {
   informationBody,
 } = require('./html-generator');
 const { handleApplicationError } = require('../errors');
-const { bookingPoc } = require('./web3');
+const { getInstructionsTxs } = require('./web3');
 const {
   BOOKING_POC_ADDRESS,
   MAIL_API_KEY,
@@ -51,12 +51,9 @@ const sendInstructions = async ({ booking, offerSignature, signatureData, contra
       nights.push(i);
     }
 
-    const txData = bookingPoc.methods.bookWithEth(
-      signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-      signatureData.roomType, nights, signatureData.bookingHash
-    ).encodeABI();
+    const txs = getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights);
+    const html = instructionsBody(booking.paymentType, txs);
 
-    const html = instructionsBody(booking.paymentAmount, BOOKING_POC_ADDRESS, txData);
     return sgMail.send({ from, to, subject, html });
   } catch (e) {
     console.log(e);

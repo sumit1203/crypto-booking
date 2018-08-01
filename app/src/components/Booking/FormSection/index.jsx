@@ -116,9 +116,9 @@ class FormSection extends React.Component {
         'Content-Type': 'application/json'
       }
     })
-    const {signatureData, offerSignature, booking, contractAddress} = await response.json()
+    const {signatureData, offerSignature, booking, contractAddress, txs} = await response.json()
     console.log('Signature data:', signatureData)
-    console.log('Offer signature:', offerSignature)
+    console.log('Offer signature:', offerSignature, txs)
     const txData = this.bookingPoC.methods.bookWithEth(
       signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
       signatureData.roomType, [1, 2, 3, 4], signatureData.bookingHash

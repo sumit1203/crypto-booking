@@ -8,7 +8,7 @@ const sgMail = require('@sendgrid/mail');
 const { SERVER_PORT } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
 
-const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
+const { validBooking, validLifBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const apiUrl = `http://localhost:${SERVER_PORT}/api`;
 let server;
 let BookingModel;
@@ -38,9 +38,14 @@ describe('Booking API', () => {
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
   });
   describe('POST /api/booking', () => {
-    it('Should create a valid booking', async () => {
+    it('Should create a valid ETH booking', async () => {
       const body = validBooking;
-      const { booking } = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+      const { booking, txs } = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+      expect(txs.length).to.be.an.equal(1);
+      expect(txs[0]).to.have.property('to');
+      expect(txs[0]).to.have.property('data');
+      expect(txs[0]).to.have.property('gas');
+      expect(txs[0]).to.have.property('value');
       expect(booking).to.have.property('_id');
       expect(booking).to.have.property('bookingHash');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
@@ -53,6 +58,29 @@ describe('Booking API', () => {
       expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
       expect(booking.personalInfo).to.have.property('birthDate', validBooking.personalInfo.birthDate);
       expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
+      const sendFake = sandbox.getFakes()[0];
+      expect(sendFake).to.have.property('calledOnce', true);
+    });
+    it('Should create a valid LIF booking', async () => {
+      const body = validLifBooking;
+      const { booking, txs } = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+      expect(txs.length).to.be.an.equal(2);
+      expect(txs[1]).to.have.property('to');
+      expect(txs[1]).to.have.property('data');
+      expect(txs[1]).to.have.property('gas');
+      expect(txs[1]).to.have.property('value');
+      expect(booking).to.have.property('_id');
+      expect(booking).to.have.property('bookingHash');
+      expect(booking).to.have.property('guestEthAddress', validLifBooking.guestEthAddress);
+      expect(booking).to.have.property('paymentAmount');
+      expect(booking).to.have.property('paymentType', validLifBooking.paymentType);
+      expect(booking).to.have.property('signatureTimestamp');
+      expect(booking.signatureTimestamp).to.have.a('number');
+      expect(booking).to.have.property('personalInfo');
+      expect(booking.personalInfo).to.have.property('fullName', validLifBooking.personalInfo.fullName);
+      expect(booking.personalInfo).to.have.property('email', validLifBooking.personalInfo.email);
+      expect(booking.personalInfo).to.have.property('birthDate', validLifBooking.personalInfo.birthDate);
+      expect(booking.personalInfo).to.have.property('phone', validLifBooking.personalInfo.phone);
       const sendFake = sandbox.getFakes()[0];
       expect(sendFake).to.have.property('calledOnce', true);
     });
