@@ -47,11 +47,13 @@ describe('Booking API', () => {
       expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
       expect(booking).to.have.property('signatureTimestamp');
+      expect(booking).to.have.property('guestCount', validBooking.guestCount);
       expect(booking.signatureTimestamp).to.have.a('number');
       expect(booking).to.have.property('personalInfo');
       expect(booking.personalInfo).to.have.property('fullName', validBooking.personalInfo.fullName);
       expect(booking.personalInfo).to.have.property('email', validBooking.personalInfo.email);
       expect(booking.personalInfo).to.have.property('birthDate', validBooking.personalInfo.birthDate);
+      expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
       expect(booking.personalInfo).to.have.property('phone', validBooking.personalInfo.phone);
       const sendFake = sandbox.getFakes()[0];
       expect(sendFake).to.have.property('calledOnce', true);
@@ -80,6 +82,7 @@ describe('Booking API', () => {
       expect(booking).to.have.property('paymentAmount');
       expect(booking).to.have.property('paymentType', validBooking.paymentType);
       expect(booking).to.have.property('signatureTimestamp');
+      expect(booking).to.have.property('guestCount', validBooking.guestCount);
       expect(booking.signatureTimestamp).to.have.a('number');
       expect(booking).to.have.property('personalInfo');
       expect(booking.personalInfo).to.have.property('fullName', validBooking.personalInfo.fullName);
