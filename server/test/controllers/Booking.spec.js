@@ -13,6 +13,7 @@ const {
   changesEmailSentBooking,
   sendBookingInfoByEmail } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
+const { setCryptoIndex } = require('../../src/services/crypto');
 
 after(() => {
   mongoose.connection.close();
@@ -24,6 +25,7 @@ describe('Booking controller', () => {
     sandbox = sinon.createSandbox();
   });
   beforeEach(() => {
+    setCryptoIndex(0);
     sandbox.stub(sgMail, 'send')
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
   });
@@ -98,8 +100,9 @@ describe('Booking controller', () => {
   });
 
   it('Should read a booking using bookingHash', async () => {
-    const { booking: generatedBooking, index } = await createBooking(validBooking);
-    const booking = await readBooking({ bookingHash: generatedBooking.bookingHash }, index);
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    await dbBooking.save();
+    const booking = await readBooking({ bookingHash: dbBooking.bookingHash }, 0);
     expect(booking).to.have.property('_id');
     expect(booking).to.have.property('bookingHash');
     expect(booking.bookingHash).to.be.a('string');
