@@ -141,4 +141,14 @@ module.exports = {
     short: 'Property "guestCount" out of range.',
     long: '"guestCount" must be a number between 1 and 2',
   },
+  noRecaptcha: {
+    status: 409,
+    short: 'No property "g-recaptcha-response" provided.',
+    long: '"g-recaptcha-response" is required.',
+  },
+  recaptcha: {
+    status: 401,
+    short: 'Bad recaptcha.',
+    long: 'Recaptcha can not be verified.',
+  },
 };
