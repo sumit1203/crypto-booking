@@ -1,5 +1,6 @@
 module.exports = {
   BOOKING_POC_ADDRESS: process.env.BOOKING_POC_ADDRESS || '0x028C2ed488804A80e8355590575979397403078C',
+  LIF_TOKEN_ADDRESS: process.env.LIF_TOKEN_ADDRESS || '0xeb9951021698b42e4399f9cbb6267aa35f82d59d',
   WHITELIST: process.env.WHITELIST || '*',
   SERVER_PORT: process.env.SERVER_PORT || 3001,
   STARTING_BLOCK: process.env.STARTING_BLOCK || 3668521,
@@ -11,4 +12,6 @@ module.exports = {
   WEB3_PROVIDER: process.env.WEB3_PROVIDER || 'http://localhost:8545',
   MASTER_KEY: process.env.MASTER_KEY,
   GIT_REV: process.env.GIT_REV,
+  RECAPTCHA_SECRET: process.env.RECAPTCHA_SECRET,
+  IS_RECAPTCHA_ON: true,
 };

@@ -78,7 +78,7 @@ const Booking = new Schema({
   signatureTimestamp: {
     type: Number,
     default: function () {
-      return Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60;
+      return Math.floor(Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60);
     },
     required: [true, 'noSignatureTimestamp'],
   },
@@ -101,6 +101,16 @@ const Booking = new Schema({
     required: [true, 'noStatus'],
     default: 'pending',
     enum: [BOOKING_STATUS.pending, BOOKING_STATUS.canceled, BOOKING_STATUS.approved],
+  },
+  guestCount: {
+    type: Number,
+    validate: {
+      validator: function (guestCount) {
+        return guestCount >= 1 && guestCount <= 2;
+      },
+      message: 'guestCountOutOfRange',
+    },
+    required: [true, 'noGuestCount'],
   },
 });
 
@@ -146,17 +156,17 @@ Booking.method({
       return {};
     }
   },
-  generatePaymentAmount: function (ethPrice) {
-    if (typeof ethPrice !== 'number') {
-      throw handleApplicationError('invalidEthPrice');
+  generatePaymentAmount: function (cryptoPrice) {
+    if (typeof cryptoPrice !== 'number') {
+      throw handleApplicationError('invalidCryptoPrice');
     }
-    this.paymentAmount = ((ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / ethPrice) + 0.0001).toFixed(4);
+    this.paymentAmount = ((ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / cryptoPrice) + 0.0001).toFixed(4);
   },
-  getWeiPerNight: function (ethPrice) {
-    if (typeof ethPrice !== 'number') {
-      throw handleApplicationError('invalidEthPrice');
+  getWeiPerNight: function (cryptoPrice) {
+    if (typeof cryptoPrice !== 'number') {
+      throw handleApplicationError('invalidCryptoPrice');
     }
-    return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / ethPrice).toString(), 'ether');
+    return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / cryptoPrice).toString(), 'ether');
   },
   setAsPending: function () {
     this.status = BOOKING_STATUS.pending;
@@ -192,11 +202,11 @@ Booking.post('save', function (error, doc, next) {
 });
 
 Booking.statics.generate = function (data) {
-  const { personalInfo, ethPrice, privateKey, ...rest } = data;
+  const { personalInfo, cryptoPrice, privateKey, ...rest } = data;
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
   booking.encryptPersonalInfo(personalInfo, privateKey);
-  booking.generatePaymentAmount(ethPrice);
+  booking.generatePaymentAmount(cryptoPrice);
   return booking;
 };
 

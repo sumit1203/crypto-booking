@@ -211,6 +211,26 @@ describe('Booking model', () => {
       expect(validation.errors.status).to.have.property('message', 'noStatus');
     });
   });
+  describe('guestCount', () => {
+    it('Should allow to set guestCount', async () => {
+      const booking = new Booking(validBookingDB);
+      const validation = booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking.guestCount).to.be.equal(validBookingDB.guestCount);
+    });
+    it('Should throw with invalid guestCount', async () => {
+      const booking = new Booking({ ...validBookingDB, guestCount: 3 });
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'guestCount');
+      expect(validation.errors.guestCount).to.have.property('message', 'guestCountOutOfRange');
+    });
+    it('Should throw with invalid guestCount', async () => {
+      const booking = new Booking({ ...validBookingDB, guestCount: 0 });
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'guestCount');
+      expect(validation.errors.guestCount).to.have.property('message', 'guestCountOutOfRange');
+    });
+  });
   describe('methods', () => {
     describe('encryptPersonalInfo', () => {
       it('Should encode to hex and encrypt personal info', () => {

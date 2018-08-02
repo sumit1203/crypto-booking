@@ -112,6 +112,22 @@ const validBooking = {
   },
   from: 1,
   to: 4,
+  guestCount: 1,
+};
+const validLifBooking = {
+  guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
+  paymentAmount: 0.1,
+  paymentType: 'lif',
+  roomType: 'pure-cozy',
+  personalInfo: {
+    fullName: 'Some name',
+    email: 'email@email.com',
+    birthDate: '1987-12-17',
+    phone: '+1111111111111',
+  },
+  from: 1,
+  to: 4,
+  guestCount: 1,
 };
 const validBookingWithEthPrice = {
   guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
@@ -127,7 +143,8 @@ const validBookingWithEthPrice = {
   },
   from: 1,
   to: 4,
-  ethPrice: 1,
+  cryptoPrice: 1,
+  guestCount: 1,
   privateKey: '0xc9803c313dda9f39b7733dc845bc9b93788f8bbb4f9dbe0d4c2657634f966154',
   bookingHash: '0x1ab512eb0d6ba16d0aa20b616b257a3c55b5a395e80d0fcbf5963ac694d5b309',
 };
@@ -140,6 +157,7 @@ const validBookingDB = {
   encryptedPersonalInfo: '0x7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
   from: 1,
   to: 4,
+  guestCount: 1,
 };
 
 const events = {
@@ -172,6 +190,7 @@ const toEmail = process.env.TO_EMAIL || 'example@windingtree.com';
 module.exports = {
   testHtmlBody,
   validBooking,
+  validLifBooking,
   validBookingDB,
   validBookingWithEthPrice,
   ToPlainObjectTestClass,
