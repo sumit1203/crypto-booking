@@ -13,7 +13,7 @@ const { FROM_EMAIL } = require('../config');
   */
 async function createBooking (data) {
   data.cryptoPrice = await fetchPrice(data.paymentType);
-  const { privateKey, publicKey, index } = generateKeyPair();
+  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
   data.bookingHash = publicKey;
   const bookingModel = BookingModel.generate(data, privateKey);
   await bookingModel.save();
@@ -25,7 +25,7 @@ async function createBooking (data) {
     booking,
     offerSignature,
     signatureData,
-    index,
+    bookingIndex,
     privateKey,
   };
 }

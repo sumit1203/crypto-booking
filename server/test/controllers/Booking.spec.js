@@ -37,7 +37,7 @@ describe('Booking controller', () => {
   });
 
   it('Should create a valid booking', async function () {
-    const { booking, offerSignature, index, privateKey } = await createBooking(validBooking);
+    const { booking, offerSignature, bookingIndex, privateKey } = await createBooking(validBooking);
     expect(booking).to.have.property('bookingHash');
     expect(booking.bookingHash).to.be.a('string');
     expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
@@ -56,7 +56,7 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('changesEmailSent');
     expect(booking).to.have.property('guestCount', validBooking.guestCount);
     expect(offerSignature).to.not.be.an('undefined');
-    expect(index).to.be.an('number');
+    expect(bookingIndex).to.be.an('number');
     expect(privateKey).to.be.an('string');
   });
 
