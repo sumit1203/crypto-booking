@@ -1,5 +1,6 @@
 const { resolve, join } = require('path');
 const webpack = require('webpack');
+const packageJson = require('../package');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -27,6 +28,7 @@ const plugins = [
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new HtmlWebpackPlugin({
     template: join('src', 'index.html'),
+    meta: {version: packageJson.version}
   }),
   new webpack.NamedModulesPlugin(),
 ];
