@@ -10,7 +10,6 @@ class ConfirmModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      paymentType: 'eth',
       guestEthAddress: null,
       captchaToken: null
     }
@@ -18,10 +17,6 @@ class ConfirmModal extends React.Component {
 
   onAddressChange = (e) => {
     this.setState({guestEthAddress: e.target.value})
-  }
-
-  onPaymentTypeChange = (e) => {
-    this.setState({paymentType: e.target.value})
   }
 
   onSubmit = (e) => {
@@ -37,6 +32,7 @@ class ConfirmModal extends React.Component {
   }
 
   render () {
+    const {paymentType, onPaymentTypeChange} = this.props
     return (
       <div className="modal" id="modalConfirm" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
@@ -60,18 +56,18 @@ class ConfirmModal extends React.Component {
                       <div className="col-8">
                         <div className="form-check" style={{marginBottom: '0.3em', paddingTop: 7}}>
                           <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
-                                 type="radio" name="pay-type" id="pay-eth" value="eth" defaultChecked={true} required
-                                 onChange={this.onPaymentTypeChange}/>
+                                 type="radio" name="pay-type" id="pay-eth" value="eth" required
+                                 onChange={onPaymentTypeChange} checked={paymentType === 'eth'}/>
                           <label className="form-check-label" htmlFor="pay-eth">
                             <b>Ether</b>
                           </label>
                         </div>
-                        <div className="form-check disabled">
+                        <div className="form-check">
                           <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
-                                 type="radio" name="pay-type" id="pay-lif" value="lif" disabled required
-                                 onChange={this.onPaymentTypeChange}/>
+                                 type="radio" name="pay-type" id="pay-lif" value="lif" required
+                                 onChange={onPaymentTypeChange} checked={paymentType === 'lif'}/>
                           <label className="form-check-label" htmlFor="pay-lif">
-                            <b>Lif</b> (soon)
+                            <b>Lif</b>
                           </label>
                         </div>
                       </div>
@@ -130,7 +126,9 @@ class ConfirmModal extends React.Component {
 
 ConfirmModal.propTypes = {
   price: PropTypes.number,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  paymentType: PropTypes.string.isRequired,
+  onPaymentTypeChange: PropTypes.func.isRequired
 }
 
 export default ConfirmModal

@@ -1,6 +1,6 @@
 const fetch = require('isomorphic-fetch');
 
-const fetchEthPrice = async (unit = 'EUR') => {
+const fetchETHPrice = async (unit = 'EUR') => {
   const PRICE_URL = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${unit}`;
   const res = await (await fetch(PRICE_URL)).json();
 
@@ -9,6 +9,16 @@ const fetchEthPrice = async (unit = 'EUR') => {
   return price;
 };
 
+const fetchLIFPrice = async (unit = 'EUR') => {
+  return 0.5;
+};
+
+const fetchPrice = async (type) => {
+  return (type === 'eth') ? fetchETHPrice() : fetchLIFPrice();
+};
+
 module.exports = {
-  fetchEthPrice
+  fetchETHPrice,
+  fetchPrice,
+  fetchLIFPrice,
 };

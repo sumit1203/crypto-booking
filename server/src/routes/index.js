@@ -7,6 +7,7 @@ const {
 const { createThrottlingInstance } = require('../middlewares/throttling');
 const { recaptchaMiddleware } = require('../middlewares/recaptcha');
 const { sendInstructions } = require('../services/mail');
+const { getInstructionsTxs } = require('../services/web3');
 
 const router = express.Router();
 const bookingUrl = '/booking';
@@ -14,7 +15,13 @@ const bookingUrl = '/booking';
 router.post(`${bookingUrl}`, recaptchaMiddleware, async (req, res, next) => {
   try {
     const { signatureData, booking, offerSignature } = await createBooking(req.body);
+    const nights = [];
+    for (let i = booking.from; i <= booking.to; i++) {
+      nights.push(i);
+    }
+
     const data = {
+      txs: await getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights),
       booking,
       offerSignature,
       signatureData,

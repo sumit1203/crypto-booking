@@ -11,10 +11,10 @@ module.exports = {
     short: 'Invalid encrypted personal information.',
     long: 'The encryptedPersonalInfo must be a hex.',
   },
-  invalidEthPrice: {
+  invalidCryptoPrice: {
     status: 500,
     short: 'Invalid eth price.',
-    long: 'The ethPrice must be a number.',
+    long: 'The cryptoPrice must be a number.',
   },
   whiteList: {
     status: 403,
