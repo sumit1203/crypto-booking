@@ -1,4 +1,5 @@
 import React from 'react'
+import { SIGNER_API } from '../../config'
 
 export default class MyBookingSection extends React.Component {
 
@@ -12,7 +13,7 @@ export default class MyBookingSection extends React.Component {
     try {
       const {bookingHash} = this.state
       const data = {bookingHash}
-      const response = await fetch(process.env.SIGNER_API + '/booking/emailInfo', {
+      const response = await fetch(SIGNER_API + '/booking/emailInfo', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {

@@ -32,7 +32,7 @@ export default class HeroSection extends React.Component {
                 <span className="mx-1 h5">•</span>
                 <span className="h5"><b>Berlin, Germany</b></span>
                 <span className="mx-1 h5">•</span>
-                <span className="h5">September 7-9, 2018</span>
+                <span className="h5">September 7-10, 2018</span>
               </div>
             </div>
           </div>
