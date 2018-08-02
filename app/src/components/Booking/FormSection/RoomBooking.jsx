@@ -6,8 +6,6 @@ import RulesModal from './RulesModal';
 import { roomType } from '../propTypes';
 import $ from 'jquery'
 
-// import lifToken from 'windingtree-media-web/custom-icons/svg/wt-icon--lif-token.svg';
-
 export default class RoomBooking extends React.Component {
   showRulesModal = (e) => {
     e.preventDefault()
@@ -43,6 +41,8 @@ export default class RoomBooking extends React.Component {
       fromDateMax,
       from,
       price,
+      paymentType,
+      onPaymentTypeChange,
       onFromDateChange,
       onToDateChange,
       onFullNameChange,
@@ -135,7 +135,8 @@ export default class RoomBooking extends React.Component {
             </div>
           </div>
         </div>
-        <ConfirmModal onSubmit={this.handleConfirmModalOnSubmit} price={price}/>
+        <ConfirmModal onSubmit={this.handleConfirmModalOnSubmit} price={price}
+                      paymentType={paymentType} onPaymentTypeChange={onPaymentTypeChange}/>
         <RulesModal/>
       </article>
     );
@@ -149,6 +150,8 @@ RoomBooking.propTypes = {
   selectedRoom: roomType,
   price: PropTypes.number,
   roomTypes: PropTypes.arrayOf(roomType).isRequired,
+  paymentType: PropTypes.string.isRequired,
+  onPaymentTypeChange: PropTypes.func.isRequired,
   onRoomTypeChange: PropTypes.func.isRequired,
   onFromDateChange: PropTypes.func.isRequired,
   onToDateChange: PropTypes.func.isRequired,
