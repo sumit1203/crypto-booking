@@ -20,7 +20,7 @@ router.post(`${bookingUrl}`, async (req, res, next) => {
     }
 
     const data = {
-      txs: getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights),
+      txs: await getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights),
       booking,
       offerSignature,
       signatureData,

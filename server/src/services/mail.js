@@ -50,7 +50,7 @@ const sendInstructions = async ({ booking, offerSignature, signatureData, contra
       nights.push(i);
     }
 
-    const txs = getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights);
+    const txs = await getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights);
     const html = instructionsBody(booking.paymentType, txs);
 
     return sgMail.send({ from, to, subject, html });
