@@ -3,4 +3,5 @@ module.exports = {
   WEB3_PROVIDER: 'https://ropsten.infura.io/CusDXRIFRTuTeUQlhKjc',
   BOOKING_POC_ADDRESS: '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D',
   SIGNER_API: 'https://crypto-booking-server.windingtree.com',
+  CAPTCHA_SITE_KEY: '6LfKmmcUAAAAADUI1_CpxzyQ1JHz_bYiQ6Tw3vPF'
 };

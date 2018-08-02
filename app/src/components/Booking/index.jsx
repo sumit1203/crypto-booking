@@ -33,7 +33,7 @@ export default class BookingContainer extends React.Component {
         const price = PRICES_BY_ROOMTYPE[room.id]
         return [...acc, {...room, isFull, price}]
       }, [])
-      this.setState({isLoading: false, roomTypes: mappedRooms});
+      this.setState({isLoading: false, roomTypes: mappedRooms, selectedRoom: mappedRooms[0]});
     }catch (e) {
       this.setState({ isLoading: true});
       console.error(e);

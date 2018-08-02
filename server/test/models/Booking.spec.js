@@ -15,7 +15,7 @@ function basicValidationExpect (validation, field) {
 describe('Booking model', () => {
   describe('bookingHash', () => {
     it('Should throw an error if bookingHash is not defined', () => {
-      const booking = Booking.generate(validBookingWithEthPrice);
+      const booking = Booking.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       booking.bookingHash = '';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'bookingHash');
@@ -211,6 +211,26 @@ describe('Booking model', () => {
       expect(validation.errors.status).to.have.property('message', 'noStatus');
     });
   });
+  describe('guestCount', () => {
+    it('Should allow to set guestCount', async () => {
+      const booking = new Booking(validBookingDB);
+      const validation = booking.validateSync();
+      expect(validation).to.be.a('undefined');
+      expect(booking.guestCount).to.be.equal(validBookingDB.guestCount);
+    });
+    it('Should throw with invalid guestCount', async () => {
+      const booking = new Booking({ ...validBookingDB, guestCount: 3 });
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'guestCount');
+      expect(validation.errors.guestCount).to.have.property('message', 'guestCountOutOfRange');
+    });
+    it('Should throw with invalid guestCount', async () => {
+      const booking = new Booking({ ...validBookingDB, guestCount: 0 });
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'guestCount');
+      expect(validation.errors.guestCount).to.have.property('message', 'guestCountOutOfRange');
+    });
+  });
   describe('methods', () => {
     describe('encryptPersonalInfo', () => {
       it('Should encode to hex and encrypt personal info', () => {
@@ -277,20 +297,17 @@ describe('Booking model', () => {
     describe('decryptPersonalInfo', () => {
       it('Should decode personal info', () => {
         const booking = new Booking(validBookingDB);
-        booking.bookingHash = 'someHash';
-        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, booking.bookingHash);
-        const decryptPersonalInfo = booking.decryptPersonalInfo(booking.bookingHash);
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, validBookingWithEthPrice.privateKey);
+        const decryptPersonalInfo = booking.decryptPersonalInfo(validBookingWithEthPrice.privateKey);
         expect(decryptPersonalInfo).to.be.deep.equal(validBookingWithEthPrice.personalInfo);
       });
       it('Should return an empty object on invalid bookingHash', () => {
         const booking = new Booking(validBookingDB);
-        booking.bookingHash = 'someHash';
-        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, booking.bookingHash);
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, validBookingWithEthPrice.privateKey);
         const decryptPersonalInfo = booking.decryptPersonalInfo('fakeBookinHash');
         expect(decryptPersonalInfo).to.be.deep.equal({});
       });
     });
-    xdescribe('generateBookingHash', () => {});
     xdescribe('generatePaymentAmount', () => {});
     xdescribe('getWeiPerNight', () => {});
     describe('setAsPending', () => {
@@ -318,7 +335,7 @@ describe('Booking model', () => {
     });
     describe('generate', () => {
       it('Should generate no error using validBooking data', async () => {
-        const booking = Booking.generate(validBookingWithEthPrice);
+        const booking = Booking.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
         const validation = await booking.validateSync();
         expect(validation).to.be.a('undefined');
         expect(booking).to.have.property('bookingHash');

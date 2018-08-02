@@ -5,19 +5,28 @@ const {
   FROM_EMAIL,
 } = require('../config');
 const { createThrottlingInstance } = require('../middlewares/throttling');
+const { recaptchaMiddleware } = require('../middlewares/recaptcha');
 const { sendInstructions } = require('../services/mail');
+const { getInstructionsTxs } = require('../services/web3');
 
 const router = express.Router();
 const bookingUrl = '/booking';
 
-router.post(`${bookingUrl}`, async (req, res, next) => {
+router.post(`${bookingUrl}`, recaptchaMiddleware, async (req, res, next) => {
   try {
-    const { signatureData, booking, offerSignature } = await createBooking(req.body);
+    const { signatureData, booking, offerSignature, bookingIndex } = await createBooking(req.body);
+    const nights = [];
+    for (let i = booking.from; i <= booking.to; i++) {
+      nights.push(i);
+    }
+
     const data = {
+      txs: await getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights),
       booking,
       offerSignature,
       signatureData,
       contractAddress: BOOKING_POC_ADDRESS,
+      bookingIndex
     };
 
     sendInstructions(data, {
@@ -33,7 +42,7 @@ router.post(`${bookingUrl}`, async (req, res, next) => {
 
 router.get(`${bookingUrl}/:bookingHash`, async (req, res, next) => {
   try {
-    const booking = await readBooking({ bookingHash: req.params.bookingHash });
+    const booking = await readBooking({ bookingHash: req.params.bookingHash }, parseInt(req.query.bookingIndex));
     if (!booking) return next();
     res.json(booking);
   } catch (e) {
@@ -48,7 +57,7 @@ router.post(`${bookingUrl}/emailInfo`, createThrottlingInstance({
   max: 3, // Start blocking after 3 requests
 }), async (req, res, next) => {
   try {
-    await sendBookingInfoByEmail(req.body.bookingHash);
+    await sendBookingInfoByEmail(req.body.bookingHash, parseInt(req.body.bookingIndex));
     res.json({ status: 'ok' });
   } catch (e) {
     return next(e);

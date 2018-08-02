@@ -1,15 +1,17 @@
 import React from 'react'
-import $ from 'jquery'
 import PropTypes from 'prop-types'
+import $ from 'jquery'
+import ReCAPTCHA from 'react-google-recaptcha'
+import {CAPTCHA_SITE_KEY} from '../../../config'
+
 import payment from 'windingtree-media-web/custom-icons/svg/wt-icon--payment.svg'
-// import ReCAPTCHA from 'react-google-recaptcha'
 
 class ConfirmModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      paymentType: 'eth',
       guestEthAddress: null,
+      captchaToken: null
     }
   }
 
@@ -17,18 +19,20 @@ class ConfirmModal extends React.Component {
     this.setState({guestEthAddress: e.target.value})
   }
 
-  onPaymentTypeChange = (e) => {
-    this.setState({paymentType: e.target.value})
-  }
-
   onSubmit = (e) => {
     e.preventDefault()
-    const {guestEthAddress, paymentType} = this.state
-    this.props.onSubmit({guestEthAddress, paymentType})
+    const {guestEthAddress, paymentType, captchaToken} = this.state
+    if (!captchaToken) return
+    this.props.onSubmit({guestEthAddress, paymentType, captchaToken})
     $('#modalConfirm').modal('hide')
   }
 
+  onCaptchaChange = (value) => {
+    this.setState({captchaToken: value})
+  }
+
   render () {
+    const {paymentType, onPaymentTypeChange} = this.props
     return (
       <div className="modal" id="modalConfirm" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
@@ -52,18 +56,18 @@ class ConfirmModal extends React.Component {
                       <div className="col-8">
                         <div className="form-check" style={{marginBottom: '0.3em', paddingTop: 7}}>
                           <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
-                                 type="radio" name="pay-type" id="pay-eth" value="eth" defaultChecked={true} required
-                                 onChange={this.onPaymentTypeChange}/>
+                                 type="radio" name="pay-type" id="pay-eth" value="eth" required
+                                 onChange={onPaymentTypeChange} checked={paymentType === 'eth'}/>
                           <label className="form-check-label" htmlFor="pay-eth">
                             <b>Ether</b>
                           </label>
                         </div>
-                        <div className="form-check disabled">
+                        <div className="form-check">
                           <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
-                                 type="radio" name="pay-type" id="pay-lif" value="lif" disabled required
-                                 onChange={this.onPaymentTypeChange}/>
+                                 type="radio" name="pay-type" id="pay-lif" value="lif" required
+                                 onChange={onPaymentTypeChange} checked={paymentType === 'lif'}/>
                           <label className="form-check-label" htmlFor="pay-lif">
-                            <b>Lif</b> (soon)
+                            <b>Lif</b>
                           </label>
                         </div>
                       </div>
@@ -106,8 +110,7 @@ class ConfirmModal extends React.Component {
                     </div>
                   </div>
                 </div>
-                {/* TODO replace the sitekey when we register a domain for the app */}
-                {/*<ReCAPTCHA sitekey='xxxxxxxxx' theme='light'/>*/}
+                <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} theme='light' onChange={this.onCaptchaChange}/>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-dismiss="modal">Cancel</button>
@@ -123,7 +126,9 @@ class ConfirmModal extends React.Component {
 
 ConfirmModal.propTypes = {
   price: PropTypes.number,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  paymentType: PropTypes.string.isRequired,
+  onPaymentTypeChange: PropTypes.func.isRequired
 }
 
 export default ConfirmModal

@@ -1,6 +1,6 @@
 {
   "name": "crypto-booking-app",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Web app to show hotel inventory from WT api.",
   "scripts": {
     "test": "eslint .",
@@ -9,7 +9,8 @@
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
     "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
     "now-start": "serve --single ./public",
-    "alias": "now alias --team windingtree --token=$NOW_TOKEN"
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN",
+    "postalias": "./scripts/cloudflare-cachepurge.sh"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

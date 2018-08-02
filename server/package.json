@@ -1,6 +1,6 @@
 {
   "name": "crypto-booking-server",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Nodejs server to sign room offers and manage bookings.",
   "scripts": {
     "start": "NODE_ENV=production GIT_REV=`git rev-parse --short HEAD` node ./src/index.js",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
+    "bitcoinjs-lib": "^4.0.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
