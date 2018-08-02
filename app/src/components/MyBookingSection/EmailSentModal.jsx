@@ -1,7 +1,7 @@
 import React from 'react'
 
 const EmailSentModal = () => (
-  <div className="modal" id="modalMessage" tabIndex="-2" role="dialog">
+  <div className="modal" id="emailSentModal" tabIndex="-2" role="dialog">
     <div className="modal-dialog" role="document">
       <div className="modal-content">
 
@@ -23,3 +23,5 @@ const EmailSentModal = () => (
     </div>
   </div>
 )
+
+export default EmailSentModal
