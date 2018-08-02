@@ -52,6 +52,7 @@ describe('Booking controller', () => {
     expect(booking.roomType).to.be.a('string');
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking).to.have.property('changesEmailSent');
+    expect(booking).to.have.property('guestCount', validBooking.guestCount);
     expect(offerSignature).to.not.be.an('undefined');
   });
 
@@ -93,6 +94,7 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking).to.have.property('changesEmailSent');
+    expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
   });
 
   it('Should read a booking using bookingHash', async () => {
@@ -115,6 +117,7 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
     expect(booking).to.have.property('to', validBookingWithEthPrice.to);
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);
+    expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
   });
 
   it('Should return null if the id not exists', async () => {
