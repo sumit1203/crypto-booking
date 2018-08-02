@@ -6,7 +6,6 @@ const {
   informationBody,
 } = require('./html-generator');
 const { handleApplicationError } = require('../errors');
-const { getInstructionsTxs } = require('./web3');
 const {
   MAIL_API_KEY,
   FROM_EMAIL,
@@ -43,14 +42,13 @@ const sendBookingChange = async (event, secretCode, to) => {
   }
 };
 
-const sendInstructions = async ({ booking, offerSignature, signatureData, contractAddress }, { from, to, subject }) => {
+const sendInstructions = async ({ txs, booking, offerSignature, signatureData, contractAddress }, { from, to, subject }) => {
   try {
     const nights = [];
     for (let i = booking.from; i <= booking.to; i++) {
       nights.push(i);
     }
 
-    const txs = await getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights);
     const html = instructionsBody(booking.paymentType, txs);
 
     return sgMail.send({ from, to, subject, html });
