@@ -1,21 +1,21 @@
 const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
-const { fetchEthPrice } = require('../services/prices');
+const { fetchPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
-const { TO_EMAIL, FROM_EMAIL } = require('../config');
+const { FROM_EMAIL } = require('../config');
 /**
   * Creates a new Booking in the db and returns an instance of Booking
   * @param {Object} {publicKey, guestEthAddress, payment, personalInfo}
   * @return {Booking}
   */
 async function createBooking (data) {
-  data.ethPrice = await fetchEthPrice();
+  data.cryptoPrice = await fetchPrice(data.paymentType);
   const bookingModel = BookingModel.generate(data);
   await bookingModel.save();
   const booking = _prepareForExport(bookingModel, bookingModel.bookingHash);
-  booking.weiPerNight = bookingModel.getWeiPerNight(data.ethPrice);
+  booking.weiPerNight = bookingModel.getWeiPerNight(data.cryptoPrice);
   const { signatureData, offerSignature } = await signOffer(booking, await readKey());
 
   return {
