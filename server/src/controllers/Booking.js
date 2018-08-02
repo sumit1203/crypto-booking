@@ -4,7 +4,7 @@ const { fetchPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
-const { TO_EMAIL, FROM_EMAIL } = require('../config');
+const { FROM_EMAIL } = require('../config');
 /**
   * Creates a new Booking in the db and returns an instance of Booking
   * @param {Object} {publicKey, guestEthAddress, payment, personalInfo}

@@ -8,7 +8,6 @@ const {
 const { handleApplicationError } = require('../errors');
 const { getInstructionsTxs } = require('./web3');
 const {
-  BOOKING_POC_ADDRESS,
   MAIL_API_KEY,
   FROM_EMAIL,
 } = require('../config');

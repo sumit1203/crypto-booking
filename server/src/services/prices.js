@@ -14,11 +14,11 @@ const fetchLIFPrice = async (unit = 'EUR') => {
 };
 
 const fetchPrice = async (type) => {
-  return (type == 'eth') ? fetchETHPrice() : fetchLIFPrice();
+  return (type === 'eth') ? fetchETHPrice() : fetchLIFPrice();
 };
 
 module.exports = {
   fetchETHPrice,
   fetchPrice,
-  fetchLIFPrice
+  fetchLIFPrice,
 };

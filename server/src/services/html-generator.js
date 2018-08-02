@@ -104,8 +104,8 @@ td.full-width-mobile { width: auto !important; }
 };
 
 const instructionsBody = (paymentType, txs) => {
-  return (paymentType == 'eth') ? _instructionsETHBody(txs) : _instructionsLIFBody(txs);
-}
+  return (paymentType === 'eth') ? _instructionsETHBody(txs) : _instructionsLIFBody(txs);
+};
 
 const bookingChangeBody = (event, secretCode) => {
   const bookingChangeHtml = `
