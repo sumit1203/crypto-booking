@@ -78,7 +78,7 @@ const Booking = new Schema({
   signatureTimestamp: {
     type: Number,
     default: function () {
-      return Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60;
+      return Math.floor(Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60);
     },
     required: [true, 'noSignatureTimestamp'],
   },
