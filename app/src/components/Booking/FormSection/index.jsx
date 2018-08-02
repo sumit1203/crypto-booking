@@ -123,11 +123,10 @@ class FormSection extends React.Component {
         'Content-Type': 'application/json'
       }
     })
-    const asd = await response.json()
-    console.log(asd)
-    const txData = asd.txs[0] || asd.txs[1]
+    const {txs} = await response.json()
     this.setState({
-      instructions: txData
+      instructions: txs[1] || txs[0],
+      lifInstructions: !!txs[1] && tx[0]
     })
   }
 
@@ -138,6 +137,7 @@ class FormSection extends React.Component {
   render () {
     const {from, instructions, isFull, price, toDateMin, fromDateMax, paymentType} = this.state
     const {selectedRoom, roomTypes} = this.props
+    // TODO we should show lifInstructions if they exist
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
     if (instructions) return <CheckEmail onClose={this.onCloseModal}
                                          paymentAmount={instructions.value}
