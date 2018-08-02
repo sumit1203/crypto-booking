@@ -1,14 +1,17 @@
 import React from 'react'
-import $ from 'jquery'
 import PropTypes from 'prop-types'
+import $ from 'jquery'
+import ReCAPTCHA from 'react-google-recaptcha'
+import {CAPTCHA_SITE_KEY} from '../../../config'
+
 import payment from 'windingtree-media-web/custom-icons/svg/wt-icon--payment.svg'
-// import ReCAPTCHA from 'react-google-recaptcha'
 
 class ConfirmModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       guestEthAddress: null,
+      captchaToken: null
     }
   }
 
@@ -18,9 +21,14 @@ class ConfirmModal extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    const {guestEthAddress} = this.state
-    this.props.onSubmit({guestEthAddress})
+    const {guestEthAddress, paymentType, captchaToken} = this.state
+    if (!captchaToken) return
+    this.props.onSubmit({guestEthAddress, paymentType, captchaToken})
     $('#modalConfirm').modal('hide')
+  }
+
+  onCaptchaChange = (value) => {
+    this.setState({captchaToken: value})
   }
 
   render () {
@@ -102,8 +110,7 @@ class ConfirmModal extends React.Component {
                     </div>
                   </div>
                 </div>
-                {/* TODO replace the sitekey when we register a domain for the app */}
-                {/*<ReCAPTCHA sitekey='xxxxxxxxx' theme='light'/>*/}
+                <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} theme='light' onChange={this.onCaptchaChange}/>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-dismiss="modal">Cancel</button>
