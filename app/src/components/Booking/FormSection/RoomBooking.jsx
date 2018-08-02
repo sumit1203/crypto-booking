@@ -43,6 +43,8 @@ export default class RoomBooking extends React.Component {
       fromDateMax,
       from,
       price,
+      guestCount,
+      onGuestCountChange,
       onFromDateChange,
       onToDateChange,
       onFullNameChange,
@@ -63,21 +65,19 @@ export default class RoomBooking extends React.Component {
                 </p>
               </header>
               <form onSubmit={this.onSubmit}>
-
                 <section>
-
                   <h5 className="mb-1 text-center">Guests</h5>
                   <div className="row justify-content-center">
                     <div className="media mb-2">
                       <i className="mdi mdi-account mdi-48px text-dark mr-1" style={{marginTop: -17}}/>
                       <div className="media-body">
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="guests" id="guests1" value="guests1" checked/>
-                          <label className="form-check-label" for="guests1">&nbsp; One person
+                          <input className="form-check-input" type="radio" name="guests" id="guests1" value='1' onChange={onGuestCountChange} checked={guestCount === '1'}/>
+                          <label className="form-check-label" htmlFor="guests1">&nbsp; One person
                           </label>
                         </div>
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2"/>
+                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2" onChange={onGuestCountChange} checked={guestCount === '2'}/>
                           <label className="form-check-label" for="guests2">&nbsp; Two people
                           </label>
                         </div>
@@ -147,9 +147,11 @@ RoomBooking.propTypes = {
   fromDateMax: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
   selectedRoom: roomType,
+  guestCount: PropTypes.string,
   price: PropTypes.number,
   roomTypes: PropTypes.arrayOf(roomType).isRequired,
   onRoomTypeChange: PropTypes.func.isRequired,
+  onGuestCountChange: PropTypes.func.isRequired,
   onFromDateChange: PropTypes.func.isRequired,
   onToDateChange: PropTypes.func.isRequired,
   onFullNameChange: PropTypes.func.isRequired,

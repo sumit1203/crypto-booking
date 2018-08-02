@@ -5,12 +5,13 @@ const {
   FROM_EMAIL,
 } = require('../config');
 const { createThrottlingInstance } = require('../middlewares/throttling');
+const { recaptchaMiddleware } = require('../middlewares/recaptcha');
 const { sendInstructions } = require('../services/mail');
 
 const router = express.Router();
 const bookingUrl = '/booking';
 
-router.post(`${bookingUrl}`, async (req, res, next) => {
+router.post(`${bookingUrl}`, recaptchaMiddleware, async (req, res, next) => {
   try {
     const { signatureData, booking, offerSignature } = await createBooking(req.body);
     const data = {

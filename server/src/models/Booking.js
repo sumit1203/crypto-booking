@@ -102,6 +102,16 @@ const Booking = new Schema({
     default: 'pending',
     enum: [BOOKING_STATUS.pending, BOOKING_STATUS.canceled, BOOKING_STATUS.approved],
   },
+  guestCount: {
+    type: Number,
+    validate: {
+      validator: function (guestCount) {
+        return guestCount >= 1 && guestCount <= 2;
+      },
+      message: 'guestCountOutOfRange',
+    },
+    required: [true, 'noGuestCount'],
+  },
 });
 
 Booking.method({

@@ -112,6 +112,7 @@ const validBooking = {
   },
   from: 1,
   to: 4,
+  guestCount: 1,
 };
 const validBookingWithEthPrice = {
   guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
@@ -128,6 +129,7 @@ const validBookingWithEthPrice = {
   from: 1,
   to: 4,
   ethPrice: 1,
+  guestCount: 1,
 };
 const validBookingDB = {
   bookingHash: 'some public key',
@@ -138,6 +140,7 @@ const validBookingDB = {
   encryptedPersonalInfo: '0x7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
   from: 1,
   to: 4,
+  guestCount: 1,
 };
 
 const events = {
