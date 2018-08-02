@@ -201,8 +201,8 @@ Booking.post('save', function (error, doc, next) {
   }
 });
 
-Booking.statics.generate = function (data) {
-  const { personalInfo, cryptoPrice, privateKey, ...rest } = data;
+Booking.statics.generate = function (data, privateKey) {
+  const { personalInfo, cryptoPrice, ...rest } = data;
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
   booking.encryptPersonalInfo(personalInfo, privateKey);

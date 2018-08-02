@@ -15,7 +15,7 @@ function basicValidationExpect (validation, field) {
 describe('Booking model', () => {
   describe('bookingHash', () => {
     it('Should throw an error if bookingHash is not defined', () => {
-      const booking = Booking.generate(validBookingWithEthPrice);
+      const booking = Booking.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       booking.bookingHash = '';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'bookingHash');
@@ -335,7 +335,7 @@ describe('Booking model', () => {
     });
     describe('generate', () => {
       it('Should generate no error using validBooking data', async () => {
-        const booking = Booking.generate(validBookingWithEthPrice);
+        const booking = Booking.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
         const validation = await booking.validateSync();
         expect(validation).to.be.a('undefined');
         expect(booking).to.have.property('bookingHash');

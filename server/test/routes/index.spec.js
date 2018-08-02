@@ -135,7 +135,7 @@ describe('Booking API', () => {
 
   describe('GET /api/booking/:bookingHash', () => {
     it('Should read a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const index = 0;
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.bookingHash}?index=${index}`, method: 'GET', json: true });
@@ -166,7 +166,7 @@ describe('Booking API', () => {
 
   describe('POST /api/booking/emailInfo', () => {
     it('Should read a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const body = { bookingHash: dbBooking.bookingHash };
       const response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
@@ -184,7 +184,7 @@ describe('Booking API', () => {
     });
     it('should respond with 429 when throttling limit is exceeded', async () => {
       throttling.turnOnThrottling();
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const body = { bookingHash: dbBooking.bookingHash };
       let response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
@@ -205,7 +205,7 @@ describe('Booking API', () => {
 
   describe('DELETE /api/booking/:id', () => {
     it('Should delete a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'DELETE', json: true });
       const dbReadBooking = await BookingModel.findById(booking.id).exec();

@@ -15,8 +15,7 @@ async function createBooking (data) {
   data.cryptoPrice = await fetchPrice(data.paymentType);
   const { privateKey, publicKey, index } = generateKeyPair();
   data.bookingHash = publicKey;
-  data.privateKey = privateKey;
-  const bookingModel = BookingModel.generate(data);
+  const bookingModel = BookingModel.generate(data, privateKey);
   await bookingModel.save();
   const booking = _prepareForExport(bookingModel, privateKey);
   booking.weiPerNight = bookingModel.getWeiPerNight(data.cryptoPrice);
