@@ -124,7 +124,7 @@ module.exports = {
   noStatus: {
     status: 409,
     short: 'No property "status" provided.',
-    long: '"from" is required.',
+    long: '"status" is required.',
   },
   invalidStatus: {
     status: 409,

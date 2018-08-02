@@ -61,7 +61,7 @@ export default class RoomBooking extends React.Component {
               <header className="text-center">
                 <h2 className="mb-1">Book a Room</h2>
                 <p className="lead h4 mb-2">
-                    All rooms offered to book only within ETH Berlin Dates 6.09 - 10.09
+                  All rooms are offered to book only within ETH Berlin dates September 6-10, 2018
                 </p>
               </header>
               <form onSubmit={this.onSubmit}>
@@ -77,8 +77,8 @@ export default class RoomBooking extends React.Component {
                           </label>
                         </div>
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="guests" id="guests2" value='2' onChange={onGuestCountChange} checked={guestCount === '2'}/>
-                          <label className="form-check-label" htmlFor="guests2">&nbsp; Two persons
+                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2" onChange={onGuestCountChange} checked={guestCount === '2'}/>
+                          <label className="form-check-label" for="guests2">&nbsp; Two people
                           </label>
                         </div>
                       </div>

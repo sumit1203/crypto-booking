@@ -18,6 +18,11 @@ function _isBirthDate (birthDate) {
   return re.test(String(birthDate));
 }
 
+function _isPhone (phone) {
+  const re = /^\+\d{13}$/;
+  return re.test(String(phone));
+}
+
 const Booking = new Schema({
   bookingHash: {
     type: String,
@@ -120,7 +125,7 @@ Booking.method({
     if (!personalInfo.fullName) {
       throw handleApplicationError('invalidPersonalInfoFullName');
     }
-    if (!personalInfo.phone) {
+    if (!personalInfo.phone || !_isPhone(personalInfo.phone)) {
       throw handleApplicationError('invalidPersonalInfoPhone');
     }
     if (!personalInfo.birthDate || !_isBirthDate(personalInfo.birthDate)) {

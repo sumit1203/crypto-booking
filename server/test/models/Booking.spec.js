@@ -276,7 +276,7 @@ describe('Booking model', () => {
       it('Should throw and error if an invalid phone is given', () => {
         const booking = new Booking(validBookingDB);
         booking.bookingHash = 'someHash';
-        const invalidPersonalInfo = { ...validBookingWithEthPrice.personalInfo, phone: 'invalidPhone' };
+        const invalidPersonalInfo = { ...validBookingWithEthPrice.personalInfo, phone: '1234' };
         try {
           booking.encryptPersonalInfo(invalidPersonalInfo, booking.bookingHash);
         } catch (e) {
