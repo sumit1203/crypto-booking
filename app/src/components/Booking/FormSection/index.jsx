@@ -126,7 +126,7 @@ class FormSection extends React.Component {
     const {txs} = await response.json()
     this.setState({
       instructions: txs[1] || txs[0],
-      lifInstructions: !!txs[1] && tx[0]
+      lifInstructions: !!txs[1] && txs[0]
     })
   }
 
