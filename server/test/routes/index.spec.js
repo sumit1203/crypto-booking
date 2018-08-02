@@ -7,12 +7,14 @@ const sinon = require('sinon');
 const sgMail = require('@sendgrid/mail');
 const { SERVER_PORT } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
+const { setCryptoIndex, getCryptoIndex } = require('../../src/services/crypto');
 const {
   turnOffRecaptcha,
   turnOnRecaptcha,
 } = require('../../src/middlewares/recaptcha');
 
 const { validBooking, validLifBooking, validBookingWithEthPrice } = require('../utils/test-data');
+
 const apiUrl = `http://localhost:${SERVER_PORT}/api`;
 let server;
 let BookingModel;
@@ -37,6 +39,7 @@ describe('Booking API', () => {
     throttling.turnOnThrottling();
   });
   beforeEach(function () {
+    setCryptoIndex(0);
     throttling.turnOffThrottling();
     sandbox.stub(sgMail, 'send')
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
@@ -132,9 +135,10 @@ describe('Booking API', () => {
 
   describe('GET /api/booking/:bookingHash', () => {
     it('Should read a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
-      const booking = await request({ url: `${apiUrl}/booking/${dbBooking.bookingHash}`, method: 'GET', json: true });
+      const index = 0;
+      const booking = await request({ url: `${apiUrl}/booking/${dbBooking.bookingHash}?index=${index}`, method: 'GET', json: true });
       expect(booking).to.have.property('_id');
       expect(booking).to.have.property('bookingHash');
       expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
@@ -162,7 +166,7 @@ describe('Booking API', () => {
 
   describe('POST /api/booking/emailInfo', () => {
     it('Should read a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const body = { bookingHash: dbBooking.bookingHash };
       const response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
@@ -180,7 +184,7 @@ describe('Booking API', () => {
     });
     it('should respond with 429 when throttling limit is exceeded', async () => {
       throttling.turnOnThrottling();
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const body = { bookingHash: dbBooking.bookingHash };
       let response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
@@ -201,7 +205,7 @@ describe('Booking API', () => {
 
   describe('DELETE /api/booking/:id', () => {
     it('Should delete a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'DELETE', json: true });
       const dbReadBooking = await BookingModel.findById(booking.id).exec();

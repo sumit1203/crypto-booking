@@ -41,7 +41,7 @@ router.post(`${bookingUrl}`, recaptchaMiddleware, async (req, res, next) => {
 
 router.get(`${bookingUrl}/:bookingHash`, async (req, res, next) => {
   try {
-    const booking = await readBooking({ bookingHash: req.params.bookingHash });
+    const booking = await readBooking({ bookingHash: req.params.bookingHash }, parseInt(req.query.index));
     if (!booking) return next();
     res.json(booking);
   } catch (e) {
@@ -56,7 +56,7 @@ router.post(`${bookingUrl}/emailInfo`, createThrottlingInstance({
   max: 3, // Start blocking after 3 requests
 }), async (req, res, next) => {
   try {
-    await sendBookingInfoByEmail(req.body.bookingHash);
+    await sendBookingInfoByEmail(req.body.bookingHash, parseInt(req.body.index));
     res.json({ status: 'ok' });
   } catch (e) {
     return next(e);

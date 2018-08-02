@@ -13,6 +13,7 @@ const {
   changesEmailSentBooking,
   sendBookingInfoByEmail } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
+const { setCryptoIndex } = require('../../src/services/crypto');
 
 after(() => {
   mongoose.connection.close();
@@ -24,6 +25,7 @@ describe('Booking controller', () => {
     sandbox = sinon.createSandbox();
   });
   beforeEach(() => {
+    setCryptoIndex(0);
     sandbox.stub(sgMail, 'send')
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
   });
@@ -35,7 +37,7 @@ describe('Booking controller', () => {
   });
 
   it('Should create a valid booking', async function () {
-    const { booking, offerSignature } = await createBooking(validBooking);
+    const { booking, offerSignature, index, privateKey } = await createBooking(validBooking);
     expect(booking).to.have.property('bookingHash');
     expect(booking.bookingHash).to.be.a('string');
     expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
@@ -54,6 +56,8 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('changesEmailSent');
     expect(booking).to.have.property('guestCount', validBooking.guestCount);
     expect(offerSignature).to.not.be.an('undefined');
+    expect(index).to.be.an('number');
+    expect(privateKey).to.be.an('string');
   });
 
   it('Should throw an error on creating an invalid booking', async () => {
@@ -77,7 +81,7 @@ describe('Booking controller', () => {
   });
 
   it('Should read a booking using id', async () => {
-    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     const booking = await readBooking({ id: dbBooking._id });
     expect(booking).to.have.property('_id');
@@ -98,9 +102,9 @@ describe('Booking controller', () => {
   });
 
   it('Should read a booking using bookingHash', async () => {
-    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    const booking = await readBooking({ bookingHash: dbBooking.bookingHash });
+    const booking = await readBooking({ bookingHash: dbBooking.bookingHash }, 0);
     expect(booking).to.have.property('_id');
     expect(booking).to.have.property('bookingHash');
     expect(booking.bookingHash).to.be.a('string');
@@ -125,21 +129,21 @@ describe('Booking controller', () => {
     expect(booking).to.be.equal(null);
   });
   it('Should set confirmationEmailSent as true', async () => {
-    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     const booking = await confirmationEmailSentBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', true);
     expect(booking).to.have.property('changesEmailSent');
   });
   it('Should set changesEmailSent as true', async () => {
-    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     const { changesEmailSent } = await dbBooking.save();
     const booking = await changesEmailSentBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking.changesEmailSent).to.be.at.least(changesEmailSent);
   });
   it('Should send an email information', async () => {
-    const dbBooking = BookingModel.generate(validBookingWithEthPrice);
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     await sendBookingInfoByEmail(dbBooking.bookingHash);
   });
