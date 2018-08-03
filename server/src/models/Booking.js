@@ -30,6 +30,10 @@ const Booking = new Schema({
   },
   guestEthAddress: {
     type: String,
+    validate: {
+      validator: (guestEthAddress) => web3.utils.isAddress(guestEthAddress),
+      message: 'guestEthAddressChecksum',
+    },
     required: [true, 'noGuestEthAddress'],
   },
   roomType: {
