@@ -26,6 +26,7 @@ function _isPhone (phone) {
 const Booking = new Schema({
   bookingHash: {
     type: String,
+    unique: true,
     required: [true, 'noBookingHash'],
   },
   guestEthAddress: {
@@ -115,7 +116,7 @@ const Booking = new Schema({
 });
 
 Booking.method({
-  encryptPersonalInfo: function (personalInfo, bookingHash) {
+  encryptPersonalInfo: function (personalInfo, privateKey) {
     if (typeof personalInfo !== 'object') {
       throw handleApplicationError('invalidPersonalInfo');
     }
@@ -131,18 +132,18 @@ Booking.method({
     if (!personalInfo.birthDate || !_isBirthDate(personalInfo.birthDate)) {
       throw handleApplicationError('invalidPersonalInfoBirthDate');
     }
-    if (!bookingHash) {
-      throw handleApplicationError('noBookingHash');
+    if (!privateKey) {
+      throw handleApplicationError('noPrivateKey');
     }
     personalInfo = JSON.stringify(personalInfo);
     const hexEncoded = web3.utils.stringToHex(personalInfo);
 
-    this.encryptedPersonalInfo = encrypt(hexEncoded, bookingHash).toString();
+    this.encryptedPersonalInfo = encrypt(hexEncoded, privateKey).toString();
   },
-  decryptPersonalInfo: function (bookingHash) {
+  decryptPersonalInfo: function (privateKey) {
     let encodedPersonalInfo;
     try {
-      encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, bookingHash);
+      encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, privateKey);
     } catch (e) {
       encodedPersonalInfo = null;
     }
@@ -155,10 +156,6 @@ Booking.method({
     } catch (e) {
       return {};
     }
-  },
-  generateBookingHash: function () {
-    const randomCode = Math.floor((1 + Math.random()) * 10000);
-    this.bookingHash = web3.utils.sha3(`${randomCode}${Date.now()}`);
   },
   generatePaymentAmount: function (cryptoPrice) {
     if (typeof cryptoPrice !== 'number') {
@@ -189,7 +186,7 @@ Booking.method({
 // Error Handler
 Booking.post('save', function (error, doc, next) {
   if (error.name === 'MongoError' && error.code === 11000) {
-    return handleApplicationError('duplicateBooking');
+    return next(handleApplicationError('duplicateBooking'));
   }
   if (!error.errors) {
     return next(error);
@@ -205,12 +202,11 @@ Booking.post('save', function (error, doc, next) {
   }
 });
 
-Booking.statics.generate = function (data) {
+Booking.statics.generate = function (data, privateKey) {
   const { personalInfo, cryptoPrice, ...rest } = data;
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
-  booking.generateBookingHash();
-  booking.encryptPersonalInfo(personalInfo, booking.bookingHash);
+  booking.encryptPersonalInfo(personalInfo, privateKey);
   booking.generatePaymentAmount(cryptoPrice);
   return booking;
 };

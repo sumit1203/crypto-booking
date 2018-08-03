@@ -9,8 +9,10 @@ const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
 const routes = require('./routes');
+const { initializeCryptoIndex } = require('./controllers/Booking');
 const { checkEtherumUpdates } = require('./services/ethereum-listener');
 
+initializeCryptoIndex();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());

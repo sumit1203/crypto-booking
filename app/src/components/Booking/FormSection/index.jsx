@@ -155,10 +155,9 @@ class FormSection extends React.Component {
         alert(response.long)
         return
       }
-      const {txs} = await response
+      const {txs, booking} = response
       this.setState({
-        instructions: txs[1] || txs[0],
-        lifInstructions: !!txs[1] && txs[0]
+        instructions: {txs, booking},
       })
     }catch (e) {
       console.error(e)
@@ -172,12 +171,8 @@ class FormSection extends React.Component {
   render () {
     const {from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone} = this.state
     const {selectedRoom, roomTypes} = this.props
-    // TODO we should show lifInstructions if they exist
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
-    if (instructions) return <CheckEmail onClose={this.onCloseModal}
-                                         paymentAmount={instructions.value}
-                                         contract={instructions.to}
-                                         offerSignature={instructions.data}/>
+    if (instructions) return <CheckEmail onClose={this.onCloseModal} instructions={instructions}/>
     return (
       <RoomBooking
         from={from}

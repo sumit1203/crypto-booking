@@ -4,7 +4,24 @@ const { fetchPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
+const { generateKeyPair, getKeyPair, setCryptoIndex } = require('../services/crypto');
 const { FROM_EMAIL } = require('../config');
+
+async function _generateBooking (data) {
+  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
+  data.bookingHash = publicKey;
+  try {
+    const bookingModel = BookingModel.generate(data, privateKey);
+    await bookingModel.save();
+    return { bookingModel, privateKey, bookingIndex };
+  } catch (e) {
+    if (e.code !== '#duplicateBooking') {
+      throw e;
+    }
+    return _generateBooking(data);
+  }
+}
+
 /**
   * Creates a new Booking in the db and returns an instance of Booking
   * @param {Object} {publicKey, guestEthAddress, payment, personalInfo}
@@ -12,9 +29,8 @@ const { FROM_EMAIL } = require('../config');
   */
 async function createBooking (data) {
   data.cryptoPrice = await fetchPrice(data.paymentType);
-  const bookingModel = BookingModel.generate(data);
-  await bookingModel.save();
-  const booking = _prepareForExport(bookingModel, bookingModel.bookingHash);
+  const { bookingModel, bookingIndex, privateKey } = await _generateBooking(data);
+  const booking = _prepareForExport(bookingModel, privateKey);
   booking.weiPerNight = bookingModel.getWeiPerNight(data.cryptoPrice);
   const { signatureData, offerSignature } = await signOffer(booking, await readKey());
 
@@ -22,12 +38,14 @@ async function createBooking (data) {
     booking,
     offerSignature,
     signatureData,
+    bookingIndex,
+    privateKey,
   };
 }
 
-function _prepareForExport (bookingModel, bookingHash) {
+function _prepareForExport (bookingModel, privateKey) {
   const booking = bookingModel.toObject();
-  booking.personalInfo = bookingModel.decryptPersonalInfo(bookingHash);
+  booking.personalInfo = bookingModel.decryptPersonalInfo(privateKey);
   return booking;
 }
 
@@ -36,7 +54,7 @@ function _prepareForExport (bookingModel, bookingHash) {
   * @param {Object} {id: <Booking_id>}
   * @return {Booking || null}
   */
-async function readBooking (filter) {
+async function readBooking (filter, index) {
   if (mongoose.Types.ObjectId.isValid(filter.id)) {
     const bookingModel = await BookingModel.findById(filter.id).exec();
     if (!bookingModel) return null;
@@ -45,7 +63,8 @@ async function readBooking (filter) {
   if (filter.bookingHash) {
     const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
     if (!bookingModel) return null;
-    return _prepareForExport(bookingModel, filter.bookingHash);
+    const { privateKey } = getKeyPair(filter.bookingHash, index);
+    return _prepareForExport(bookingModel, privateKey);
   }
   return null;
 }
@@ -69,8 +88,8 @@ async function changesEmailSentBooking (id) {
   return bookingModel.save();
 }
 
-async function sendBookingInfoByEmail (bookingHash) {
-  const booking = await readBooking({ bookingHash });
+async function sendBookingInfoByEmail (bookingHash, index) {
+  const booking = await readBooking({ bookingHash }, index);
   if (!booking) {
     throw handleApplicationError('sendBookingInfoFail');
   }
@@ -81,6 +100,11 @@ async function sendBookingInfoByEmail (bookingHash) {
   });
 }
 
+async function initializeCryptoIndex () {
+  const totalBookings = await BookingModel.countDocuments().exec();
+  setCryptoIndex(totalBookings);
+}
+
 module.exports = {
   readBooking,
   createBooking,
@@ -88,4 +112,5 @@ module.exports = {
   confirmationEmailSentBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail,
+  initializeCryptoIndex,
 };

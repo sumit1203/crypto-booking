@@ -1,26 +1,43 @@
 import React from 'react'
+import $ from 'jquery'
+import EmailSentModal from './EmailSentModal'
 import { SIGNER_API } from '../../config'
 
 export default class MyBookingSection extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      bookingHash: '',
+      bookingIndex: ''
+    }
+  }
 
-  onChange = (e) => {
+  onHashChange = (e) => {
     this.setState({bookingHash: e.target.value})
+  }
+
+  onIndexChange = (e) => {
+    this.setState({bookingIndex: e.target.value})
   }
 
   onSubmit = async (e) => {
     // TODO check this when server can handle this request
     e.preventDefault()
     try {
-      const {bookingHash} = this.state
-      const data = {bookingHash}
-      const response = await fetch(SIGNER_API + '/booking/emailInfo', {
+      const {bookingHash, bookingIndex} = this.state
+      const data = {bookingHash, bookingIndex}
+      const response = await (await fetch(SIGNER_API + '/booking/emailInfo', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json'
         }
-      })
-      if (response.status > 400) console.error(response.statusText || response.status)
+      })).json()
+      if (response.status > 400) {
+        console.error(response.code)
+        alert(response.long || response.short)
+      }
+      $('#emailSentModal').modal('show')
     } catch (e) {
       console.error(e)
     }
@@ -41,7 +58,17 @@ export default class MyBookingSection extends React.Component {
                          id="userBookingHash"
                          placeholder="Booking hash"
                          autoComplete="off"
-                         onChange={this.onChange}
+                         onChange={this.onHashChange}
+                         type="text"
+                         required/>
+                </div>
+                <div className="form-group text-left">
+                  <label htmlFor="userBookingIndex"> <b>Booking index</b> </label>
+                  <input className="form-control form-control-lg mb-2"
+                         id="userBookingIndex"
+                         placeholder="Booking Index"
+                         autoComplete="off"
+                         onChange={this.onIndexChange}
                          type="text"
                          required/>
                 </div>
@@ -50,6 +77,7 @@ export default class MyBookingSection extends React.Component {
             </div>
           </div>
         </div>
+        <EmailSentModal/>
       </article>
     )
   }

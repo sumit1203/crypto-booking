@@ -133,7 +133,7 @@ export default class RoomBooking extends React.Component {
                     <div className="col text-left">
                       <label htmlFor="fullName"> <b>Full Name</b> </label>
                       <input className="form-control form-control-lg mb-1" id="fullName" autoComplete="off" type="text" onChange={onFullNameChange} required/>
-                      <label htmlFor="birthDate"> <b>Birth Dat</b>e </label>
+                      <label htmlFor="birthDate"> <b>Birth Date</b> </label>
                       <input className="form-control form-control-lg" id="birthDate" autoComplete="off" type="date" onChange={onBirthDateChange} required/>
                     </div>
                     <div className="col text-left">
