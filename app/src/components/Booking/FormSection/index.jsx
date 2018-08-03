@@ -2,14 +2,14 @@ import React, { Fragment } from 'react'
 import $ from 'jquery'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
+
+import { roomType } from '../propTypes'
+
 import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
-import Alert from '../../Alert'
 import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
-
-import { roomType } from '../propTypes'
 
 function _formatDate (date) {
   const d = new Date(date)
@@ -30,11 +30,11 @@ class FormSection extends React.Component {
     this.state = {
       paymentType: 'eth',
       from: '2018-09-06',
-      to: '',
+      to: null,
       fullName: null,
       birthDate: null,
-      email: '',
-      phone: '+',
+      email: null,
+      phone: null,
       instructions: null,
       toDateMin: '2018-09-07',
       fromDateMax: '2018-09-09',
@@ -64,21 +64,11 @@ class FormSection extends React.Component {
 
   onFromDateChange = (e) => {
     const from = e.target.value
-    if (!from) return
-    const {to} = this.state
-    const fromDate = new Date(from)
-    const toDate = new Date(to)
-    if (fromDate.getUTCDate() < 6 || fromDate.getUTCDate() >= toDate.getUTCDate()) return
     this.setState({from, toDateMin: this._addDay(from, 1)}, this.computePrice)
   }
 
   onToDateChange = (e) => {
     const to = e.target.value
-    if (!to) return
-    const {from} = this.state
-    const toDate = new Date(to)
-    const fromDate = new Date(from)
-    if (toDate.getUTCDate() <= fromDate.getUTCDate() || toDate.getUTCDate() > 10) return
     this.setState({to, fromDateMax: this._addDay(to, -1)}, this.computePrice)
   }
   onFullNameChange = (e) => {
@@ -88,14 +78,10 @@ class FormSection extends React.Component {
     this.setState({birthDate: e.target.value})
   }
   onEmailChange = (e) => {
-    const email = e.target.value
-    this.setState({email})
+    this.setState({email: e.target.value})
   }
   onPhoneChange = (e) => {
-    const phone = e.target.value
-    const regexp = /^\+/
-    if (!regexp.test(phone)) return
-    this.setState({phone})
+    this.setState({phone: e.target.value})
   }
 
   onGuestCountChange = (e) => {
@@ -152,6 +138,7 @@ class FormSection extends React.Component {
       guestEthAddress,
       personalInfo: {fullName, birthDate, phone, email}
     }
+
     try {
       const response = await (await fetch(SIGNER_API + '/api/booking', {
         method: 'POST',
