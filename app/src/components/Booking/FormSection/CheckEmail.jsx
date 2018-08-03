@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import $ from 'jquery'
 import PropTypes from 'prop-types'
-import CopyInput from '../../CopyInput'
+import Transaction, {transactionType} from '../../Transaction'
 
 class CheckEmail extends React.Component {
   componentDidMount () {
@@ -52,19 +52,8 @@ const LifBody = ({txs}) => (
   </Fragment>
 )
 
-const Transaction = ({to, gas, data, value}) => (
-  <div className="p-1">
-    <div><b>To:</b> <CopyInput className="font--alt" value={to} readOnly/></div>
-    {!!value && <div><b>Amount:</b> <CopyInput className="font--alt" value={value} readOnly/></div>}
-    <div><b>Recommended Gas:</b> <CopyInput className="font--alt" value={gas} readOnly/></div>
-    <div>
-      <b>Data:</b> <CopyInput className="font--alt" value={data} readOnly/>
-    </div>
-  </div>
-)
-
 const instructionsType = PropTypes.shape({
-  txs: PropTypes.arrayOf(PropTypes.object),
+  txs: PropTypes.arrayOf(PropTypes.shape(transactionType)),
   booking: PropTypes.object
 })
 
