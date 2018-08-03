@@ -1,5 +1,6 @@
 const { resolve, join } = require('path');
 const webpack = require('webpack');
+const git = require('git-rev');
 const packageJson = require('../package');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -26,10 +27,6 @@ const cleanOptions = {
 const plugins = [
   new webpack.EnvironmentPlugin(),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
-  new HtmlWebpackPlugin({
-    template: join('src', 'index.html'),
-    meta: {version: packageJson.version}
-  }),
   new webpack.NamedModulesPlugin(),
 ];
 
@@ -61,4 +58,16 @@ if (isProduction) {
   );
 }
 
-module.exports = plugins;
+
+module.exports = new Promise((resolve) => {
+  git.short(function (commit) {
+    const htmlPlugin = new HtmlWebpackPlugin({
+      template: join('src', 'index.html'),
+      meta: {
+        version: packageJson.version,
+        'git-rev': commit
+      }
+    })
+    resolve([...plugins, htmlPlugin])
+  })
+});
