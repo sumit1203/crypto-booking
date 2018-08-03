@@ -72,6 +72,17 @@ describe('Booking API', () => {
         }
       });
     });
+    it('Should thorw with invalid guest ETH address', async () => {
+      try {
+        await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body: { ...validBooking, guestEthAddress: '0x9876545678' } });
+        throw new Error('should not be called');
+      } catch (e) {
+        expect(e).to.have.property('error');
+        expect(e.error).to.have.property('code', '#guestEthAddressChecksum');
+        const sendFake = sandbox.getFakes()[0];
+        expect(sendFake).to.have.property('calledOnce', false);
+      }
+    });
     it('Should create a valid ETH booking', async () => {
       const body = validBooking;
       const { booking, txs, bookingIndex } = await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
