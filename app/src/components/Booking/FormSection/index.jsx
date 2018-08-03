@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
-
-import { roomType } from '../propTypes'
-
 import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
 import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
+
+import { roomType } from '../propTypes'
 
 function _formatDate (date) {
   const d = new Date(date)
@@ -29,11 +28,11 @@ class FormSection extends React.Component {
     this.state = {
       paymentType: 'eth',
       from: '2018-09-06',
-      to: null,
+      to: '',
       fullName: null,
       birthDate: null,
-      email: null,
-      phone: null,
+      email: '',
+      phone: '+',
       instructions: null,
       toDateMin: '2018-09-07',
       fromDateMax: '2018-09-09',
@@ -62,11 +61,21 @@ class FormSection extends React.Component {
 
   onFromDateChange = (e) => {
     const from = e.target.value
+    if (!from) return
+    const {to} = this.state
+    const fromDate = new Date(from)
+    const toDate = new Date(to)
+    if (fromDate.getUTCDate() < 6 || fromDate.getUTCDate() >= toDate.getUTCDate()) return
     this.setState({from, toDateMin: this._addDay(from, 1)}, this.computePrice)
   }
 
   onToDateChange = (e) => {
     const to = e.target.value
+    if (!to) return
+    const {from} = this.state
+    const toDate = new Date(to)
+    const fromDate = new Date(from)
+    if (toDate.getUTCDate() <= fromDate.getUTCDate() || toDate.getUTCDate() > 10) return
     this.setState({to, fromDateMax: this._addDay(to, -1)}, this.computePrice)
   }
   onFullNameChange = (e) => {
@@ -76,10 +85,14 @@ class FormSection extends React.Component {
     this.setState({birthDate: e.target.value})
   }
   onEmailChange = (e) => {
-    this.setState({email: e.target.value})
+    const email = e.target.value
+    this.setState({email})
   }
   onPhoneChange = (e) => {
-    this.setState({phone: e.target.value})
+    const phone = e.target.value
+    const regexp = /^\+/
+    if (!regexp.test(phone)) return
+    this.setState({phone})
   }
 
   onGuestCountChange = (e) => {
@@ -129,18 +142,27 @@ class FormSection extends React.Component {
       guestEthAddress,
       personalInfo: {fullName, birthDate, phone, email}
     }
-    const response = await fetch(SIGNER_API + '/api/booking', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
+    try {
+      const response = await (await fetch(SIGNER_API + '/api/booking', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })).json()
+      if (response.status >= 400) {
+        console.error(response)
+        alert(response.long)
+        return
       }
-    })
-    const {txs} = await response.json()
-    this.setState({
-      instructions: txs[1] || txs[0],
-      lifInstructions: !!txs[1] && txs[0]
-    })
+      const {txs} = await response
+      this.setState({
+        instructions: txs[1] || txs[0],
+        lifInstructions: !!txs[1] && txs[0]
+      })
+    }catch (e) {
+      console.error(e)
+    }
   }
 
   onCloseModal = () => {
@@ -148,7 +170,7 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const {from, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount} = this.state
+    const {from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone} = this.state
     const {selectedRoom, roomTypes} = this.props
     // TODO we should show lifInstructions if they exist
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
@@ -159,11 +181,14 @@ class FormSection extends React.Component {
     return (
       <RoomBooking
         from={from}
+        to={to}
         roomTypes={roomTypes}
         selectedRoom={selectedRoom}
         toDateMin={toDateMin}
         fromDateMax={fromDateMax}
         price={price}
+        email={email}
+        phone={phone}
         paymentType={paymentType}
         onPaymentTypeChange={this.onPaymentTypeChange}
         guestCount={guestCount}

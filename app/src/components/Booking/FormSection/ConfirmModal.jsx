@@ -15,6 +15,14 @@ class ConfirmModal extends React.Component {
     }
   }
 
+  componentDidMount() {
+    $('#modalConfirm').modal('show')
+    $('#modalConfirm').on('hidden.bs.modal', () => {
+      this.props.onClose()
+    })
+    if (this.reCaptchaRef) this.reCaptchaRef.reset()
+  }
+
   onAddressChange = (e) => {
     this.setState({guestEthAddress: e.target.value})
   }
@@ -29,6 +37,10 @@ class ConfirmModal extends React.Component {
 
   onCaptchaChange = (value) => {
     this.setState({captchaToken: value})
+  }
+
+  setReCaptchaRef = ref => {
+    this.reCaptchaRef = ref
   }
 
   render () {
@@ -110,7 +122,7 @@ class ConfirmModal extends React.Component {
                     </div>
                   </div>
                 </div>
-                <ReCAPTCHA sitekey={CAPTCHA_SITE_KEY} theme='light' onChange={this.onCaptchaChange}/>
+                <ReCAPTCHA ref={this.setReCaptchaRef} sitekey={CAPTCHA_SITE_KEY} theme='light' onChange={this.onCaptchaChange}/>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-dismiss="modal">Cancel</button>
@@ -128,7 +140,9 @@ ConfirmModal.propTypes = {
   price: PropTypes.number,
   onSubmit: PropTypes.func.isRequired,
   paymentType: PropTypes.string.isRequired,
-  onPaymentTypeChange: PropTypes.func.isRequired
+  onPaymentTypeChange: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+
 }
 
 export default ConfirmModal
