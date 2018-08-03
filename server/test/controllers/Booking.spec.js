@@ -9,11 +9,12 @@ const BookingModel = mongoose.model('Booking');
 const {
   createBooking,
   readBooking,
-  confirmationEmailSentBooking,
+  confirmBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { setCryptoIndex } = require('../../src/services/crypto');
+const { BOOKING_STATUS } = require('../../src/constants');
 
 after(() => {
   mongoose.connection.close();
@@ -147,8 +148,9 @@ describe('Booking controller', () => {
   it('Should set confirmationEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    const booking = await confirmationEmailSentBooking(dbBooking._id);
+    const booking = await confirmBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', true);
+    expect(booking).to.have.property('status', BOOKING_STATUS.approved);
     expect(booking).to.have.property('changesEmailSent');
   });
   it('Should set changesEmailSent as true', async () => {

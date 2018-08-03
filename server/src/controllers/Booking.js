@@ -76,10 +76,9 @@ async function deleteBooking (filter) {
   return null;
 }
 
-async function confirmationEmailSentBooking (id) {
+async function confirmBooking (id) {
   const bookingModel = await BookingModel.findById(id).exec();
-  bookingModel.confirmationEmailSent = true;
-  return bookingModel.save();
+  return bookingModel.setAsApproved();
 }
 
 async function changesEmailSentBooking (id) {
@@ -109,7 +108,7 @@ module.exports = {
   readBooking,
   createBooking,
   deleteBooking,
-  confirmationEmailSentBooking,
+  confirmBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail,
   initializeCryptoIndex,
