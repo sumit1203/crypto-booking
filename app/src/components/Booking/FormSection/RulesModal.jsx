@@ -16,22 +16,16 @@ const RulesModal = () => (
 
           <ul>
             <li>
-              <b>Check in time</b>: 12-00
+              <b>Check in time</b>: 10am
             </li>
             <li>
-              <b>Check out time</b>: 11-00
+              <b>Check out time</b>: 11am
             </li>
             <li>
-              <b>Breakfast</b>: included
+              <b>Breakfast</b>: Not included
             </li>
             <li>
-              <b>Pets allowed</b>: no
-            </li>
-            <li>
-              <b>Hotel phone</b>: +49 12 3234 654
-            </li>
-            <li>
-              <b>Hotel address</b>: Berlin, strasse ..
+              <b>No Smoking</b>
             </li>
           </ul>
         </div>
