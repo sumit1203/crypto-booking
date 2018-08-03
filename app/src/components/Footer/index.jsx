@@ -1,7 +1,7 @@
 import React from 'react';
 
-import logoEB from '../../img/content/logo-ethberlin.png';
-import logoI31 from '../../img/content/logo-hotel-i-31.jpg';
+import logoEB from '../../img/content/logo-ethberlin-bw.png';
+import logoI31 from '../../img/content/logo-hotel-i-31-bw.jpg';
 import logoWTmd from '../../../node_modules/windingtree-media-web/logo-variants/full-logo/svg/logo--white_white-text--md.svg';
 import logoWTsm from '../../../node_modules/windingtree-media-web/logo-variants/sign/svg/sign--white_white-text--sm.svg';
 
