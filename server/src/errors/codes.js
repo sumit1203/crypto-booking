@@ -46,6 +46,11 @@ module.exports = {
     short: 'No guest Ethereum address provided.',
     long: 'The field guestEthAddress is required.',
   },
+  guestEthAddressChecksum: {
+    status: 409,
+    short: 'Ivaliid guest Ethereum address.',
+    long: 'Guest Ethereum address provided have not passed checksum.',
+  },
   minAmount: {
     status: 409,
     short: 'Invalid minimun amount of payment.',
