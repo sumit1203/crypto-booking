@@ -32,7 +32,7 @@ const settings = plugins.then(plugins => (
     mode: process.env.NODE_ENV
   }
 )).catch(e => {
-  console.log(e)
+  console.error(e)
 })
 module.exports = settings;
 
