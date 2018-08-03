@@ -10,6 +10,7 @@ module.exports = {
   OWNER_PRIVATE_KEY: process.env.OWNER_PRIVATE_KEY,
   OWNER_ADDRESS: process.env.OWNER_ADDRESS,
   WEB3_PROVIDER: process.env.WEB3_PROVIDER,
+  MASTER_KEY: process.env.MASTER_KEY,
   GIT_REV: process.env.GIT_REV,
   RECAPTCHA_SECRET: process.env.RECAPTCHA_SECRET,
   IS_RECAPTCHA_ON: true,

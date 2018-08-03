@@ -1,32 +1,75 @@
 import React from 'react'
+import $ from 'jquery'
+import EmailSentModal from './EmailSentModal'
+import DeleteInstructionsModal from './DeleteInstructionsModal'
 import { SIGNER_API } from '../../config'
 
 export default class MyBookingSection extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      bookingHash: '',
+      bookingIndex: '',
+      cancelTx: null
+    }
+  }
 
-  onChange = (e) => {
+  onHashChange = (e) => {
     this.setState({bookingHash: e.target.value})
+  }
+
+  onIndexChange = (e) => {
+    this.setState({bookingIndex: e.target.value})
   }
 
   onSubmit = async (e) => {
     // TODO check this when server can handle this request
     e.preventDefault()
     try {
-      const {bookingHash} = this.state
-      const data = {bookingHash}
-      const response = await fetch(SIGNER_API + '/booking/emailInfo', {
+      const {bookingHash, bookingIndex} = this.state
+      const data = {bookingHash, bookingIndex}
+      const response = await (await fetch(SIGNER_API + '/booking/emailInfo', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json'
         }
-      })
-      if (response.status > 400) console.error(response.statusText || response.status)
+      })).json()
+      if (response.status > 400) {
+        console.error(response.code)
+        alert(response.long || response.short)
+      }
+      $('#emailSentModal').modal('show')
     } catch (e) {
       console.error(e)
     }
   }
 
+   onCancel = async() => {
+    try {
+      const {bookingHash, bookingIndex} = this.state
+      const data = {bookingHash, bookingIndex}
+      // TODO check this when server can handle this request
+      const response = await (await fetch(SIGNER_API + '/booking', {
+        method: 'DELETE',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })).json()
+      if (response.status > 400) {
+        console.error(response.code)
+        alert(response.long || response.short)
+      }
+      this.setState({cancelTx: {to:'123123123123', data:'123123123123',value: '33333', gas: '123123'}}, () => $('#deleteInstructionsModal').modal('show'))
+    } catch (e) {
+      console.error(e)
+    }
+
+  }
+
   render () {
+    const {cancelTx} = this.state
     return (
       <article className="py-3 py-md-5 border-bottom" id="my-booking">
         <div className="container">
@@ -41,15 +84,30 @@ export default class MyBookingSection extends React.Component {
                          id="userBookingHash"
                          placeholder="Booking hash"
                          autoComplete="off"
-                         onChange={this.onChange}
+                         onChange={this.onHashChange}
                          type="text"
                          required/>
                 </div>
-                <button className="btn btn-primary btn-lg" type="submit"> Retrieve booking data</button>
+                <div className="form-group text-left">
+                  <label htmlFor="userBookingIndex"> <b>Booking index</b> </label>
+                  <input className="form-control form-control-lg mb-2"
+                         id="userBookingIndex"
+                         placeholder="Booking Index"
+                         autoComplete="off"
+                         onChange={this.onIndexChange}
+                         type="text"
+                         required/>
+                </div>
+                <div className="d-flex justify-content-around">
+                  <button className="btn btn-primary btn-lg" type="submit"> Retrieve booking data</button>
+                  <button className="btn btn-danger btn-lg" type="button" onClick={this.onCancel}> Cancel my Booking</button>
+                </div>
               </form>
             </div>
           </div>
         </div>
+        <EmailSentModal/>
+        {cancelTx && <DeleteInstructionsModal {...cancelTx}/>}
       </article>
     )
   }
