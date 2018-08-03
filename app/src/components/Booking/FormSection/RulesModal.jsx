@@ -22,7 +22,7 @@ const RulesModal = () => (
               <b>Check out time</b>: 11am
             </li>
             <li>
-              <b>Breakfast</b>: included
+              <b>Breakfast</b>: not included
             </li>
             <li>
               <b>No Smoking</b>
