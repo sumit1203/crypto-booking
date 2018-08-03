@@ -26,6 +26,7 @@ function _isPhone (phone) {
 const Booking = new Schema({
   bookingHash: {
     type: String,
+    unique: true,
     required: [true, 'noBookingHash'],
   },
   guestEthAddress: {
@@ -185,7 +186,7 @@ Booking.method({
 // Error Handler
 Booking.post('save', function (error, doc, next) {
   if (error.name === 'MongoError' && error.code === 11000) {
-    return handleApplicationError('duplicateBooking');
+    return next(handleApplicationError('duplicateBooking'));
   }
   if (!error.errors) {
     return next(error);

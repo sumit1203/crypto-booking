@@ -60,6 +60,13 @@ describe('Booking controller', () => {
     expect(privateKey).to.be.an('string');
   });
 
+  it('Should create a new booking with a diffent public key if already exists', async function () {
+    const { booking: booking1 } = await createBooking(validBooking);
+    setCryptoIndex(0);
+    const { booking: booking2 } = await createBooking(validBooking);
+    expect(booking1.bookingHash).to.be.not.equal(booking2.bookingHash);
+  });
+
   it('Should throw an error on creating an invalid booking', async () => {
     // TODO the actual error must be roomType, payment is NaN because of roomtype is invalid
     // Mongoose is returning the 2 errors but we are triggering only the first one
