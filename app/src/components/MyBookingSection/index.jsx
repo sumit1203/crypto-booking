@@ -1,6 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import EmailSentModal from './EmailSentModal'
+import DeleteInstructionsModal from './DeleteInstructionsModal'
 import { SIGNER_API } from '../../config'
 
 export default class MyBookingSection extends React.Component {
@@ -8,7 +9,8 @@ export default class MyBookingSection extends React.Component {
     super(props)
     this.state = {
       bookingHash: '',
-      bookingIndex: ''
+      bookingIndex: '',
+      cancelTx: null
     }
   }
 
@@ -43,7 +45,31 @@ export default class MyBookingSection extends React.Component {
     }
   }
 
+   onCancel = async() => {
+    try {
+      const {bookingHash, bookingIndex} = this.state
+      const data = {bookingHash, bookingIndex}
+      // TODO check this when server can handle this request
+      const response = await (await fetch(SIGNER_API + '/booking', {
+        method: 'DELETE',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })).json()
+      if (response.status > 400) {
+        console.error(response.code)
+        alert(response.long || response.short)
+      }
+      this.setState({cancelTx: {to:'123123123123', data:'123123123123',value: '33333', gas: '123123'}}, () => $('#deleteInstructionsModal').modal('show'))
+    } catch (e) {
+      console.error(e)
+    }
+
+  }
+
   render () {
+    const {cancelTx} = this.state
     return (
       <article className="py-3 py-md-5 border-bottom" id="my-booking">
         <div className="container">
@@ -72,12 +98,16 @@ export default class MyBookingSection extends React.Component {
                          type="text"
                          required/>
                 </div>
-                <button className="btn btn-primary btn-lg" type="submit"> Retrieve booking data</button>
+                <div className="d-flex justify-content-around">
+                  <button className="btn btn-primary btn-lg" type="submit"> Retrieve booking data</button>
+                  <button className="btn btn-danger btn-lg" type="button" onClick={this.onCancel}> Cancel my Booking</button>
+                </div>
               </form>
             </div>
           </div>
         </div>
         <EmailSentModal/>
+        {cancelTx && <DeleteInstructionsModal {...cancelTx}/>}
       </article>
     )
   }
