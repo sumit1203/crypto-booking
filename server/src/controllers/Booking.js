@@ -6,6 +6,22 @@ const { sendBookingInfo } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
 const { generateKeyPair, getKeyPair, setCryptoIndex } = require('../services/crypto');
 const { FROM_EMAIL } = require('../config');
+
+async function _generateBooking (data) {
+  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
+  data.bookingHash = publicKey;
+  try {
+    const bookingModel = BookingModel.generate(data, privateKey);
+    await bookingModel.save();
+    return { bookingModel, privateKey, bookingIndex };
+  } catch (e) {
+    if (e.code !== '#duplicateBooking') {
+      throw e;
+    }
+    return _generateBooking(data);
+  }
+}
+
 /**
   * Creates a new Booking in the db and returns an instance of Booking
   * @param {Object} {publicKey, guestEthAddress, payment, personalInfo}
@@ -13,10 +29,7 @@ const { FROM_EMAIL } = require('../config');
   */
 async function createBooking (data) {
   data.cryptoPrice = await fetchPrice(data.paymentType);
-  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
-  data.bookingHash = publicKey;
-  const bookingModel = BookingModel.generate(data, privateKey);
-  await bookingModel.save();
+  const { bookingModel, bookingIndex, privateKey } = await _generateBooking(data);
   const booking = _prepareForExport(bookingModel, privateKey);
   booking.weiPerNight = bookingModel.getWeiPerNight(data.cryptoPrice);
   const { signatureData, offerSignature } = await signOffer(booking, await readKey());
