@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import $ from 'jquery'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
 
@@ -38,7 +39,8 @@ class FormSection extends React.Component {
       toDateMin: '2018-09-07',
       fromDateMax: '2018-09-09',
       price: null,
-      guestCount: '1'
+      guestCount: '1',
+      errorMessage: 'asdasdasdasdasd'
     }
   }
 
@@ -105,6 +107,13 @@ class FormSection extends React.Component {
     this.setState({price: total})
   }
 
+  showErrorAlert = () => {
+    $('.alert').addClass('show')
+    setTimeout(() => {
+      $('.alert').removeClass('show')
+    }, 3000)
+  }
+
   onSubmit = async ({guestEthAddress, captchaToken}) => {
     const {from, to, fullName, birthDate, email, phone, guestCount, paymentType} = this.state
     const {id: roomType} = this.props.selectedRoom
@@ -129,18 +138,27 @@ class FormSection extends React.Component {
       guestEthAddress,
       personalInfo: {fullName, birthDate, phone, email}
     }
-    const response = await fetch(SIGNER_API + '/api/booking', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
+
+    try {
+      const response = await (await fetch(SIGNER_API + '/api/booking', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })).json()
+      if (response.status >= 400) {
+        console.error(response)
+        this.setState({errorMessage: response.long}, this.showErrorAlert)
+        return
       }
-    })
-    const {txs} = await response.json()
-    this.setState({
-      instructions: txs[1] || txs[0],
-      lifInstructions: !!txs[1] && txs[0]
-    })
+      const {txs, booking} = response
+      this.setState({
+        instructions: {txs, booking},
+      })
+    }catch (e) {
+      console.error(e)
+    }
   }
 
   onCloseModal = () => {
@@ -148,34 +166,41 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const {from, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount} = this.state
+    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone} = this.state
     const {selectedRoom, roomTypes} = this.props
-    // TODO we should show lifInstructions if they exist
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
-    if (instructions) return <CheckEmail onClose={this.onCloseModal}
-                                         paymentAmount={instructions.value}
-                                         contract={instructions.to}
-                                         offerSignature={instructions.data}/>
+    if (instructions) return <CheckEmail onClose={this.onCloseModal} instructions={instructions}/>
     return (
-      <RoomBooking
-        from={from}
-        roomTypes={roomTypes}
-        selectedRoom={selectedRoom}
-        toDateMin={toDateMin}
-        fromDateMax={fromDateMax}
-        price={price}
-        paymentType={paymentType}
-        onPaymentTypeChange={this.onPaymentTypeChange}
-        guestCount={guestCount}
-        onGuestCountChange={this.onGuestCountChange}
-        onRoomTypeChange={this.onRoomTypeChange}
-        onFromDateChange={this.onFromDateChange}
-        onToDateChange={this.onToDateChange}
-        onFullNameChange={this.onFullNameChange}
-        onBirthDateChange={this.onBirthDateChange}
-        onEmailChange={this.onEmailChange}
-        onPhoneChange={this.onPhoneChange}
-        onSubmit={this.onSubmit}/>
+      <Fragment>
+          <div className="alert fade fixed-top alert-danger text-center" role="alert">
+            <span>{errorMessage}</span>
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <RoomBooking
+          from={from}
+          to={to}
+          roomTypes={roomTypes}
+          selectedRoom={selectedRoom}
+          toDateMin={toDateMin}
+          fromDateMax={fromDateMax}
+          price={price}
+          email={email}
+          phone={phone}
+          paymentType={paymentType}
+          onPaymentTypeChange={this.onPaymentTypeChange}
+          guestCount={guestCount}
+          onGuestCountChange={this.onGuestCountChange}
+          onRoomTypeChange={this.onRoomTypeChange}
+          onFromDateChange={this.onFromDateChange}
+          onToDateChange={this.onToDateChange}
+          onFullNameChange={this.onFullNameChange}
+          onBirthDateChange={this.onBirthDateChange}
+          onEmailChange={this.onEmailChange}
+          onPhoneChange={this.onPhoneChange}
+          onSubmit={this.onSubmit}/>
+      </Fragment>
     )
   }
 }

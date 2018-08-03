@@ -16,21 +16,11 @@ export default class Hotel extends React.Component {
 
           <div className="row flex-column flex-md-row align-items-center">
             <div className="col-md-8 mb-1 mb-md-0">
-              <h2 className="mb-1 text-white">
-                {/* REFERENCE: Boutique Hotel i31 Berlin */}
-                {name}
-              </h2>
-              <p className="text-white mb-1">
-                {/* REFERENCE: Das 4 Sterne Superior Hotel in Berlin Mitte –  nur 1 km vom Berliner Hauptbahnhof entfernt – begrüßt
-                seine Gäste in einem modernen Design und trotzdem mit dem lässigen Gefühl Berlins. */}
-                {description}
-              </p>
+              <h2 className="mb-1 text-white"> {name} </h2>
+              <p className="text-white mb-1"> {description} </p>
               <p className="text-white">
                 <b>For more info please check</b>
-                  <a className="ml-1 btn btn-sm btn-secondary" href={url}>&nbsp;
-                    {/* REFERENCE: https://www.hotel-i31.de/ */}
-                    {url}
-                  </a>
+                <a className="ml-1 btn btn-sm btn-secondary" href={url}>&nbsp;{url}</a>
               </p>
           </div>
           <div className="col-md-4 text-center">

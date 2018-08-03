@@ -12,14 +12,14 @@ class RoomsSection extends React.Component {
         <div className="container">
           <div className="row">
             <div className="col">
-              <h2 className="text-white my-2 h3">
+              <h2 className="text-white my-2 h3 pt-2 pt-lg-0">
                 Rooms for hackers with discount
               </h2>
             </div>
           </div>
-          <div className="row">
+          <div className="card-group">
             {roomTypes.map(room => (
-              <div key={room.id} className="col-sm-6">
+              <div key={room.id} className="card mx-1">
                 <Room room={room} onSelect={onRoomTypeChange}/>
               </div>
             ))

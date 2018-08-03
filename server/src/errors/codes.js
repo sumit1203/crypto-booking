@@ -6,6 +6,21 @@ module.exports = {
     short: 'Something went wrong.',
     long: 'Something went wrong. Please contact the administrator.',
   },
+  noMasterKey: {
+    status: 500,
+    short: 'No master key provided',
+    long: 'A master key must be setted for encrypt info',
+  },
+  noBookingHash: {
+    status: 500,
+    short: 'No booking hash provided',
+    long: 'A booking hash must be generated for encrypt/decrypt info',
+  },
+  noPrivateKey: {
+    status: 500,
+    short: 'No private key provided',
+    long: 'A private key must be provided for encrypt/decrypt info',
+  },
   invalidEncryptedPersonalInfo: {
     status: 500,
     short: 'Invalid encrypted personal information.',
@@ -30,6 +45,11 @@ module.exports = {
     status: 409,
     short: 'No guest Ethereum address provided.',
     long: 'The field guestEthAddress is required.',
+  },
+  guestEthAddressChecksum: {
+    status: 409,
+    short: 'Invalid guest Ethereum address.',
+    long: 'Guest Ethereum address provided have not passed checksum.',
   },
   minAmount: {
     status: 409,
