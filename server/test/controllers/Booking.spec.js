@@ -71,6 +71,15 @@ describe('Booking controller', () => {
     }
   });
 
+  it('Should throw with invalid guestEthAddress', async () => {
+    try {
+      await createBooking(Object.assign({}, validBooking, { guestEthAddress: '0x8765445678' }));
+      throw Error('should not be called');
+    } catch (e) {
+      expect(e.code).to.be.equal('#guestEthAddressChecksum');
+    }
+  });
+
   it('Should throw an error on creating an invalid booking', async () => {
     try {
       await createBooking(Object.assign({}, validBooking, { to: 0 }));
