@@ -321,14 +321,14 @@ describe('Booking model', () => {
     });
     describe('setAsCanceled', async () => {
       it('Should set the booking as canceled', async () => {
-        const booking = new Booking(validBookingDB);
+        const booking = new Booking({ ...validBookingDB, ...{ bookingHash: `${validBookingDB.bookingHash}${Date.now()}` } });
         await booking.setAsCanceled();
         expect(booking).to.have.property('status', BOOKING_STATUS.canceled);
       });
     });
     describe('setAsApproved', async () => {
       it('Should set the booking as approved', async () => {
-        const booking = new Booking(validBookingDB);
+        const booking = new Booking({ ...validBookingDB, ...{ bookingHash: `${validBookingDB.bookingHash}${Date.now()}` } });
         await booking.setAsApproved();
         expect(booking).to.have.property('status', BOOKING_STATUS.approved);
       });
