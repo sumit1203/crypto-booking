@@ -42,14 +42,14 @@ const sendBookingChange = async (event, secretCode, to) => {
   }
 };
 
-const sendInstructions = async ({ txs, booking, offerSignature, signatureData, contractAddress }, { from, to, subject }) => {
+const sendInstructions = async ({ txs, booking, offerSignature, signatureData, contractAddress, bookingIndex }, { from, to, subject }) => {
   try {
     const nights = [];
     for (let i = booking.from; i <= booking.to; i++) {
       nights.push(i);
     }
 
-    const html = instructionsBody(booking.paymentType, txs);
+    const html = instructionsBody(booking.paymentType, txs, booking.bookingHash, bookingIndex);
 
     return sgMail.send({ from, to, subject, html });
   } catch (e) {
