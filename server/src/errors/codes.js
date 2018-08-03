@@ -9,17 +9,17 @@ module.exports = {
   noMasterKey: {
     status: 500,
     short: 'No master key provided',
-    long: 'A master key must be setted for encrypt info'
+    long: 'A master key must be setted for encrypt info',
   },
   noBookingHash: {
     status: 500,
     short: 'No booking hash provided',
-    long: 'A booking hash must be generated for encrypt/decrypt info'
+    long: 'A booking hash must be generated for encrypt/decrypt info',
   },
   noPrivateKey: {
     status: 500,
     short: 'No private key provided',
-    long: 'A private key must be provided for encrypt/decrypt info'
+    long: 'A private key must be provided for encrypt/decrypt info',
   },
   invalidEncryptedPersonalInfo: {
     status: 500,
@@ -48,7 +48,7 @@ module.exports = {
   },
   guestEthAddressChecksum: {
     status: 409,
-    short: 'Ivaliid guest Ethereum address.',
+    short: 'Invalid guest Ethereum address.',
     long: 'Guest Ethereum address provided have not passed checksum.',
   },
   minAmount: {
