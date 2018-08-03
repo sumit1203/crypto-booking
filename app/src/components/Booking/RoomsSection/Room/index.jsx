@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
+import ImageSlider from '../../../ImageSlider'
 import { roomType } from '../../propTypes'
 
 class Room extends React.Component {
@@ -8,11 +9,12 @@ class Room extends React.Component {
     const {room, onSelect} = this.props
     onSelect(room)
   }
+
   render () {
-    const {images, name, price, description, isFull} = this.props.room
+    const {images, name, price, description, isFull, id} = this.props.room
     return (
       <React.Fragment>
-        <img className="card-img-top" src={images[0]} alt="Card image cap"/>
+        <ImageSlider id={id} images={images}/>
         <div className="card-img-overlay text-right d-block d-lg-none">
             <h5 className="h6 lead badge badge-warning">
               <b className="font--alt">{price * 0.8} €</b><br/> Night

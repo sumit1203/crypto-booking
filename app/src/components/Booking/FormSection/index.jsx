@@ -6,7 +6,6 @@ import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
-import Alert from '../../Alert'
 import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
 
 import { roomType } from '../propTypes'
