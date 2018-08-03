@@ -61,14 +61,14 @@ class Room extends React.Component {
             How to pay<br className="d-none d-md-block"/> with Lif?
           </a>
           <p className="w-100  text-light" style={{marginTop: 35, position: 'absolute'}}>
-            <small>
-                { !isFull &&
+            { isFull &&
+              <small>
                 <em>
                   <i className="mdi mdi-28px mdi-information-outline"/>&nbsp;
                   Sorry, <span className="d-inline d-sm-none d-lg-inline">these </span> rooms <span className="d-inline d-sm-none d-lg-inline">these are </span> fully booked
                 </em>
-                }
-            </small>
+              </small>
+            }
           </p>
         </div>
       </React.Fragment>

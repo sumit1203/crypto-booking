@@ -31,6 +31,12 @@ describe('Booking model', () => {
       basicValidationExpect(validation, 'guestEthAddress');
       expect(validation.errors.guestEthAddress).to.have.property('message', 'noGuestEthAddress');
     });
+    it('Should throw an error if guestEthAddress is not checksum', () => {
+      const booking = new Booking({ ...validBookingDB, guestEthAddress: '0x98789' });
+      const validation = booking.validateSync();
+      basicValidationExpect(validation, 'guestEthAddress');
+      expect(validation.errors.guestEthAddress).to.have.property('message', 'guestEthAddressChecksum');
+    });
   });
 
   describe('payment amount', () => {

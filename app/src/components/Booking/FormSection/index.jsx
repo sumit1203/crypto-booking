@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import $ from 'jquery'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
 import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
+import Alert from '../../Alert'
 import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
 
 import { roomType } from '../propTypes'
@@ -37,7 +39,8 @@ class FormSection extends React.Component {
       toDateMin: '2018-09-07',
       fromDateMax: '2018-09-09',
       price: null,
-      guestCount: '1'
+      guestCount: '1',
+      errorMessage: 'asdasdasdasdasd'
     }
   }
 
@@ -118,6 +121,13 @@ class FormSection extends React.Component {
     this.setState({price: total})
   }
 
+  showErrorAlert = () => {
+    $('.alert').addClass('show')
+    setTimeout(() => {
+      $('.alert').removeClass('show')
+    }, 3000)
+  }
+
   onSubmit = async ({guestEthAddress, captchaToken}) => {
     const {from, to, fullName, birthDate, email, phone, guestCount, paymentType} = this.state
     const {id: roomType} = this.props.selectedRoom
@@ -152,7 +162,7 @@ class FormSection extends React.Component {
       })).json()
       if (response.status >= 400) {
         console.error(response)
-        alert(response.long)
+        this.setState({errorMessage: response.long}, this.showErrorAlert)
         return
       }
       const {txs, booking} = response
@@ -169,33 +179,41 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const {from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone} = this.state
+    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone} = this.state
     const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
     if (instructions) return <CheckEmail onClose={this.onCloseModal} instructions={instructions}/>
     return (
-      <RoomBooking
-        from={from}
-        to={to}
-        roomTypes={roomTypes}
-        selectedRoom={selectedRoom}
-        toDateMin={toDateMin}
-        fromDateMax={fromDateMax}
-        price={price}
-        email={email}
-        phone={phone}
-        paymentType={paymentType}
-        onPaymentTypeChange={this.onPaymentTypeChange}
-        guestCount={guestCount}
-        onGuestCountChange={this.onGuestCountChange}
-        onRoomTypeChange={this.onRoomTypeChange}
-        onFromDateChange={this.onFromDateChange}
-        onToDateChange={this.onToDateChange}
-        onFullNameChange={this.onFullNameChange}
-        onBirthDateChange={this.onBirthDateChange}
-        onEmailChange={this.onEmailChange}
-        onPhoneChange={this.onPhoneChange}
-        onSubmit={this.onSubmit}/>
+      <Fragment>
+          <div className="alert fade fixed-top alert-danger text-center" role="alert">
+            <span>{errorMessage}</span>
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <RoomBooking
+          from={from}
+          to={to}
+          roomTypes={roomTypes}
+          selectedRoom={selectedRoom}
+          toDateMin={toDateMin}
+          fromDateMax={fromDateMax}
+          price={price}
+          email={email}
+          phone={phone}
+          paymentType={paymentType}
+          onPaymentTypeChange={this.onPaymentTypeChange}
+          guestCount={guestCount}
+          onGuestCountChange={this.onGuestCountChange}
+          onRoomTypeChange={this.onRoomTypeChange}
+          onFromDateChange={this.onFromDateChange}
+          onToDateChange={this.onToDateChange}
+          onFullNameChange={this.onFullNameChange}
+          onBirthDateChange={this.onBirthDateChange}
+          onEmailChange={this.onEmailChange}
+          onPhoneChange={this.onPhoneChange}
+          onSubmit={this.onSubmit}/>
+      </Fragment>
     )
   }
 }
