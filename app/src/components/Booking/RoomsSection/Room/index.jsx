@@ -49,8 +49,8 @@ class Room extends React.Component {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" id={"ammenities-tab-"+roomIndex} data-toggle="tab" href={"#ammenities-"+roomIndex} role="tab" aria-controls="ammenities" aria-selected="false">
-                Ammenities
+              <a className="nav-link" id={"amenities-tab-"+roomIndex} data-toggle="tab" href={"#amenities-"+roomIndex} role="tab" aria-controls="amenities" aria-selected="false">
+                amenities
               </a>
             </li>
           </ul>
@@ -61,7 +61,7 @@ class Room extends React.Component {
                 {description}
               </p>
             </div>
-            <div className="tab-pane fade" id={"ammenities-"+roomIndex} role="tabpanel" aria-labelledby="ammenities-tab">
+            <div className="tab-pane fade" id={"amenities-"+roomIndex} role="tabpanel" aria-labelledby="amenities-tab">
               <ul className="pl-1">
                 { amenities.map((item, index) => (
                   <li key={index+item}>
