@@ -162,14 +162,14 @@ Booking.method({
     }
   },
   generatePaymentAmount: function (cryptoPrice) {
-    if (typeof cryptoPrice !== 'number') {
-      throw handleApplicationError('invalidCryptoPrice');
-    }
     this.paymentAmount = this.getWeiPerNight(cryptoPrice);
   },
   getWeiPerNight: function (cryptoPrice) {
     if (typeof cryptoPrice !== 'number') {
       throw handleApplicationError('invalidCryptoPrice');
+    }
+    if (BOOKING_ROOM_TYPES.indexOf(this.roomType) === -1) {
+      throw handleApplicationError('invalidRoomType');
     }
     return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / cryptoPrice).toString(), 'ether');
   },
@@ -198,10 +198,6 @@ Booking.statics.generate = function (data, privateKey) {
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
   booking.encryptPersonalInfo(personalInfo, privateKey);
-  const error = booking.validateSync();
-  if (error) {
-    throw _errorHandler(error);
-  }
   booking.generatePaymentAmount(cryptoPrice);
   return booking;
 };
