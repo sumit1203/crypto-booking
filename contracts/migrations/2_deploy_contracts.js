@@ -10,7 +10,7 @@ module.exports = function (deployer, network, accounts) {
     .then(function (bookingContract) {
       console.log('BookingPoC address:', bookingContract.address);
       bookingContract.addRooms('pure-cozy', 5);
-      bookingContract.addRooms('white-brown-confort', 5);
+      bookingContract.addRooms('white-brown-comfort', 5);
     });
   }
 
