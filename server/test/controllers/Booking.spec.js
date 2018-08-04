@@ -71,13 +71,11 @@ describe('Booking controller', () => {
   });
 
   it('Should throw an error on creating an invalid booking', async () => {
-    // TODO the actual error must be roomType, payment is NaN because of roomtype is invalid
-    // Mongoose is returning the 2 errors but we are triggering only the first one
     try {
       await createBooking(Object.assign({}, validBooking, { roomType: -1 }));
       throw Error('should not be called');
     } catch (e) {
-      expect(e.code).to.be.equal('#invalidPaymentAmount');
+      expect(e.code).to.be.equal('#invalidRoomType');
     }
   });
 
