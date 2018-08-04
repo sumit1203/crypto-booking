@@ -152,6 +152,7 @@ class FormSection extends React.Component {
       personalInfo: {fullName, birthDate, phone, email}
     }
     try {
+      this.setState({loading: true})
       const response = await (await fetch(SIGNER_API + '/api/booking', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -161,16 +162,17 @@ class FormSection extends React.Component {
       })).json()
       if (response.status >= 400) {
         console.error(response)
-        this.setState({errorMessage: response.long}, this.showErrorAlert)
+        this.setState({errorMessage: response.long, loading: false}, this.showErrorAlert)
         return
       }
       const {txs, booking} = response
       this.setState({
-        instructions: {txs, booking},
+        instructions: {txs, booking}
       })
     }catch (e) {
       console.error(e)
     }
+    this.setState({loading: false})
   }
 
   onCloseModal = () => {
@@ -178,10 +180,11 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone} = this.state
+    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone, loading} = this.state
     const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
-    if (instructions) return <CheckEmail onClose={this.onCloseModal} instructions={instructions}/>
+
+    if (instructions || loading) return <CheckEmail onClose={this.onCloseModal} instructions={instructions} loading={loading}/>
     return (
       <Fragment>
           <div className="alert fade fixed-top alert-danger text-center" role="alert">
