@@ -78,7 +78,7 @@ export default class RoomBooking extends React.Component {
                         </div>
                         <div className="form-check">
                           <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2" onChange={onGuestCountChange} checked={guestCount === '2'}/>
-                          <label className="form-check-label" for="guests2">&nbsp; Two people
+                          <label className="form-check-label" htmlFor="guests2">&nbsp; Two people
                           </label>
                         </div>
                       </div>

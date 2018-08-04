@@ -17,7 +17,7 @@ class RoomsSection extends React.Component {
               </h2>
             </div>
           </div>
-          <div className="card-group">
+          <div className="card-deck">
             {roomTypes.map(room => (
               <div key={room.id} className="card mx-1">
                 <Room room={room} onSelect={onRoomTypeChange}/>
