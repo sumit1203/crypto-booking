@@ -25,23 +25,36 @@ const getInstructionsTxs = async (paymentType, signatureData, offerSignature, ni
         BOOKING_POC_ADDRESS, totalWei
       ).encodeABI(),
       value: 0,
-      gas: 50000, // await lifToken.methods.approve( BOOKING_POC_ADDRESS, totalWei).estimateGas(),
+      gas: 100000, // await lifToken.methods.approve( BOOKING_POC_ADDRESS, totalWei).estimateGas(),
+    });
+    txs.push({
+      to: BOOKING_POC_ADDRESS,
+      data: bookingPoc.methods.bookWithLif(
+        signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
+        signatureData.roomType, nights, signatureData.bookingHash
+      ).encodeABI(),
+      value: (paymentType === 'eth') ? totalWei : 0,
+      gas: 100000,
+      // gas: await bookingPoc.methods.bookWithEth(
+      //   signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
+      //   signatureData.roomType, nights, signatureData.bookingHash
+      // ).estimateGas(),
+    });
+  } else {
+    txs.push({
+      to: BOOKING_POC_ADDRESS,
+      data: bookingPoc.methods.bookWithEth(
+        signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
+        signatureData.roomType, nights, signatureData.bookingHash
+      ).encodeABI(),
+      value: (paymentType === 'eth') ? totalWei : 0,
+      gas: 100000,
+      // gas: await bookingPoc.methods.bookWithEth(
+      //   signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
+      //   signatureData.roomType, nights, signatureData.bookingHash
+      // ).estimateGas(),
     });
   }
-
-  txs.push({
-    to: BOOKING_POC_ADDRESS,
-    data: bookingPoc.methods.bookWithEth(
-      signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-      signatureData.roomType, nights, signatureData.bookingHash
-    ).encodeABI(),
-    value: (paymentType === 'eth') ? totalWei : 0,
-    gas: 50000,
-    // gas: await bookingPoc.methods.bookWithEth(
-    //   signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-    //   signatureData.roomType, nights, signatureData.bookingHash
-    // ).estimateGas(),
-  });
 
   return txs;
 };
