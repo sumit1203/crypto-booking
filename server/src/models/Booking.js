@@ -183,6 +183,7 @@ Booking.method({
   },
   setAsApproved: function () {
     this.status = BOOKING_STATUS.approved;
+    this.confirmationEmailSent = true;
     return this.save();
   },
 });
