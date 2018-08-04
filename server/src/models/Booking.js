@@ -165,7 +165,7 @@ Booking.method({
     if (typeof cryptoPrice !== 'number') {
       throw handleApplicationError('invalidCryptoPrice');
     }
-    this.paymentAmount = ((ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / cryptoPrice) + 0.0001).toFixed(4);
+    this.paymentAmount = this.getWeiPerNight(cryptoPrice);
   },
   getWeiPerNight: function (cryptoPrice) {
     if (typeof cryptoPrice !== 'number') {
