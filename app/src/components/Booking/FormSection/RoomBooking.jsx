@@ -1,15 +1,30 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import PriceLabel from './PriceLabel';
 import ConfirmModal from './ConfirmModal';
 import RulesModal from './RulesModal';
 import { roomType } from '../propTypes';
 import $ from 'jquery'
+import {validateEmail, validatePhone} from './inputValidations'
 
 export default class RoomBooking extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isValidEmail: true,
+      isValidPhone: true,
+      isConfirmModalOpen: false
+    }
+
+  }
   showRulesModal = (e) => {
     e.preventDefault()
     $('#modalRules').modal('show')
+  }
+
+  onConfirmModalClose = () => {
+    this.setState({isConfirmModalOpen: false})
   }
 
   handleConfirmModalOnSubmit = (data) => {
@@ -18,7 +33,11 @@ export default class RoomBooking extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    $('#modalConfirm').modal('show')
+    const {email, phone} = this.props
+    const isValidEmail = validateEmail(email)
+    const isValidPhone = validatePhone(phone)
+    this.setState({isValidEmail, isValidPhone})
+    if (isValidEmail && isValidPhone) this.setState({isConfirmModalOpen: true})
   }
 
   renderRoomTypes = () => {
@@ -39,6 +58,9 @@ export default class RoomBooking extends React.Component {
     const {
       toDateMin,
       fromDateMax,
+      phone,
+      to,
+      email,
       from,
       price,
       paymentType,
@@ -52,7 +74,7 @@ export default class RoomBooking extends React.Component {
       onEmailChange,
       onPhoneChange,
     } = this.props;
-
+    const {isValidEmail, isValidPhone, isConfirmModalOpen} = this.state
     return (
       <article id='book-a-room' className="section-wrapper bg-light py-3 py-md-5">
         <div className="container">
@@ -72,12 +94,12 @@ export default class RoomBooking extends React.Component {
                       <i className="mdi mdi-account mdi-48px text-dark mr-1" style={{marginTop: -17}}/>
                       <div className="media-body">
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="guests" id="guests1" value='1' onChange={onGuestCountChange} checked={guestCount === '1'}/>
+                          <input className="form-check-input" type="radio" name="guests" id="guests1" value='1' onChange={onGuestCountChange} checked={guestCount === '1'} required/>
                           <label className="form-check-label" htmlFor="guests1">&nbsp; One person
                           </label>
                         </div>
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2" onChange={onGuestCountChange} checked={guestCount === '2'}/>
+                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2" onChange={onGuestCountChange} checked={guestCount === '2'} required/>
                           <label className="form-check-label" htmlFor="guests2">&nbsp; Two people
                           </label>
                         </div>
@@ -85,15 +107,12 @@ export default class RoomBooking extends React.Component {
                    </div>
                   </div>
                 </section>
-
                 {/*TODO: in case one of the options is unavailable use the class "disabled" and the attribute "disabled" on that item*/}
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Preferred room type </h5>
                   <div className="btn-group btn-group--switch w-100" role="group" aria-label="Room type">
                     {this.renderRoomTypes()}
                   </div>
-                  {/* NOTE: Change the messages depending on room availability */}
-                  {/* <p>* Only Tween rooms are available</p> */}
                 </section>
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Reservation date </h5>
@@ -102,7 +121,7 @@ export default class RoomBooking extends React.Component {
                       <input className="form-control form-control-lg" type="date" min="2018-09-06" max={fromDateMax} onChange={onFromDateChange} value={from} required/>
                     </div>
                     <div className=" col-12 col-sm-6">
-                      <input className="form-control form-control-lg" type="date" name="to" min={toDateMin} max="2018-09-10" onChange={onToDateChange} required/>
+                      <input className="form-control form-control-lg" type="date" name="to" min={toDateMin} max="2018-09-10" onChange={onToDateChange} value={to} required/>
                     </div>
                   </div>
                 </section>
@@ -117,9 +136,9 @@ export default class RoomBooking extends React.Component {
                     </div>
                     <div className="col text-left">
                       <label htmlFor="email"> <b>Email</b> </label>
-                      <input className="form-control form-control-lg mb-1" id="email" autoComplete="off" type="email" onChange={onEmailChange} required/>
+                      <input className={classnames('form-control', 'form-control-lg', 'mb-1', {'is-invalid': !isValidEmail})} id="email" autoComplete="off" type="email" onChange={onEmailChange} value={email} required/>
                       <label htmlFor="phone"> <b>Phone Number</b> </label>
-                      <input className="form-control form-control-lg" id="phone" autoComplete="off" type="tel" onChange={onPhoneChange} required/>
+                      <input className={classnames('form-control', 'form-control-lg', {'is-invalid': !isValidPhone})} id="phone" autoComplete="off" type="tel" onChange={onPhoneChange} value={phone} maxLength={14} required/>
                     </div>
                   </section>
                 </div>
@@ -135,8 +154,8 @@ export default class RoomBooking extends React.Component {
             </div>
           </div>
         </div>
-        <ConfirmModal onSubmit={this.handleConfirmModalOnSubmit} price={price}
-                      paymentType={paymentType} onPaymentTypeChange={onPaymentTypeChange}/>
+        {isConfirmModalOpen && <ConfirmModal onSubmit={this.handleConfirmModalOnSubmit} price={price} paymentType={paymentType}
+                                             onClose={this.onConfirmModalClose} onPaymentTypeChange={onPaymentTypeChange}/>}
         <RulesModal/>
       </article>
     );
@@ -146,7 +165,10 @@ export default class RoomBooking extends React.Component {
 RoomBooking.propTypes = {
   toDateMin: PropTypes.string.isRequired,
   fromDateMax: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
   selectedRoom: roomType,
   guestCount: PropTypes.string,
   price: PropTypes.number,
