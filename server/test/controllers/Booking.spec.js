@@ -13,7 +13,7 @@ const {
   changesEmailSentBooking,
   sendBookingInfoByEmail,
   checkBookingExpired,
-  cancelBooking,
+  getCancelBookingInstructions,
   updateRoom,
 } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
@@ -189,7 +189,7 @@ describe('Booking controller', () => {
   it('Should generate tx for cancel booking', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    const tx = await cancelBooking(dbBooking.bookingHash);
+    const tx = await getCancelBookingInstructions(dbBooking.bookingHash);
     expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
     expect(tx).to.have.property('data');
     expect(tx).to.have.property('value', 0);

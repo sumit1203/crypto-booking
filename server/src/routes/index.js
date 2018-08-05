@@ -1,5 +1,5 @@
 const express = require('express');
-const { createBooking, readBooking, cancelBooking, sendBookingInfoByEmail } = require('../controllers/Booking');
+const { createBooking, readBooking, getCancelBookingInstructions, sendBookingInfoByEmail } = require('../controllers/Booking');
 const {
   BOOKING_POC_ADDRESS,
   FROM_EMAIL,
@@ -67,7 +67,7 @@ router.post(`${bookingUrl}/emailInfo`, createThrottlingInstance({
 router.delete(`${bookingUrl}/:bookingHash`, async (req, res, next) => {
   try {
     const { bookingHash } = req.params;
-    const tx = await cancelBooking(bookingHash);
+    const tx = await getCancelBookingInstructions(bookingHash);
     res.status(200).json({ tx });
   } catch (e) {
     return next(e);

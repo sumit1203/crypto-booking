@@ -73,7 +73,7 @@ async function readBooking (filter, index) {
   return null;
 }
 
-async function cancelBooking (bookingHash) {
+async function getCancelBookingInstructions (bookingHash) {
   const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
   if (!bookingModel) {
     throw handleApplicationError('bookingNotFound');
@@ -125,7 +125,7 @@ const checkBookingExpired = async () => {
   });
 };
 
-const updateRoom = async (bookingHash, roomNumber) => {
+const updateRoom = async function (bookingHash, roomNumber) {
   const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
   bookingModel.roomNumber = roomNumber;
   return bookingModel.save();
@@ -134,7 +134,7 @@ const updateRoom = async (bookingHash, roomNumber) => {
 module.exports = {
   readBooking,
   createBooking,
-  cancelBooking,
+  getCancelBookingInstructions,
   confirmBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail,
