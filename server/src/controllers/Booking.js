@@ -114,6 +114,12 @@ const checkBookingExpired = async () => {
   });
 };
 
+const updateRoom = async (bookingHash, roomNumber) => {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
+  bookingModel.roomNumber = roomNumber;
+  return bookingModel.save();
+};
+
 module.exports = {
   readBooking,
   createBooking,
@@ -123,4 +129,5 @@ module.exports = {
   sendBookingInfoByEmail,
   initializeCryptoIndex,
   checkBookingExpired,
+  updateRoom,
 };
