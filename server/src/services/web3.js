@@ -18,6 +18,7 @@ const getInstructionsTxs = async (paymentType, signatureData, offerSignature, ni
   var txs = [];
   const totalNights = new web3.utils.BN(nights.length);
   const totalWei = (new web3.utils.BN(signatureData.weiPerNight)).mul(totalNights).toString();
+  let bookWith = bookingPoc.methods.bookWithEth;
   if (paymentType === 'lif') {
     txs.push({
       to: LIF_TOKEN_ADDRESS,
@@ -27,34 +28,21 @@ const getInstructionsTxs = async (paymentType, signatureData, offerSignature, ni
       value: 0,
       gas: 100000, // await lifToken.methods.approve( BOOKING_POC_ADDRESS, totalWei).estimateGas(),
     });
-    txs.push({
-      to: BOOKING_POC_ADDRESS,
-      data: bookingPoc.methods.bookWithLif(
-        signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-        signatureData.roomType, nights, signatureData.bookingHash
-      ).encodeABI(),
-      value: (paymentType === 'eth') ? totalWei : 0,
-      gas: 100000,
-      // gas: await bookingPoc.methods.bookWithEth(
-      //   signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-      //   signatureData.roomType, nights, signatureData.bookingHash
-      // ).estimateGas(),
-    });
-  } else {
-    txs.push({
-      to: BOOKING_POC_ADDRESS,
-      data: bookingPoc.methods.bookWithEth(
-        signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-        signatureData.roomType, nights, signatureData.bookingHash
-      ).encodeABI(),
-      value: (paymentType === 'eth') ? totalWei : 0,
-      gas: 100000,
-      // gas: await bookingPoc.methods.bookWithEth(
-      //   signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
-      //   signatureData.roomType, nights, signatureData.bookingHash
-      // ).estimateGas(),
-    });
+    bookWith = bookingPoc.methods.bookWithLif;
   }
+  txs.push({
+    to: BOOKING_POC_ADDRESS,
+    data: bookWith(
+      signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
+      signatureData.roomType, nights, signatureData.bookingHash
+    ).encodeABI(),
+    value: (paymentType === 'eth') ? totalWei : 0,
+    gas: 100000,
+    // gas: await bookingPoc.methods.bookWith(
+    //   signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
+    //   signatureData.roomType, nights, signatureData.bookingHash
+    // ).estimateGas(),
+  });
 
   return txs;
 };
