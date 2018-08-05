@@ -19,6 +19,7 @@ const {
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { setCryptoIndex } = require('../../src/services/crypto');
 const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
+const { BOOKING_POC_ADDRESS } = require('../../src/config');
 
 after(() => {
   mongoose.connection.close();
@@ -184,5 +185,14 @@ describe('Booking controller', () => {
     await updateRoom(dbBooking.bookingHash, ROOM_NUMBER);
     const updatedBooking = await readBooking({ bookingHash: dbBooking.bookingHash }, 0);
     expect(updatedBooking).to.have.property('roomNumber', ROOM_NUMBER);
+  });
+  it('Should generate tx for cancel booking', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    const tx = await cancelBooking(dbBooking.bookingHash);
+    expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
+    expect(tx).to.have.property('data');
+    expect(tx).to.have.property('value', 0);
+    expect(tx).to.have.property('gas');
   });
 });
