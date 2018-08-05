@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-import LogoEB from '../../img/content/logo-ethberlin.png'
+import LogoEB from '../../img/content/logo-ethberlin.png';
+import BackgroundLif from '../../img/style/lif-token-bg.svg';
 
 export default class HeroSection extends React.Component {
   render () {
@@ -10,7 +11,7 @@ export default class HeroSection extends React.Component {
           opacity: .6,
           position: 'absolute',
           top: '0', left: '0', bottom: '0', right: '0',
-          backgroundImage: 'url(https://windingtree.com/assets/img/banners/lif-token-bg.svg)',
+          backgroundImage: `url(${BackgroundLif})`,
           backgroundPosition: 'right center, left center',
           backgroundRepeat: 'no-repeat, no-repeat',
           backgroundSize: 'contain, auto',
