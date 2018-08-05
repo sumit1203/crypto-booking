@@ -5,8 +5,11 @@ const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
 const { generateKeyPair, getKeyPair, setCryptoIndex } = require('../services/crypto');
+const {
+  getCancelBookingTx,
+} = require('../services/web3');
 const { FROM_EMAIL } = require('../config');
-const { SIGNATURE_TIME_LIMIT } = require('../constants');
+const { SIGNATURE_TIME_LIMIT, BOOKING_PAYMENT_TYPES } = require('../constants');
 
 async function _generateBooking (data) {
   const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
@@ -70,11 +73,19 @@ async function readBooking (filter, index) {
   return null;
 }
 
-async function deleteBooking (filter) {
-  if (mongoose.Types.ObjectId.isValid(filter.id)) {
-    await BookingModel.deleteOne({ id: filter.id }).exec();
+async function cancelBooking (bookingHash) {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
+  if (!bookingModel) {
+    throw handleApplicationError('bookingNotFound');
   }
-  return null;
+  const { roomType, roomNumber, from, to, paymentType } = bookingModel;
+  const isEther = paymentType === BOOKING_PAYMENT_TYPES.eth;
+  const nights = [];
+  for (let i = from; i <= to; i++) {
+    nights.push(i);
+  }
+  const tx = getCancelBookingTx(roomType, nights, roomNumber, bookingHash, isEther);
+  return tx;
 }
 
 async function confirmBooking (id) {
@@ -123,7 +134,7 @@ const updateRoom = async (bookingHash, roomNumber) => {
 module.exports = {
   readBooking,
   createBooking,
-  deleteBooking,
+  cancelBooking,
   confirmBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail,
