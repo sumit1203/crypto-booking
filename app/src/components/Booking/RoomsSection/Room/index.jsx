@@ -11,7 +11,8 @@ class Room extends React.Component {
   }
 
   render () {
-    const {images, name, price, description, isFull, id} = this.props.room
+    const {images, name, price, description, isFull, amenities} = this.props.room;
+    const roomIndex = this.props.roomIndex;
     return (
       <React.Fragment>
         <ImageSlider id={id} images={images}/>
@@ -30,29 +31,59 @@ class Room extends React.Component {
           </h5>
             <div className="d-none d-lg-block">
               <div className="row align-items-center">
-                <div className="col-sm-12 col-md-8 h5">{name}</div>
+                <h4 className="col-sm-12 col-md-8">{name}</h4>
                 <div className="col-sm-12 col-md-4 text-md-right">
-                  <span className="h6 lead">
-                    <b className="font--alt">{price * 0.8} €</b> /Night
+                  <span className="h5 lead">
+                    <b className="font--alt">{price * 0.8}€</b><span className="text-muted">/Night</span>
                   </span>
                 </div>
               </div>
             </div>
           </header>
 
-          <hr className="my-1"/>
 
-          <p className="card-text">
-            {description}
-          </p>
+          <ul className="nav nav-tabs my-1" id="myTab" role="tablist" style={{position: 'relative'}}>
+            <li className="nav-item">
+              <a className="nav-link active" id={"description-tab-"+roomIndex} data-toggle="tab" href={"#description-"+roomIndex} role="tab" aria-controls="description" aria-selected="true">
+                Description
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" id={"amenities-tab-"+roomIndex} data-toggle="tab" href={"#amenities-"+roomIndex} role="tab" aria-controls="amenities" aria-selected="false">
+                amenities
+              </a>
+            </li>
+          </ul>
 
-          <p className="card-text mt-1 mb-0"> <b>Price in ETH</b>: {price}€/night </p>
-          <p className="card-text"> <b>Price in Lif</b>: {price * 0.8}€/night </p>
+          <div className="tab-content" id="tab-content">
+            <div className="tab-pane fade show active" id={"description-"+roomIndex} role="tabpanel" aria-labelledby="description-tab">
+              <p className="card-text text-left">
+                {description}
+              </p>
+            </div>
+            <div className="tab-pane fade" id={"amenities-"+roomIndex} role="tabpanel" aria-labelledby="amenities-tab">
+              <ul className="pl-1">
+                { amenities.map((item, index) => (
+                  <li key={index+item}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
         </div>
 
 
+          <div className="card-footer text-left bg-white">
+            <ul className="list-unstyled">
+              <li> <b>Price in ETH</b>: <span className="font--alt">{price}</span>€<span className="text-muted">/Night</span> </li>
+              <li> <b>Price in Lif</b>: <span className="font--alt">{price * 0.8}</span>€<span className="text-muted">/Night</span> </li>
+            </ul>
+          </div>
+
         <div className="card-footer text-left">
+
 
           <a href="#book-a-room" className={classnames('btn btn-secondary mb-1 mb-md-0',{'disabled': isFull})}
             style={isFull ? {textDecoration: 'line-through', opacity: 0.5}: {}}

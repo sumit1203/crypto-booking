@@ -113,8 +113,6 @@ export default class RoomBooking extends React.Component {
                   <div className="btn-group btn-group--switch w-100" role="group" aria-label="Room type">
                     {this.renderRoomTypes()}
                   </div>
-                  {/* NOTE: Change the messages depending on room availability */}
-                  {/* <p>* Only Tween rooms are available</p> */}
                 </section>
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Reservation date </h5>

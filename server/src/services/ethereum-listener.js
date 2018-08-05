@@ -1,5 +1,5 @@
 const { bookingPoc } = require('./web3');
-const { readBooking, changesEmailSentBooking, confirmationEmailSentBooking } = require('../controllers/Booking');
+const { readBooking, confirmBooking, confirmationEmailSentBooking } = require('../controllers/Booking');
 const { sendConfirmation, sendBookingChange } = require('./mail.js');
 const { STARTING_BLOCK } = require('../config');
 
@@ -26,7 +26,7 @@ const onBookingChange = async (event) => {
     return;
   }
   sendBookingChange(event, event.returnValues.bookingHash, booking.personalInfo.email);
-  changesEmailSentBooking(booking.id);
+  confirmBooking(booking.id);
 };
 
 const eventTypes = {
