@@ -14,6 +14,7 @@ const {
   sendBookingInfoByEmail,
   checkBookingExpired,
   getBookingIndex,
+  cancelBooking,
 } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { setCryptoIndex } = require('../../src/services/crypto');
@@ -183,5 +184,14 @@ describe('Booking controller', () => {
     const { booking } = await createBooking(validBooking);
     await createBooking(validBooking);
     expect(await getBookingIndex(booking._id.toString())).to.be.equal(1);
+  });
+  it('Should cancel the booking', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    await cancelBooking(dbBooking.id);
+    const updatedBooking = await readBooking({ id: dbBooking.id });
+    const sendFake = sandbox.getFakes()[0];
+    expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
+    expect(sendFake).to.have.property('calledOnce', true);
   });
 });
