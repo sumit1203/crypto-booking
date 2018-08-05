@@ -9,7 +9,7 @@ const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
 const routes = require('./routes');
-const { initializeCryptoIndex } = require('./controllers/Booking');
+const { initializeCryptoIndex, checkBookingExpired } = require('./controllers/Booking');
 const { checkEtherumUpdates } = require('./services/ethereum-listener');
 
 initializeCryptoIndex();
@@ -57,8 +57,10 @@ app.use((err, req, res, next) => {
 });
 
 const ethereunListenerCron = cron.schedule('* * * * *', checkEtherumUpdates);
+const expiredBookingCron = cron.schedule('*/5 * * * *', checkBookingExpired);
 
 module.exports = {
   app,
   ethereunListenerCron,
+  expiredBookingCron,
 };

@@ -23,8 +23,9 @@ before(async () => {
   BookingModel = mongoose.model('Booking');
 });
 after(async () => {
-  const { ethereunListenerCron } = require('../../src/app');
+  const { ethereunListenerCron, expiredBookingCron } = require('../../src/app');
   ethereunListenerCron.destroy();
+  expiredBookingCron.destroy();
   await server.close();
   await mongoose.connection.close();
 });
@@ -72,7 +73,7 @@ describe('Booking API', () => {
         }
       });
     });
-    it('Should thorw with invalid guest ETH address', async () => {
+    it('Should throw with invalid guest ETH address', async () => {
       try {
         await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body: { ...validBooking, guestEthAddress: '0x9876545678' } });
         throw new Error('should not be called');
@@ -141,7 +142,7 @@ describe('Booking API', () => {
         throw new Error('should not be called');
       } catch (e) {
         expect(e).to.have.property('error');
-        expect(e.error).to.have.property('code', '#invalidPaymentAmount');
+        expect(e.error).to.have.property('code', '#invalidRoomType');
       }
     });
   });

@@ -1,4 +1,4 @@
-const { BOOKING_STATUS } = require('../constants');
+const { BOOKING_STATUS, BOOKING_ROOM_TYPES } = require('../constants');
 
 module.exports = {
   genericError: {
@@ -140,6 +140,11 @@ module.exports = {
     status: 409,
     short: 'No room type provided.',
     long: 'The roomType is required.',
+  },
+  invalidRoomType: {
+    status: 409,
+    short: 'Invalid room type provided.',
+    long: `The roomType could be ${BOOKING_ROOM_TYPES.join(', ').toLowerCase()}.`,
   },
   noStatus: {
     status: 409,
