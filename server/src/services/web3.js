@@ -47,8 +47,16 @@ const getInstructionsTxs = async (paymentType, signatureData, offerSignature, ni
   return txs;
 };
 
+const getCancelBookingTx = (roomType, _nights, room, bookingHash, isEther) => ({
+  to: BOOKING_POC_ADDRESS,
+  data: bookingPoc.methods.cancelBooking(roomType, _nights, room, bookingHash, isEther).encodeABI(),
+  value: 0,
+  gas: 50000,
+});
+
 module.exports = {
   web3,
   bookingPoc,
   getInstructionsTxs,
+  getCancelBookingTx,
 };

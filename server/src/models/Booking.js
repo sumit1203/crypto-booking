@@ -117,6 +117,10 @@ const Booking = new Schema({
     },
     required: [true, 'noGuestCount'],
   },
+  roomNumber: {
+    type: Number,
+    default: null,
+  },
 });
 
 Booking.method({
