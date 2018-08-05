@@ -11,7 +11,7 @@ class Room extends React.Component {
   }
 
   render () {
-    const {images, name, price, description, isFull, amenities} = this.props.room;
+    const {images, name, price, description, isFull, amenities, id} = this.props.room;
     const roomIndex = this.props.roomIndex;
     return (
       <React.Fragment>
