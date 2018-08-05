@@ -6,6 +6,7 @@ const { sendBookingInfo } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
 const { generateKeyPair, getKeyPair, setCryptoIndex } = require('../services/crypto');
 const { FROM_EMAIL } = require('../config');
+const { SIGNATURE_TIME_LIMIT } = require('../constants');
 
 async function _generateBooking (data) {
   const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
@@ -76,10 +77,9 @@ async function deleteBooking (filter) {
   return null;
 }
 
-async function confirmationEmailSentBooking (id) {
+async function confirmBooking (id) {
   const bookingModel = await BookingModel.findById(id).exec();
-  bookingModel.confirmationEmailSent = true;
-  return bookingModel.save();
+  return bookingModel.setAsApproved();
 }
 
 async function changesEmailSentBooking (id) {
@@ -105,12 +105,22 @@ async function initializeCryptoIndex () {
   setCryptoIndex(totalBookings);
 }
 
+const checkBookingExpired = async () => {
+  const limit = Math.floor(Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60);
+  const bookings = await BookingModel.find({ signatureTimestamp: { $lt: limit } });
+  return bookings.map(async (booking) => {
+    await booking.setAsCanceled();
+    return booking._id;
+  });
+};
+
 module.exports = {
   readBooking,
   createBooking,
   deleteBooking,
-  confirmationEmailSentBooking,
+  confirmBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail,
   initializeCryptoIndex,
+  checkBookingExpired,
 };

@@ -9,11 +9,14 @@ const BookingModel = mongoose.model('Booking');
 const {
   createBooking,
   readBooking,
-  confirmationEmailSentBooking,
+  confirmBooking,
   changesEmailSentBooking,
-  sendBookingInfoByEmail } = require('../../src/controllers/Booking');
+  sendBookingInfoByEmail,
+  checkBookingExpired,
+} = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { setCryptoIndex } = require('../../src/services/crypto');
+const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 
 after(() => {
   mongoose.connection.close();
@@ -68,13 +71,11 @@ describe('Booking controller', () => {
   });
 
   it('Should throw an error on creating an invalid booking', async () => {
-    // TODO the actual error must be roomType, payment is NaN because of roomtype is invalid
-    // Mongoose is returning the 2 errors but we are triggering only the first one
     try {
       await createBooking(Object.assign({}, validBooking, { roomType: -1 }));
       throw Error('should not be called');
     } catch (e) {
-      expect(e.code).to.be.equal('#invalidPaymentAmount');
+      expect(e.code).to.be.equal('#invalidRoomType');
     }
   });
 
@@ -147,8 +148,9 @@ describe('Booking controller', () => {
   it('Should set confirmationEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    const booking = await confirmationEmailSentBooking(dbBooking._id);
+    const booking = await confirmBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', true);
+    expect(booking).to.have.property('status', BOOKING_STATUS.approved);
     expect(booking).to.have.property('changesEmailSent');
   });
   it('Should set changesEmailSent as true', async () => {
@@ -162,5 +164,15 @@ describe('Booking controller', () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     await sendBookingInfoByEmail(dbBooking.bookingHash);
+  });
+  it('Should set a booking as pending', async () => {
+    const dbBooking = BookingModel.generate({
+      ...validBookingWithEthPrice,
+      signatureTimestamp: Math.floor(Date.now() / 1000 - (SIGNATURE_TIME_LIMIT + 15) * 60),
+    }, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    const bookingsExpred = await checkBookingExpired();
+    const updatedBooking = await readBooking({ id: await bookingsExpred[0] });
+    expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
   });
 });
