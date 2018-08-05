@@ -1,5 +1,5 @@
 const { bookingPoc } = require('./web3');
-const { readBooking, confirmBooking, confirmationEmailSentBooking } = require('../controllers/Booking');
+const { readBooking, confirmBooking, confirmationEmailSentBooking, cancelBooking } = require('../controllers/Booking');
 const { sendConfirmation, sendBookingChange } = require('./mail.js');
 const { STARTING_BLOCK } = require('../config');
 
@@ -29,9 +29,22 @@ const onBookingChange = async (event) => {
   confirmBooking(booking.id);
 };
 
+async function onBookingCancel (args) {
+  const { event, blockNumber, returnValues: { bookingHash, newGuest } } = args;
+  const booking = await readBooking({ bookingHash });
+  if (!booking) {
+    return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
+  }
+  if (booking.guestEthAddress === newGuest) {
+    return;
+  }
+  cancelBooking(booking.id);
+}
+
 const eventTypes = {
   'BookingChanged': onBookingChange,
   'BookingDone': onBookingDone,
+  'BookingCanceled': onBookingCancel,
 };
 
 const checkEtherumUpdates = () => {
