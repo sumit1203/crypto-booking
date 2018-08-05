@@ -21,8 +21,9 @@ module.exports = function (deployer, network, accounts) {
   } else {
     deployer.deploy(LifTokenTest).then(function (lifToken) {
       console.log('LifTokenTest address:', lifToken.address);
-      for (var i = 0; i < 10; i++)
+      for (let i = 0; i < 10; i++) {
         lifToken.faucetLif({from: accounts[i]});
+      };
       deployBooking(lifToken.address);
     });
   }
