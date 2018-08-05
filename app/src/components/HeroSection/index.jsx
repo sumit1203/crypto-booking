@@ -7,7 +7,7 @@ export default class HeroSection extends React.Component {
   render () {
     return (
       <article className="bg--gradient" style={{position: 'relative'}}>
-        <div style={{
+        <div className="d-none d-sm-block" style={{
           opacity: .6,
           position: 'absolute',
           top: '0', left: '0', bottom: '0', right: '0',
