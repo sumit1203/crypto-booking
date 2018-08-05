@@ -4,6 +4,7 @@ const {
   instructionsBody,
   bookingChangeBody,
   informationBody,
+  bookingCanceledBody,
 } = require('./html-generator');
 const { handleApplicationError } = require('../errors');
 const {
@@ -41,6 +42,16 @@ const sendBookingChange = async (event, secretCode, to) => {
     throw e;
   }
 };
+
+async function sendBookingCanceled (secretCode, to) {
+  try {
+    const html = bookingCanceledBody(secretCode);
+    return sgMail.send({ from: FROM_EMAIL, to, subject: 'Hotel cancel for EthBerlin', html });
+  } catch (e) {
+    // TODO: Handle errors
+    throw e;
+  }
+}
 
 const sendInstructions = async ({ txs, booking, offerSignature, signatureData, contractAddress, bookingIndex }, { from, to, subject }) => {
   try {
@@ -81,4 +92,5 @@ module.exports = {
   sendInstructions,
   sendBookingChange,
   sendBookingInfo,
+  sendBookingCanceled,
 };
