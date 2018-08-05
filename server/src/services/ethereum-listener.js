@@ -1,7 +1,7 @@
 const { bookingPoc } = require('./web3');
 const { readBooking, confirmBooking, confirmationEmailSentBooking, cancelBooking, updateRoom } = require('../controllers/Booking');
 const { sendConfirmation, sendBookingChange } = require('./mail.js');
-const { STARTING_BLOCK } = require('../config');
+const { STARTING_BLOCK, BOOKING_STATUS } = require('../config');
 
 let _nextBlockToProcess = STARTING_BLOCK;
 
@@ -31,12 +31,12 @@ const onBookingChange = async (event) => {
 };
 
 async function onBookingCancel (args) {
-  const { event, blockNumber, returnValues: { bookingHash, newGuest } } = args;
+  const { event, blockNumber, returnValues: { bookingHash } } = args;
   const booking = await readBooking({ bookingHash });
   if (!booking) {
     return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
   }
-  if (booking.guestEthAddress === newGuest) {
+  if (booking.status === BOOKING_STATUS.canceled) {
     return;
   }
   cancelBooking(booking.id);
