@@ -15,10 +15,13 @@ const {
   checkBookingExpired,
   getBookingIndex,
   cancelBooking,
+  getCancelBookingInstructions,
+  updateRoom,
 } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { setCryptoIndex } = require('../../src/services/crypto');
 const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
+const { BOOKING_POC_ADDRESS } = require('../../src/config');
 
 after(() => {
   mongoose.connection.close();
@@ -193,5 +196,22 @@ describe('Booking controller', () => {
     const sendFake = sandbox.getFakes()[0];
     expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
     expect(sendFake).to.have.property('calledOnce', true);
+  });
+  it('Should update room of the booking', async () => {
+    const ROOM_NUMBER = 8;
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    await updateRoom(dbBooking.bookingHash, ROOM_NUMBER);
+    const updatedBooking = await readBooking({ bookingHash: dbBooking.bookingHash }, 0);
+    expect(updatedBooking).to.have.property('roomNumber', ROOM_NUMBER);
+  });
+  it('Should generate tx for cancel booking', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    const tx = await getCancelBookingInstructions(dbBooking.bookingHash);
+    expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
+    expect(tx).to.have.property('data');
+    expect(tx).to.have.property('value', 0);
+    expect(tx).to.have.property('gas');
   });
 });

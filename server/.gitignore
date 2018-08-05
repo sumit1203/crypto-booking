@@ -55,8 +55,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
-.env.production
+.env*
 
 # test and key files
 keys/*.json

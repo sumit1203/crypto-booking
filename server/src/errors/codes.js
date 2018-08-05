@@ -176,4 +176,9 @@ module.exports = {
     short: 'Bad recaptcha.',
     long: 'Recaptcha can not be verified.',
   },
+  bookingNotFound: {
+    status: 404,
+    short: 'Booking not found.',
+    long: 'We cannot found booking. If you think that this is an error, please contract Winding Tree team.',
+  },
 };
