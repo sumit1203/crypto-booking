@@ -88,9 +88,16 @@ async function getCancelBookingInstructions (bookingHash) {
   return tx;
 }
 
+async function _getDecryptedBooking (bookingModel) {
+  const index = await getBookingIndex(bookingModel._id);
+  const { privateKey } = getKeyPair(bookingModel.bookingHash, index);
+  return _prepareForExport(bookingModel, privateKey);
+}
+
 async function confirmBooking (id) {
   const bookingModel = await BookingModel.findById(id).exec();
-  return bookingModel.setAsApproved();
+  await bookingModel.setAsApproved();
+  return _getDecryptedBooking(bookingModel);
 }
 
 async function changesEmailSentBooking (id) {

@@ -5,17 +5,18 @@ const { STARTING_BLOCK } = require('../config');
 
 let _nextBlockToProcess = STARTING_BLOCK;
 
-const onBookingDone = async (event) => {
-  const booking = await readBooking({ bookingHash: event.returnValues.bookingHash });
+async function onBookingDone (args) {
+  const { event, blockNumber, returnValues: { bookingHash, room } } = args;
+  const booking = await readBooking({ bookingHash });
   if (!booking) {
-    return console.error(`Can not find booking for event: ${event.event}, blockNumber: ${event.blockNumber}, logIndex: ${event.blockNumber}`);
+    return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
   }
   if (booking.confirmationEmailSent) {
     return;
   }
-  sendConfirmation(event, event.returnValues.bookingHash, booking.personalInfo.email);
-  confirmationEmailSentBooking(booking.id);
-  updateRoom(booking.id, event.returnValues.room);
+  const confirmedBooking = await confirmBooking(booking.id);
+  await updateRoom(booking.id, room);
+  await sendConfirmation(event, confirmedBooking.bookingHash, confirmedBooking.personalInfo.email);
 };
 
 const onBookingChange = async (event) => {
