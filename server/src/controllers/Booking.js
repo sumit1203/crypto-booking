@@ -114,6 +114,12 @@ const checkBookingExpired = async () => {
   });
 };
 
+// IMPORTANT: this function must receive an string or the value of `_id`
+// otherwise will be return a wrong index.
+async function getBookingIndex (id) {
+  const objectId = mongoose.Types.ObjectId(id);
+  return BookingModel.countDocuments({ _id: { $lt: objectId } }).exec();
+}
 module.exports = {
   readBooking,
   createBooking,
