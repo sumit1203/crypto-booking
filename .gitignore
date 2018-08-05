@@ -55,7 +55,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+.env*
 
 # test and key files
 keys/*.json
@@ -65,7 +65,8 @@ test/utils/temp-keys/*
 .idea/
 
 # truffle
-smart-contracts/build
+contracts/build
+contracts/mnemonic
 
 # ETH keys
 smart-contracts/keys.json

@@ -1,4 +1,12 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({
+  path: path.resolve(
+    process.cwd(),
+    (process.env.NODE_ENV == 'production') ? '.env' :'.env.development'
+  )
+});
+console.log('Starting server on ', process.env.NODE_ENV, 'env');
+
 const { app } = require('./app');
 const { SERVER_PORT } = require('./config');
 
