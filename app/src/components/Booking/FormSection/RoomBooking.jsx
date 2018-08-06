@@ -46,8 +46,8 @@ export default class RoomBooking extends React.Component {
      return (
        <Fragment key={room.id}>
         <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-        <label htmlFor={room.id} className="col-6">
-          {selectedRoom.id === room.id && <i className="mdi mdi-check-circle"/>}
+        <label htmlFor={room.id} className="d-flex d-md-inline align-items-center justify-content-center col-6" style={{whiteSpace: 'initial'}}>
+          {selectedRoom.id === room.id && <i className="mdi mdi-check-circle d-none d-sm-inline"/>}
           &nbsp;{room.name}
         </label>
        </Fragment>)
