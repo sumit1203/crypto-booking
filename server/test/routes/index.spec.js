@@ -7,7 +7,6 @@ const sinon = require('sinon');
 const sgMail = require('@sendgrid/mail');
 const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
-const { setCryptoIndex } = require('../../src/services/crypto');
 const prices = require('../../src/services/prices');
 const {
   turnOffRecaptcha,
@@ -40,8 +39,8 @@ describe('Booking API', () => {
     sandbox.restore();
     throttling.turnOnThrottling();
   });
-  beforeEach(function () {
-    setCryptoIndex(0);
+  beforeEach(async function () {
+    await BookingModel.resetIndex();
     throttling.turnOffThrottling();
     sandbox.stub(sgMail, 'send')
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
