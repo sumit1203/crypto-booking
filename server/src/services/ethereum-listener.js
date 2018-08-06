@@ -17,7 +17,7 @@ async function onBookingDone (args) {
     }
     const confirmedBooking = await confirmBooking(bookingHash);
     await updateRoom(bookingHash, room);
-    await sendConfirmation(event, bookingHash, confirmedBooking.personalInfo.email);
+    await sendConfirmation(args, bookingHash, confirmedBooking.personalInfo.email);
   } catch (e) {
     console.error(e);
   }
