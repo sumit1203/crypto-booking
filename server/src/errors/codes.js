@@ -1,4 +1,4 @@
-const { BOOKING_STATUS } = require('../constants');
+const { BOOKING_STATUS, BOOKING_ROOM_TYPES } = require('../constants');
 
 module.exports = {
   genericError: {
@@ -141,6 +141,11 @@ module.exports = {
     short: 'No room type provided.',
     long: 'The roomType is required.',
   },
+  invalidRoomType: {
+    status: 409,
+    short: 'Invalid room type provided.',
+    long: `The roomType could be ${BOOKING_ROOM_TYPES.join(', ').toLowerCase()}.`,
+  },
   noStatus: {
     status: 409,
     short: 'No property "status" provided.',
@@ -170,5 +175,10 @@ module.exports = {
     status: 401,
     short: 'Bad recaptcha.',
     long: 'Recaptcha can not be verified.',
+  },
+  bookingNotFound: {
+    status: 404,
+    short: 'Booking not found.',
+    long: 'We cannot found booking. If you think that this is an error, please contract Winding Tree team.',
   },
 };

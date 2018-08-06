@@ -9,11 +9,19 @@ const BookingModel = mongoose.model('Booking');
 const {
   createBooking,
   readBooking,
-  confirmationEmailSentBooking,
+  confirmBooking,
   changesEmailSentBooking,
-  sendBookingInfoByEmail } = require('../../src/controllers/Booking');
+  sendBookingInfoByEmail,
+  checkBookingExpired,
+  getBookingIndex,
+  cancelBooking,
+  getCancelBookingInstructions,
+  updateRoom,
+} = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { setCryptoIndex } = require('../../src/services/crypto');
+const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
+const { BOOKING_POC_ADDRESS } = require('../../src/config');
 
 after(() => {
   mongoose.connection.close();
@@ -68,13 +76,11 @@ describe('Booking controller', () => {
   });
 
   it('Should throw an error on creating an invalid booking', async () => {
-    // TODO the actual error must be roomType, payment is NaN because of roomtype is invalid
-    // Mongoose is returning the 2 errors but we are triggering only the first one
     try {
       await createBooking(Object.assign({}, validBooking, { roomType: -1 }));
       throw Error('should not be called');
     } catch (e) {
-      expect(e.code).to.be.equal('#invalidPaymentAmount');
+      expect(e.code).to.be.equal('#invalidRoomType');
     }
   });
 
@@ -147,8 +153,9 @@ describe('Booking controller', () => {
   it('Should set confirmationEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    const booking = await confirmationEmailSentBooking(dbBooking._id);
+    const booking = await confirmBooking(dbBooking._id);
     expect(booking).to.have.property('confirmationEmailSent', true);
+    expect(booking).to.have.property('status', BOOKING_STATUS.approved);
     expect(booking).to.have.property('changesEmailSent');
   });
   it('Should set changesEmailSent as true', async () => {
@@ -162,5 +169,49 @@ describe('Booking controller', () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     await sendBookingInfoByEmail(dbBooking.bookingHash);
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
+  });
+  it('Should set a booking as pending', async () => {
+    const dbBooking = BookingModel.generate({
+      ...validBookingWithEthPrice,
+      signatureTimestamp: Math.floor(Date.now() / 1000 - (SIGNATURE_TIME_LIMIT + 15) * 60),
+    }, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    const bookingsExpred = await checkBookingExpired();
+    const updatedBooking = await readBooking({ id: await bookingsExpred[0] });
+    expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
+  });
+  it('Should get the booking index', async () => {
+    await createBooking(validBooking);
+    const { booking } = await createBooking(validBooking);
+    await createBooking(validBooking);
+    expect(await getBookingIndex(booking._id.toString())).to.be.equal(1);
+  });
+  it('Should cancel the booking', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    await cancelBooking(dbBooking.id);
+    const updatedBooking = await readBooking({ id: dbBooking.id });
+    const sendFake = sandbox.getFakes()[0];
+    expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
+    expect(sendFake).to.have.property('calledOnce', true);
+  });
+  it('Should update room of the booking', async () => {
+    const ROOM_NUMBER = 8;
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    await updateRoom(dbBooking.bookingHash, ROOM_NUMBER);
+    const updatedBooking = await readBooking({ bookingHash: dbBooking.bookingHash }, 0);
+    expect(updatedBooking).to.have.property('roomNumber', ROOM_NUMBER);
+  });
+  it('Should generate tx for cancel booking', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    const tx = await getCancelBookingInstructions(dbBooking.bookingHash);
+    expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
+    expect(tx).to.have.property('data');
+    expect(tx).to.have.property('value', 0);
+    expect(tx).to.have.property('gas');
   });
 });

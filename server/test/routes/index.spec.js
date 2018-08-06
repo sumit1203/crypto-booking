@@ -5,9 +5,10 @@ const mongoose = require('mongoose');
 const request = require('request-promise-native');
 const sinon = require('sinon');
 const sgMail = require('@sendgrid/mail');
-const { SERVER_PORT } = require('../../src/config');
+const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
 const { setCryptoIndex } = require('../../src/services/crypto');
+const prices = require('../../src/services/prices');
 const {
   turnOffRecaptcha,
   turnOnRecaptcha,
@@ -23,8 +24,9 @@ before(async () => {
   BookingModel = mongoose.model('Booking');
 });
 after(async () => {
-  const { ethereunListenerCron } = require('../../src/app');
+  const { ethereunListenerCron, expiredBookingCron } = require('../../src/app');
   ethereunListenerCron.destroy();
+  expiredBookingCron.destroy();
   await server.close();
   await mongoose.connection.close();
 });
@@ -43,6 +45,8 @@ describe('Booking API', () => {
     throttling.turnOffThrottling();
     sandbox.stub(sgMail, 'send')
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
+    sandbox.stub(prices, 'fetchETHPrice')
+      .returns(() => '500');
   });
   describe('POST /api/booking', () => {
     describe('Recaptcha', () => {
@@ -72,7 +76,7 @@ describe('Booking API', () => {
         }
       });
     });
-    it('Should thorw with invalid guest ETH address', async () => {
+    it('Should throw with invalid guest ETH address', async () => {
       try {
         await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body: { ...validBooking, guestEthAddress: '0x9876545678' } });
         throw new Error('should not be called');
@@ -141,7 +145,7 @@ describe('Booking API', () => {
         throw new Error('should not be called');
       } catch (e) {
         expect(e).to.have.property('error');
-        expect(e.error).to.have.property('code', '#invalidPaymentAmount');
+        expect(e.error).to.have.property('code', '#invalidRoomType');
       }
     });
   });
@@ -216,14 +220,24 @@ describe('Booking API', () => {
     });
   });
 
-  describe('DELETE /api/booking/:id', () => {
+  describe('DELETE /api/booking/:bookingHash', () => {
     it('Should delete a booking', async () => {
       const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
-      const booking = await request({ url: `${apiUrl}/booking/${dbBooking.id}`, method: 'DELETE', json: true });
-      const dbReadBooking = await BookingModel.findById(booking.id).exec();
-      expect(booking).to.have.property('_id', dbBooking.id);
-      expect(dbReadBooking).to.be.an.equal(null);
+      const { tx } = await request({ url: `${apiUrl}/booking/${dbBooking.bookingHash}`, method: 'DELETE', json: true });
+      expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
+      expect(tx).to.have.property('data');
+      expect(tx).to.have.property('value', 0);
+      expect(tx).to.have.property('gas');
+    });
+    it('Should retrun 404 for invalid bookingHash', async () => {
+      try {
+        await request({ url: `${apiUrl}/booking/someHash`, method: 'DELETE', json: true });
+        throw new Error('should not be called');
+      } catch (e) {
+        expect(e).to.have.property('error');
+        expect(e.error).to.have.property('code', '#bookingNotFound');
+      }
     });
   });
 });

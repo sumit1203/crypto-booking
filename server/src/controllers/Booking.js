@@ -2,10 +2,18 @@ const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
 const { fetchPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
-const { sendBookingInfo } = require('../services/mail');
+const { sendBookingInfo, sendBookingCanceled } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
 const { generateKeyPair, getKeyPair, setCryptoIndex } = require('../services/crypto');
+const {
+  getCancelBookingTx,
+} = require('../services/web3');
 const { FROM_EMAIL } = require('../config');
+const {
+  SIGNATURE_TIME_LIMIT,
+  BOOKING_PAYMENT_TYPES,
+  BOOKING_STATUS,
+} = require('../constants');
 
 async function _generateBooking (data) {
   const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
@@ -69,17 +77,31 @@ async function readBooking (filter, index) {
   return null;
 }
 
-async function deleteBooking (filter) {
-  if (mongoose.Types.ObjectId.isValid(filter.id)) {
-    await BookingModel.deleteOne({ id: filter.id }).exec();
+async function getCancelBookingInstructions (bookingHash) {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
+  if (!bookingModel) {
+    throw handleApplicationError('bookingNotFound');
   }
-  return null;
+  const { roomType, roomNumber, from, to, paymentType } = bookingModel;
+  const isEther = paymentType === BOOKING_PAYMENT_TYPES.eth;
+  const nights = [];
+  for (let i = from; i <= to; i++) {
+    nights.push(i);
+  }
+  const tx = getCancelBookingTx(roomType, nights, roomNumber, bookingHash, isEther);
+  return tx;
 }
 
-async function confirmationEmailSentBooking (id) {
+async function _getDecryptedBooking (bookingModel) {
+  const index = await getBookingIndex(bookingModel._id);
+  const { privateKey } = getKeyPair(bookingModel.bookingHash, index);
+  return _prepareForExport(bookingModel, privateKey);
+}
+
+async function confirmBooking (id) {
   const bookingModel = await BookingModel.findById(id).exec();
-  bookingModel.confirmationEmailSent = true;
-  return bookingModel.save();
+  await bookingModel.setAsApproved();
+  return _getDecryptedBooking(bookingModel);
 }
 
 async function changesEmailSentBooking (id) {
@@ -105,12 +127,49 @@ async function initializeCryptoIndex () {
   setCryptoIndex(totalBookings);
 }
 
+const checkBookingExpired = async () => {
+  const limit = Math.floor(Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60);
+  const bookings = await BookingModel.find({
+    $and: [
+      { signatureTimestamp: { $lt: limit } },
+      { status: { $eq: BOOKING_STATUS.pending } },
+    ],
+  });
+  return bookings.map(async (booking) => {
+    await booking.setAsCanceled();
+    return booking._id;
+  });
+};
+
+// IMPORTANT: this function must receive an string or the value of `_id`
+// otherwise will be return a wrong index.
+async function getBookingIndex (id) {
+  const objectId = mongoose.Types.ObjectId(id);
+  return BookingModel.countDocuments({ _id: { $lt: objectId } }).exec();
+}
+
+async function cancelBooking (id) {
+  const bookingModel = await BookingModel.findById(id).exec();
+  await bookingModel.setAsCanceled();
+  const booking = await _getDecryptedBooking(bookingModel);
+  return sendBookingCanceled(booking.bookingHash, booking.personalInfo.email);
+}
+const updateRoom = async function (bookingHash, roomNumber) {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
+  bookingModel.roomNumber = roomNumber;
+  return bookingModel.save();
+};
+
 module.exports = {
   readBooking,
   createBooking,
-  deleteBooking,
-  confirmationEmailSentBooking,
+  getCancelBookingInstructions,
+  confirmBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail,
   initializeCryptoIndex,
+  checkBookingExpired,
+  cancelBooking,
+  getBookingIndex,
+  updateRoom,
 };

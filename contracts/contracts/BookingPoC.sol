@@ -18,12 +18,17 @@ contract BookingPoC is Ownable {
   // The account that will sign the offers
   address public offerSigner;
 
+  // The time where no more bookings can be done
+  uint256 public endBookings;
+
   // A mapping of the rooms booked by night, it saves the guest address by
   // room/night
   // RoomType => Night => Room => Booking
   struct Booking {
     address guest;
     bytes32 bookingHash;
+    uint256 payed;
+    bool isEther;
   }
   struct RoomType {
     uint256 totalRooms;
@@ -31,11 +36,23 @@ contract BookingPoC is Ownable {
   }
   mapping(string => RoomType) rooms;
 
+  // An array of the refund polices, it has to be ordered by beforeTime
+  struct Refund {
+    uint256 beforeTime;
+    uint8 dividedBy;
+  }
+  Refund[] public refunds;
+
   // The total amount of nights offered for booking
   uint256 public totalNights;
 
   // The ERC20 lifToken that will be used for payment
   ERC20 public lifToken;
+
+  event BookingCanceled(
+    string roomType, uint256[] nights, uint256 room,
+    address newGuest, bytes32 bookingHash
+  );
 
   event BookingChanged(
     string roomType, uint256[] nights, uint256 room,
@@ -55,15 +72,18 @@ contract BookingPoC is Ownable {
    * @param _lifToken Address of the Lif token contract
    * @param _totalNights The max amount of nights to be booked
    */
-  function BookingPoC(
-    address _offerSigner, address _lifToken, uint256 _totalNights
+  constructor(
+    address _offerSigner, address _lifToken,
+    uint256 _totalNights, uint256 _endBookings
   ) public {
     require(_offerSigner != address(0));
     require(_lifToken != address(0));
     require(_totalNights > 0);
+    require(_endBookings > now);
     offerSigner = _offerSigner;
     lifToken = ERC20(_lifToken);
     totalNights = _totalNights;
+    endBookings = _endBookings;
   }
 
   /**
@@ -76,6 +96,31 @@ contract BookingPoC is Ownable {
     require(_lifToken != address(0));
     offerSigner = _offerSigner;
     lifToken = ERC20(_lifToken);
+  }
+
+  /**
+   * @dev Add a refund policy
+   * @param _beforeTime The time before this refund can be executed
+   * @param _dividedBy The divisor of the payment value
+   */
+  function addRefund(uint256 _beforeTime, uint8 _dividedBy) onlyOwner public {
+    if (refunds.length > 0)
+      require(refunds[refunds.length-1].beforeTime > _beforeTime);
+    refunds.push(Refund(_beforeTime, _dividedBy));
+  }
+
+  /**
+   * @dev Change a refund policy
+   * @param _beforeTime The time before this refund can be executed
+   * @param _dividedBy The divisor of the payment value
+   */
+  function changeRefund(
+    uint8 _refundIndex, uint256 _beforeTime, uint8 _dividedBy
+  ) onlyOwner public {
+    if (_refundIndex > 0)
+      require(refunds[_refundIndex-1].beforeTime > _beforeTime);
+    refunds[_refundIndex].beforeTime = _beforeTime;
+    refunds[_refundIndex].dividedBy = _dividedBy;
   }
 
   /**
@@ -97,31 +142,67 @@ contract BookingPoC is Ownable {
    */
   function bookRoom(
     string roomType, uint256[] _nights, uint256 room,
-    address guest, bytes32 bookingHash
+    address guest, bytes32 bookingHash, uint256 weiPerNight, bool isEther
   ) internal {
     for (uint i = 0; i < _nights.length; i ++) {
       rooms[roomType].nights[_nights[i]][room].guest = guest;
       rooms[roomType].nights[_nights[i]][room].bookingHash = bookingHash;
+      rooms[roomType].nights[_nights[i]][room].payed = weiPerNight;
+      rooms[roomType].nights[_nights[i]][room].isEther = isEther;
     }
     emit BookingDone(roomType, _nights, room, guest, bookingHash);
   }
 
+  event log(uint256 msg);
+
   /**
-   * @dev Book a room for a certain address, onlyOwner function
+   * @dev Cancel a booking
    * @param roomType The room type to be booked
    * @param _nights The nights that we want to book
    * @param room The room that wants to be booked
-   * @param guest The address of the guest that will book the room
    */
-  function changeBooking(
-    string roomType, uint256[] _nights, uint256 room,
-    address guest, bytes32 bookingHash
-  ) public onlyOwner {
+  function cancelBooking(
+    string roomType, uint256[] _nights,
+    uint256 room, bytes32 bookingHash, bool isEther
+  ) public {
+
+    // Check the booking and delete it
+    uint256 totalPayed = 0;
     for (uint i = 0; i < _nights.length; i ++) {
-      rooms[roomType].nights[_nights[i]][room].guest = guest;
-      rooms[roomType].nights[_nights[i]][room].bookingHash = bookingHash;
+      require(rooms[roomType].nights[_nights[i]][room].guest == msg.sender);
+      require(rooms[roomType].nights[_nights[i]][room].isEther == isEther);
+      require(rooms[roomType].nights[_nights[i]][room].bookingHash == bookingHash);
+      totalPayed = totalPayed.add(
+        rooms[roomType].nights[_nights[i]][room].payed
+      );
+      delete rooms[roomType].nights[_nights[i]][room];
     }
-    emit BookingChanged(roomType, _nights, room, guest, bookingHash);
+
+    // Calculate refund amount
+    uint256 refundAmount = 0;
+    for (i = 0; i < refunds.length; i ++) {
+      if (now < endBookings.sub(refunds[i].beforeTime)){
+        refundAmount = totalPayed.div(refunds[i].dividedBy);
+        break;
+      }
+    }
+
+    // Forward refund funds
+    if (isEther)
+      msg.sender.transfer(refundAmount);
+    else
+      lifToken.transfer(msg.sender, refundAmount);
+
+    emit BookingCanceled(roomType, _nights, room, msg.sender, bookingHash);
+  }
+
+  /**
+   * @dev Withdraw tokens and eth, only from owner contract
+   */
+  function withdraw() public onlyOwner {
+    require(now > endBookings);
+    lifToken.transfer(owner, lifToken.balanceOf(address(this)));
+    owner.transfer(address(this).balance);
   }
 
   /**
@@ -142,6 +223,7 @@ contract BookingPoC is Ownable {
   ) public payable {
     // Check that the offer is still valid
     require(offerTimestamp < now);
+    require(now < endBookings);
 
     // Check the eth sent
     require(pricePerNight.mul(_nights.length) <= msg.value);
@@ -157,10 +239,10 @@ contract BookingPoC is Ownable {
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(roomType, _nights, available, msg.sender, bookingHash);
-
-    // Transfer the eth to the owner
-    owner.transfer(msg.value);
+    bookRoom(
+      roomType, _nights, available, msg.sender,
+      bookingHash, pricePerNight, true
+    );
   }
 
   /**
@@ -197,10 +279,13 @@ contract BookingPoC is Ownable {
     require(offerSigner == priceSigned.recover(offerSignature));
 
     // Assign the available room to the guest
-    bookRoom(roomType, _nights, available, msg.sender, bookingHash);
+    bookRoom(
+      roomType, _nights, available, msg.sender,
+      bookingHash, pricePerNight, false
+    );
 
-    // Transfer the lifTokens to the owner
-    lifToken.transferFrom(msg.sender, owner, lifTokenAllowance);
+    // Transfer the lifTokens to booking
+    lifToken.transferFrom(msg.sender, address(this), lifTokenAllowance);
   }
 
   /**
@@ -209,6 +294,23 @@ contract BookingPoC is Ownable {
    */
   function totalRooms(string roomType) view public returns (uint256) {
     return rooms[roomType].totalRooms;
+  }
+
+  /**
+   * @dev Get a booking information
+   * @param roomType The room type
+   * @param room The room booked
+   * @param night The night of the booking
+   */
+  function getBooking(
+    string roomType, uint256 room, uint256 night
+  ) view public returns (address, uint256, bytes32, bool) {
+    return (
+      rooms[roomType].nights[night][room].guest,
+      rooms[roomType].nights[night][room].payed,
+      rooms[roomType].nights[night][room].bookingHash,
+      rooms[roomType].nights[night][room].isEther
+    );
   }
 
   /**
