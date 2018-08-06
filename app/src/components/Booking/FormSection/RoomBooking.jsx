@@ -45,8 +45,8 @@ export default class RoomBooking extends React.Component {
     return roomTypes.map(room => {
      return (
        <Fragment key={room.id}>
-        <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-        <label htmlFor={room.id} className="d-flex d-md-inline align-items-center justify-content-center col-6" style={{whiteSpace: 'initial'}}>
+        <input id={`radio-${room.id}`} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
+        <label htmlFor={`radio-${room.id}`} className="d-flex d-md-inline align-items-center justify-content-center col-6" style={{whiteSpace: 'initial'}}>
           {selectedRoom.id === room.id && <i className="mdi mdi-check-circle d-none d-sm-inline"/>}
           &nbsp;{room.name}
         </label>
@@ -99,7 +99,7 @@ export default class RoomBooking extends React.Component {
                           </label>
                         </div>
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="guests2" onChange={onGuestCountChange} checked={guestCount === '2'} required/>
+                          <input className="form-check-input" type="radio" name="guests" id="guests2" value="2" onChange={onGuestCountChange} checked={guestCount === '2'} required/>
                           <label className="form-check-label" htmlFor="guests2">&nbsp; Two people
                           </label>
                         </div>
