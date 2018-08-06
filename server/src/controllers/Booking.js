@@ -92,9 +92,16 @@ async function getCancelBookingInstructions (bookingHash) {
   return tx;
 }
 
+async function _getDecryptedBooking (bookingModel) {
+  const index = await getBookingIndex(bookingModel._id);
+  const { privateKey } = getKeyPair(bookingModel.bookingHash, index);
+  return _prepareForExport(bookingModel, privateKey);
+}
+
 async function confirmBooking (id) {
   const bookingModel = await BookingModel.findById(id).exec();
-  return bookingModel.setAsApproved();
+  await bookingModel.setAsApproved();
+  return _getDecryptedBooking(bookingModel);
 }
 
 async function changesEmailSentBooking (id) {
@@ -144,9 +151,7 @@ async function getBookingIndex (id) {
 async function cancelBooking (id) {
   const bookingModel = await BookingModel.findById(id).exec();
   await bookingModel.setAsCanceled();
-  const index = await getBookingIndex(bookingModel._id);
-  const { privateKey } = getKeyPair(bookingModel.bookingHash, index);
-  const booking = _prepareForExport(bookingModel, privateKey);
+  const booking = await _getDecryptedBooking(bookingModel);
   return sendBookingCanceled(booking.bookingHash, booking.personalInfo.email);
 }
 const updateRoom = async function (bookingHash, roomNumber) {
