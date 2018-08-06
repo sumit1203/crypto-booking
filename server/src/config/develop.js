@@ -13,5 +13,5 @@ module.exports = {
   MASTER_KEY: process.env.MASTER_KEY,
   GIT_REV: process.env.GIT_REV,
   RECAPTCHA_SECRET: process.env.RECAPTCHA_SECRET,
-  IS_RECAPTCHA_ON: true,
+  IS_RECAPTCHA_ON: false,
 };

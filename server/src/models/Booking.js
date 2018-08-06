@@ -117,6 +117,10 @@ const Booking = new Schema({
     },
     required: [true, 'noGuestCount'],
   },
+  roomNumber: {
+    type: Number,
+    default: null,
+  },
 });
 
 Booking.method({
@@ -162,14 +166,14 @@ Booking.method({
     }
   },
   generatePaymentAmount: function (cryptoPrice) {
-    if (typeof cryptoPrice !== 'number') {
-      throw handleApplicationError('invalidCryptoPrice');
-    }
-    this.paymentAmount = ((ROOM_TYPE_PRICES[this.roomType] * (1 + this.to - this.from) / cryptoPrice) + 0.0001).toFixed(4);
+    this.paymentAmount = this.getWeiPerNight(cryptoPrice);
   },
   getWeiPerNight: function (cryptoPrice) {
     if (typeof cryptoPrice !== 'number') {
       throw handleApplicationError('invalidCryptoPrice');
+    }
+    if (BOOKING_ROOM_TYPES.indexOf(this.roomType) === -1) {
+      throw handleApplicationError('invalidRoomType');
     }
     return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / cryptoPrice).toString(), 'ether');
   },
@@ -183,27 +187,14 @@ Booking.method({
   },
   setAsApproved: function () {
     this.status = BOOKING_STATUS.approved;
+    this.confirmationEmailSent = true;
     return this.save();
   },
 });
 
 // Error Handler
 Booking.post('save', function (error, doc, next) {
-  if (error.name === 'MongoError' && error.code === 11000) {
-    return next(handleApplicationError('duplicateBooking'));
-  }
-  if (!error.errors) {
-    return next(error);
-  }
-
-  const firstKeyError = Object.keys(error.errors)[0];
-  const firstError = error.errors[firstKeyError];
-  switch (firstError.name) {
-  case 'CastError':
-    return next(handleApplicationError(`invalid${firstError.path[0].toUpperCase()}${firstError.path.substring(1)}`));
-  default:
-    throw handleApplicationError(firstError.message);
-  }
+  next(_errorHandler(error));
 });
 
 Booking.statics.generate = function (data, privateKey) {
@@ -214,5 +205,27 @@ Booking.statics.generate = function (data, privateKey) {
   booking.generatePaymentAmount(cryptoPrice);
   return booking;
 };
+
+function _errorHandler (error) {
+  if (error.name === 'MongoError' && error.code === 11000) {
+    return handleApplicationError('duplicateBooking');
+  }
+  if (!error.errors) {
+    return error;
+  }
+  const firstKeyError = Object.keys(error.errors)[0];
+  const firstError = error.errors[firstKeyError];
+  switch (firstError.name) {
+  case 'CastError':
+    return handleApplicationError(`invalid${firstError.path[0].toUpperCase()}${firstError.path.substring(1)}`);
+  case 'ValidatorError':
+    if (firstError.kind === 'enum') {
+      return handleApplicationError(`invalid${firstError.path[0].toUpperCase()}${firstError.path.substring(1)}`);
+    }
+    return handleApplicationError(firstError.message);
+  default:
+    return handleApplicationError(firstError.message);
+  }
+}
 
 module.exports = { Booking: mongoose.model('Booking', Booking) };

@@ -98,9 +98,10 @@ export default class MyBookingSection extends React.Component {
                          type="text"
                          required/>
                 </div>
-                <div className="d-flex justify-content-around">
+                <div className="form-group">
                   <button className="btn btn-primary btn-lg" type="submit"> Retrieve booking data</button>
-                  <button className="btn btn-danger btn-lg" type="button" onClick={this.onCancel}> Cancel my Booking</button>
+                  <br/>
+                  <button className="btn btn-link btn-sm text-danger"style={{marginTop: '.5em'}} type="button" onClick={this.onCancel}> Cancel my Booking</button>
                 </div>
               </form>
             </div>

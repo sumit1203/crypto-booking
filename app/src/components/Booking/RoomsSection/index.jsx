@@ -17,10 +17,10 @@ class RoomsSection extends React.Component {
               </h2>
             </div>
           </div>
-          <div className="card-group">
-            {roomTypes.map(room => (
-              <div key={room.id} className="card mx-1">
-                <Room room={room} onSelect={onRoomTypeChange}/>
+          <div className="card-deck">
+            {roomTypes.map((room,index) => (
+              <div key={room.id} className="card">
+                <Room room={room} roomIndex={index} onSelect={onRoomTypeChange}/>
               </div>
             ))
             }

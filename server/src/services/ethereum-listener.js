@@ -1,20 +1,22 @@
 const { bookingPoc } = require('./web3');
-const { readBooking, changesEmailSentBooking, confirmationEmailSentBooking } = require('../controllers/Booking');
+const { readBooking, confirmBooking, confirmationEmailSentBooking, cancelBooking, updateRoom } = require('../controllers/Booking');
 const { sendConfirmation, sendBookingChange } = require('./mail.js');
-const { STARTING_BLOCK } = require('../config');
+const { STARTING_BLOCK, BOOKING_STATUS } = require('../config');
 
 let _nextBlockToProcess = STARTING_BLOCK;
 
-const onBookingDone = async (event) => {
-  const booking = await readBooking({ bookingHash: event.returnValues.bookingHash });
+async function onBookingDone (args) {
+  const { event, blockNumber, returnValues: { bookingHash, room } } = args;
+  const booking = await readBooking({ bookingHash });
   if (!booking) {
-    return console.error(`Can not find booking for event: ${event.event}, blockNumber: ${event.blockNumber}, logIndex: ${event.blockNumber}`);
+    return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
   }
   if (booking.confirmationEmailSent) {
     return;
   }
-  sendConfirmation(event, event.returnValues.bookingHash, booking.personalInfo.email);
-  confirmationEmailSentBooking(booking.id);
+  const confirmedBooking = await confirmBooking(booking.id);
+  await updateRoom(booking.id, room);
+  await sendConfirmation(event, confirmedBooking.bookingHash, confirmedBooking.personalInfo.email);
 };
 
 const onBookingChange = async (event) => {
@@ -26,12 +28,25 @@ const onBookingChange = async (event) => {
     return;
   }
   sendBookingChange(event, event.returnValues.bookingHash, booking.personalInfo.email);
-  changesEmailSentBooking(booking.id);
+  confirmBooking(booking.id);
 };
+
+async function onBookingCancel (args) {
+  const { event, blockNumber, returnValues: { bookingHash } } = args;
+  const booking = await readBooking({ bookingHash });
+  if (!booking) {
+    return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
+  }
+  if (booking.status === BOOKING_STATUS.canceled) {
+    return;
+  }
+  cancelBooking(booking.id);
+}
 
 const eventTypes = {
   'BookingChanged': onBookingChange,
   'BookingDone': onBookingDone,
+  'BookingCanceled': onBookingCancel,
 };
 
 const checkEtherumUpdates = () => {

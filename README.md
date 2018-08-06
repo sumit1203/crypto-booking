@@ -16,6 +16,15 @@ directory
  The smart contracts to manage rooms availability is located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking/tree/develop/smart-contracts)
 directory
 
+## Test
+
+To test in a local enviroment you have to:
+
+1.- Run `npm run testnet` in contracts folder and leave it in the background.
+2.- Run `npm run deploy-local` in the contracts folder and copy the Lif token and BookingPoC address in the dev configuration files in server and and app.
+3.- Run `npm run dev` on server, leave it in the background.
+4.- Run `npm start` on app, leave it in the background.
+
 ## Release
 ### Server
 

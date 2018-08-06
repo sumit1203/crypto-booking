@@ -1,14 +1,15 @@
 {
   "name": "crypto-booking-contracts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Smart contracts to book rooms using crypto.",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "scripts/test.sh",
+    "testnet": "scripts/run-testnet.sh",
     "lint": "eslint test",
-    "testrpc": "./node_modules/.bin/ganache-cli",
+    "deploy-local": "./node_modules/.bin/truffle migrate",
     "deploy-mainnet": "./node_modules/.bin/truffle migrate --network mainnet --reset",
     "deploy-ropsten": "./node_modules/.bin/truffle migrate --network ropsten --reset",
     "contract-flattener": "node_modules/.bin/truffle-flattener contracts/BookingPoC.sol > build/BookingPocFlattened.sol"
@@ -22,10 +23,11 @@
     "chai-as-promised": "^7.1.1",
     "ethereumjs-util": "^5.1.5",
     "moment": "^2.21.0",
+    "truffle": "^4.1.13",
     "truffle-flattener": "^1.2.5",
     "truffle-hdwallet-provider": "0.0.3",
-    "web3": "^1.0.0-beta.33",
-    "zeppelin-solidity": "^1.8.0"
+    "web3": "^1.0.0-beta.35",
+    "zeppelin-solidity": "^1.11.0"
   },
   "devDependencies": {
     "eslint": "^4.16.0",
@@ -34,12 +36,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "ganache-cli": "^6.1.6",
-    "lodash": "^4.17.5",
-    "rimraf": "^2.6.2",
-    "solidity-coverage": "^0.4.15",
-    "truffle": "^4.1.13",
-    "truffle-contract": "^3.0.6"
+    "ganache-cli": "^6.1.6"
   },
   "engines": {
     "node": ">=10.3.0"
