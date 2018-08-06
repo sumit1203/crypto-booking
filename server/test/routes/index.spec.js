@@ -8,6 +8,7 @@ const sgMail = require('@sendgrid/mail');
 const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
 const { setCryptoIndex } = require('../../src/services/crypto');
+const prices = require('../../src/services/prices');
 const {
   turnOffRecaptcha,
   turnOnRecaptcha,
@@ -44,6 +45,8 @@ describe('Booking API', () => {
     throttling.turnOffThrottling();
     sandbox.stub(sgMail, 'send')
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
+    sandbox.stub(prices, 'fetchETHPrice')
+      .returns(() => '500');
   });
   describe('POST /api/booking', () => {
     describe('Recaptcha', () => {
