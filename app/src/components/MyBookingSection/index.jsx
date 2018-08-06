@@ -28,7 +28,7 @@ export default class MyBookingSection extends React.Component {
     try {
       const {bookingHash, bookingIndex} = this.state
       const data = {bookingHash, bookingIndex}
-      const response = await (await fetch(SIGNER_API + '/booking/emailInfo', {
+      const response = await (await fetch(SIGNER_API + '/api/booking/emailInfo', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -50,7 +50,7 @@ export default class MyBookingSection extends React.Component {
       const {bookingHash, bookingIndex} = this.state
       const data = {bookingHash, bookingIndex}
       // TODO check this when server can handle this request
-      const response = await (await fetch(SIGNER_API + '/booking', {
+      const response = await (await fetch(SIGNER_API + '/api/booking', {
         method: 'DELETE',
         body: JSON.stringify(data),
         headers: {
