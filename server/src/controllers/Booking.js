@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
 const { fetchPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
-const { sendBookingInfo } = require('../services/mail');
+const { sendBookingInfo, sendBookingCanceled } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
 const { generateKeyPair, getKeyPair, setCryptoIndex } = require('../services/crypto');
 const {
@@ -125,6 +125,21 @@ const checkBookingExpired = async () => {
   });
 };
 
+// IMPORTANT: this function must receive an string or the value of `_id`
+// otherwise will be return a wrong index.
+async function getBookingIndex (id) {
+  const objectId = mongoose.Types.ObjectId(id);
+  return BookingModel.countDocuments({ _id: { $lt: objectId } }).exec();
+}
+
+async function cancelBooking (id) {
+  const bookingModel = await BookingModel.findById(id).exec();
+  await bookingModel.setAsCanceled();
+  const index = await getBookingIndex(bookingModel._id);
+  const { privateKey } = getKeyPair(bookingModel.bookingHash, index);
+  const booking = _prepareForExport(bookingModel, privateKey);
+  return sendBookingCanceled(booking.bookingHash, booking.personalInfo.email);
+}
 const updateRoom = async function (bookingHash, roomNumber) {
   const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
   bookingModel.roomNumber = roomNumber;
@@ -140,5 +155,7 @@ module.exports = {
   sendBookingInfoByEmail,
   initializeCryptoIndex,
   checkBookingExpired,
+  cancelBooking,
+  getBookingIndex,
   updateRoom,
 };
