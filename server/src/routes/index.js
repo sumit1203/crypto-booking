@@ -64,9 +64,9 @@ router.post(`${bookingUrl}/emailInfo`, createThrottlingInstance({
   }
 });
 
-router.delete(`${bookingUrl}/:bookingHash`, async (req, res, next) => {
+router.delete(`${bookingUrl}`, async (req, res, next) => {
   try {
-    const { bookingHash } = req.params;
+    const { bookingHash } = req.body;
     const tx = await getCancelBookingInstructions(bookingHash);
     res.status(200).json({ tx });
   } catch (e) {

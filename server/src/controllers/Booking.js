@@ -98,14 +98,14 @@ async function _getDecryptedBooking (bookingModel) {
   return _prepareForExport(bookingModel, privateKey);
 }
 
-async function confirmBooking (id) {
-  const bookingModel = await BookingModel.findById(id).exec();
+async function confirmBooking (bookingHash) {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
   await bookingModel.setAsApproved();
   return _getDecryptedBooking(bookingModel);
 }
 
-async function changesEmailSentBooking (id) {
-  const bookingModel = await BookingModel.findById(id).exec();
+async function changesEmailSentBooking (bookingHash) {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
   bookingModel.changesEmailSent = Date.now() / 1000;
   return bookingModel.save();
 }
@@ -148,8 +148,8 @@ async function getBookingIndex (id) {
   return BookingModel.countDocuments({ _id: { $lt: objectId } }).exec();
 }
 
-async function cancelBooking (id) {
-  const bookingModel = await BookingModel.findById(id).exec();
+async function cancelBooking (bookingHash) {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
   await bookingModel.setAsCanceled();
   const booking = await _getDecryptedBooking(bookingModel);
   return sendBookingCanceled(booking.bookingHash, booking.personalInfo.email);

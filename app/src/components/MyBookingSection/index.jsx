@@ -61,7 +61,12 @@ export default class MyBookingSection extends React.Component {
         console.error(response.code)
         alert(response.long || response.short)
       }
-      this.setState({cancelTx: {to:'123123123123', data:'123123123123',value: '33333', gas: '123123'}}, () => $('#deleteInstructionsModal').modal('show'))
+      this.setState({cancelTx: {
+        to: response.tx.to,
+        data: response.tx.data,
+        value: response.tx.value,
+        gas: response.tx.gas
+      }}, () => $('#deleteInstructionsModal').modal('show'))
     } catch (e) {
       console.error(e)
     }

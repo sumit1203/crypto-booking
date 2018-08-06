@@ -220,11 +220,12 @@ describe('Booking API', () => {
     });
   });
 
-  describe('DELETE /api/booking/:bookingHash', () => {
+  describe('DELETE /api/booking', () => {
     it('Should delete a booking', async () => {
       const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
-      const { tx } = await request({ url: `${apiUrl}/booking/${dbBooking.bookingHash}`, method: 'DELETE', json: true });
+      const body = { bookingHash: validBookingWithEthPrice.bookingHash };
+      const { tx } = await request({ url: `${apiUrl}/booking`, method: 'DELETE', json: true, body });
       expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
       expect(tx).to.have.property('data');
       expect(tx).to.have.property('value', 0);
@@ -232,7 +233,8 @@ describe('Booking API', () => {
     });
     it('Should retrun 404 for invalid bookingHash', async () => {
       try {
-        await request({ url: `${apiUrl}/booking/someHash`, method: 'DELETE', json: true });
+        const body = { bookingHash: 'invalidHash' };
+        await request({ url: `${apiUrl}/booking`, method: 'DELETE', json: true, body });
         throw new Error('should not be called');
       } catch (e) {
         expect(e).to.have.property('error');
