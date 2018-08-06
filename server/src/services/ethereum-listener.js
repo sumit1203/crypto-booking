@@ -45,7 +45,7 @@ async function onBookingCancel (args) {
     if (booking.status === BOOKING_STATUS.canceled) {
       return;
     }
-    cancelBooking(booking.id);
+    await cancelBooking(bookingHash);
   } catch (e) {
     console.error(e);
   }
