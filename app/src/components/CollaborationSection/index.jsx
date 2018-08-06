@@ -5,27 +5,19 @@ export default class CollaborationSection extends React.Component {
   render() {
 
     return (
-      <article className="section-wrapper" style={{
-        position: 'relative',
+      <article className="section-wrapper py-5" style={{
         boxShadow: '0 5px 30px rgba(0,0,0,.05) inset',
-        padding: '150px 0',
+        //padding: '150px 0',
       }}>
-        <div className="d-none d-lg-block" style={{
-          opacity: .7,
-          position: 'absolute',
-          top: '0', left: '0', bottom: '0', right: '0',
-          backgroundImage: 'url(https://windingtree.com/assets/img/banners/lif-token-bg.svg)',
-          backgroundPosition: 'right center, left center',
-          backgroundRepeat: 'no-repeat, no-repeat',
-          backgroundSize: 'contain, auto',
-        }}></div>
-          <div className="container">
-              <div className="row">
-                <div className="col-12 col-lg-6 pr-lg-5">
-                  <p className="mb-1 lead"><b>Winding Tree</b> provides ETH Berlin accomodation services together with our partner Botique Hotel i31.</p>
-                  <p className="h4"><b>We offer a 20% discount to hackers and engineers who pay by <a href="#paying-with-lif">Lif token</a></b>.</p>
+          <div className="container py-lg-1">
+              <div className="row justify-content-center">
+                <div className="col-md-10 col-lg-9 text-center">
+                  <p className="mb-1 h3">Winding Tree provides ETH Berlin accomodation services together with our partner Botique Hotel i31.</p>
+                  <p className="h4"style={{fontWeight: 'normal'}}>We offer a <b>20% discount</b> to hackers and engineers who pay with <a href="#paying-with-lif">Lif token</a>.</p>
                 </div>
               </div>
+
+
             </div>
 
       </article>
