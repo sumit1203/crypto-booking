@@ -13,6 +13,8 @@ const {
   changesEmailSentBooking,
   sendBookingInfoByEmail,
   checkBookingExpired,
+  getBookingIndex,
+  cancelBooking,
   getCancelBookingInstructions,
   updateRoom,
 } = require('../../src/controllers/Booking');
@@ -167,6 +169,8 @@ describe('Booking controller', () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     await sendBookingInfoByEmail(dbBooking.bookingHash);
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
   });
   it('Should set a booking as pending', async () => {
     const dbBooking = BookingModel.generate({
@@ -177,6 +181,21 @@ describe('Booking controller', () => {
     const bookingsExpred = await checkBookingExpired();
     const updatedBooking = await readBooking({ id: await bookingsExpred[0] });
     expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
+  });
+  it('Should get the booking index', async () => {
+    await createBooking(validBooking);
+    const { booking } = await createBooking(validBooking);
+    await createBooking(validBooking);
+    expect(await getBookingIndex(booking._id.toString())).to.be.equal(1);
+  });
+  it('Should cancel the booking', async () => {
+    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    await dbBooking.save();
+    await cancelBooking(dbBooking.id);
+    const updatedBooking = await readBooking({ id: dbBooking.id });
+    const sendFake = sandbox.getFakes()[0];
+    expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
+    expect(sendFake).to.have.property('calledOnce', true);
   });
   it('Should update room of the booking', async () => {
     const ROOM_NUMBER = 8;
