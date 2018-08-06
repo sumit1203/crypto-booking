@@ -4,7 +4,7 @@ module.exports = {
   WHITELIST: process.env.WHITELIST || '*',
   SERVER_PORT: process.env.SERVER_PORT || 3001,
   STARTING_BLOCK: process.env.STARTING_BLOCK || 3668521,
-  MONGODB_URI: process.env.MONGODB_URI || 'localhost:27017/crypto-booking-test',
+  MONGODB_URI: process.env.MONGODB_URI_TEST || 'localhost:27017/crypto-booking-test',
   MAIL_API_KEY: process.env.MAIL_API_KEY || 'API-KEY',
   FROM_EMAIL: process.env.FROM_EMAIL || 'example@windingtree.com',
   OWNER_PRIVATE_KEY: process.env.OWNER_PRIVATE_KEY || '0x4259ac86777aa87b3e24006fe6bc98a9c726c3618b18541716a8acc1a7161fa2',
