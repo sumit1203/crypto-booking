@@ -1,1 +1,6 @@
-.card ul li::first-letter {text-transform: uppercase;}
+
+// Cards (adjustments)
+.card {
+  .card-img-overlay {pointer-events: none}
+  ul li::first-letter {text-transform: uppercase;}
+}
