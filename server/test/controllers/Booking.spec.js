@@ -153,7 +153,7 @@ describe('Booking controller', () => {
   it('Should set confirmationEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    const booking = await confirmBooking(dbBooking._id);
+    const booking = await confirmBooking(dbBooking.bookingHash);
     expect(booking).to.have.property('confirmationEmailSent', true);
     expect(booking).to.have.property('status', BOOKING_STATUS.approved);
     expect(booking).to.have.property('changesEmailSent');
@@ -191,7 +191,7 @@ describe('Booking controller', () => {
   it('Should cancel the booking', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    await cancelBooking(dbBooking.id);
+    await cancelBooking(dbBooking.bookingHash);
     const updatedBooking = await readBooking({ id: dbBooking.id });
     const sendFake = sandbox.getFakes()[0];
     expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
