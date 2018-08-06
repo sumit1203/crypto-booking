@@ -161,7 +161,7 @@ describe('Booking controller', () => {
   it('Should set changesEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     const { changesEmailSent } = await dbBooking.save();
-    const booking = await changesEmailSentBooking(dbBooking._id);
+    const booking = await changesEmailSentBooking(dbBooking.bookingHash);
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking.changesEmailSent).to.be.at.least(changesEmailSent);
   });

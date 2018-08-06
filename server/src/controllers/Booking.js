@@ -104,8 +104,8 @@ async function confirmBooking (bookingHash) {
   return _getDecryptedBooking(bookingModel);
 }
 
-async function changesEmailSentBooking (id) {
-  const bookingModel = await BookingModel.findById(id).exec();
+async function changesEmailSentBooking (bookingHash) {
+  const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
   bookingModel.changesEmailSent = Date.now() / 1000;
   return bookingModel.save();
 }
