@@ -9,7 +9,11 @@ const {
   getCancelBookingTx,
 } = require('../services/web3');
 const { FROM_EMAIL } = require('../config');
-const { SIGNATURE_TIME_LIMIT, BOOKING_PAYMENT_TYPES } = require('../constants');
+const {
+  SIGNATURE_TIME_LIMIT,
+  BOOKING_PAYMENT_TYPES,
+  BOOKING_STATUS,
+} = require('../constants');
 
 async function _generateBooking (data) {
   const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
@@ -118,7 +122,12 @@ async function initializeCryptoIndex () {
 
 const checkBookingExpired = async () => {
   const limit = Math.floor(Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60);
-  const bookings = await BookingModel.find({ signatureTimestamp: { $lt: limit } });
+  const bookings = await BookingModel.find({
+    $and: [
+      { signatureTimestamp: { $lt: limit } },
+      { status: { $eq: BOOKING_STATUS.pending } },
+    ],
+  });
   return bookings.map(async (booking) => {
     await booking.setAsCanceled();
     return booking._id;
