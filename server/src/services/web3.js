@@ -26,7 +26,7 @@ const getInstructionsTxs = async (paymentType, signatureData, offerSignature, ni
         BOOKING_POC_ADDRESS, totalWei
       ).encodeABI(),
       value: 0,
-      gas: 100000, // await lifToken.methods.approve( BOOKING_POC_ADDRESS, totalWei).estimateGas(),
+      gas: 200000, // await lifToken.methods.approve( BOOKING_POC_ADDRESS, totalWei).estimateGas(),
     });
     bookWith = bookingPoc.methods.bookWithLif;
   }
@@ -37,7 +37,7 @@ const getInstructionsTxs = async (paymentType, signatureData, offerSignature, ni
       signatureData.roomType, nights, signatureData.bookingHash
     ).encodeABI(),
     value: (paymentType === 'eth') ? totalWei : 0,
-    gas: 100000,
+    gas: 1000000,
     // gas: await bookingPoc.methods.bookWith(
     //   signatureData.weiPerNight, signatureData.signatureTimestamp, offerSignature,
     //   signatureData.roomType, nights, signatureData.bookingHash
@@ -51,7 +51,7 @@ const getCancelBookingTx = (roomType, _nights, room, bookingHash, isEther) => ({
   to: BOOKING_POC_ADDRESS,
   data: bookingPoc.methods.cancelBooking(roomType, _nights, room, bookingHash, isEther).encodeABI(),
   value: 0,
-  gas: 50000,
+  gas: 500000,
 });
 
 module.exports = {
