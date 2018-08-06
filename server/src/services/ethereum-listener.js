@@ -1,22 +1,26 @@
 const { bookingPoc } = require('./web3');
-const { readBooking, confirmBooking, confirmationEmailSentBooking, cancelBooking, updateRoom } = require('../controllers/Booking');
+const { readBooking, confirmBooking, cancelBooking, updateRoom } = require('../controllers/Booking');
 const { sendConfirmation, sendBookingChange } = require('./mail.js');
 const { STARTING_BLOCK, BOOKING_STATUS } = require('../config');
 
 let _nextBlockToProcess = STARTING_BLOCK;
 
 async function onBookingDone (args) {
-  const { event, blockNumber, returnValues: { bookingHash, room } } = args;
-  const booking = await readBooking({ bookingHash });
-  if (!booking) {
-    return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
+  try {
+    const { event, blockNumber, returnValues: { bookingHash, room } } = args;
+    const booking = await readBooking({ bookingHash });
+    if (!booking) {
+      return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
+    }
+    if (booking.confirmationEmailSent) {
+      return;
+    }
+    const confirmedBooking = await confirmBooking(bookingHash);
+    await updateRoom(bookingHash, room);
+    await sendConfirmation(event, bookingHash, confirmedBooking.personalInfo.email);
+  } catch (e) {
+    console.error(e);
   }
-  if (booking.confirmationEmailSent) {
-    return;
-  }
-  const confirmedBooking = await confirmBooking(booking.id);
-  await updateRoom(booking.id, room);
-  await sendConfirmation(event, confirmedBooking.bookingHash, confirmedBooking.personalInfo.email);
 };
 
 const onBookingChange = async (event) => {
@@ -32,15 +36,19 @@ const onBookingChange = async (event) => {
 };
 
 async function onBookingCancel (args) {
-  const { event, blockNumber, returnValues: { bookingHash } } = args;
-  const booking = await readBooking({ bookingHash });
-  if (!booking) {
-    return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
+  try {
+    const { event, blockNumber, returnValues: { bookingHash } } = args;
+    const booking = await readBooking({ bookingHash });
+    if (!booking) {
+      return console.error(`Can not find booking for event: ${event}, blockNumber: ${blockNumber}, logIndex: ${blockNumber}`);
+    }
+    if (booking.status === BOOKING_STATUS.canceled) {
+      return;
+    }
+    cancelBooking(booking.id);
+  } catch (e) {
+    console.error(e);
   }
-  if (booking.status === BOOKING_STATUS.canceled) {
-    return;
-  }
-  cancelBooking(booking.id);
 }
 
 const eventTypes = {
