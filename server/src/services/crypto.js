@@ -6,7 +6,6 @@ const {
 } = require('../config');
 
 const { handleApplicationError } = require('../errors');
-let cryptoIndex = 0;
 
 function _getExtendedKeyByIndex (index) {
   if (!MASTER_KEY) {
@@ -24,18 +23,8 @@ function _getKeyPair (index) {
   return { privateKey, publicKey };
 }
 
-function setCryptoIndex (value) {
-  cryptoIndex = value;
-}
-
-function getCryptoIndex () {
-  return cryptoIndex;
-}
-
-function generateKeyPair () {
-  const index = getCryptoIndex();
+function generateKeyPair (index) {
   const { privateKey, publicKey } = _getKeyPair(index);
-  setCryptoIndex(index + 1);
   return {
     privateKey,
     publicKey,
@@ -69,4 +58,4 @@ function decrypt (text, hash, algorithm = 'aes256') {
   return dec;
 }
 
-module.exports = { encrypt, decrypt, generateKeyPair, getKeyPair, setCryptoIndex, getCryptoIndex };
+module.exports = { encrypt, decrypt, generateKeyPair, getKeyPair };
