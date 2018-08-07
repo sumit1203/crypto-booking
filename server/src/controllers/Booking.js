@@ -4,7 +4,7 @@ const { fetchPrice } = require('../services/prices');
 const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo, sendBookingCanceled } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
-const { generateKeyPair, getKeyPair, setCryptoIndex } = require('../services/crypto');
+const { generateKeyPair, getKeyPair } = require('../services/crypto');
 const {
   getCancelBookingTx,
 } = require('../services/web3');
@@ -16,7 +16,8 @@ const {
 } = require('../constants');
 
 async function _generateBooking (data) {
-  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair();
+  const index = await BookingModel.nextIndex();
+  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair(index);
   data.bookingHash = publicKey;
   try {
     const bookingModel = BookingModel.generate(data, privateKey);
@@ -78,8 +79,11 @@ async function readBooking (filter, index) {
 }
 
 async function getCancelBookingInstructions (bookingHash) {
+  if (!bookingHash) {
+    throw handleApplicationError('noBookingHashFromClient');
+  }
   const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
-  if (!bookingModel) {
+  if (!bookingModel || bookingModel.status !== BOOKING_STATUS.approved) {
     throw handleApplicationError('bookingNotFound');
   }
   const { roomType, roomNumber, from, to, paymentType } = bookingModel;
@@ -122,11 +126,6 @@ async function sendBookingInfoByEmail (bookingHash, index) {
   });
 }
 
-async function initializeCryptoIndex () {
-  const totalBookings = await BookingModel.countDocuments().exec();
-  setCryptoIndex(totalBookings);
-}
-
 const checkBookingExpired = async () => {
   const limit = Math.floor(Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60);
   const bookings = await BookingModel.find({
@@ -167,7 +166,6 @@ module.exports = {
   confirmBooking,
   changesEmailSentBooking,
   sendBookingInfoByEmail,
-  initializeCryptoIndex,
   checkBookingExpired,
   cancelBooking,
   getBookingIndex,
