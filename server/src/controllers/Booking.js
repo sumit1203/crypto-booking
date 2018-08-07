@@ -78,8 +78,11 @@ async function readBooking (filter, index) {
 }
 
 async function getCancelBookingInstructions (bookingHash) {
+  if (!bookingHash) {
+    throw handleApplicationError('noBookingHashFromClient');
+  }
   const bookingModel = await BookingModel.findOne({ bookingHash }).exec();
-  if (!bookingModel) {
+  if (!bookingModel || bookingModel.status !== BOOKING_STATUS.approved) {
     throw handleApplicationError('bookingNotFound');
   }
   const { roomType, roomNumber, from, to, paymentType } = bookingModel;
