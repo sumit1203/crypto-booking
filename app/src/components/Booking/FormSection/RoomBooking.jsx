@@ -42,14 +42,16 @@ export default class RoomBooking extends React.Component {
 
   renderRoomTypes = () => {
     const {roomTypes, selectedRoom, onRoomTypeChange} = this.props
-    return roomTypes.map(room => {
+    return roomTypes.map((room,index) => {
      return (
        <Fragment key={room.id}>
         <input id={room.id} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
+
         <label htmlFor={room.id} className="d-flex d-md-inline align-items-center justify-content-center col-6" style={{whiteSpace: 'initial'}}>
-          {selectedRoom.id === room.id && <i className="mdi mdi-check-circle d-none d-sm-inline"/>}
-          &nbsp;{room.name}
+          <i className="mdi mdi-check-circle d-none d-sm-inline"/>
+          {index === 0 ? ' Tween Bed' : index === 1 && ' King Bed'}
         </label>
+
        </Fragment>)
     })
   }
