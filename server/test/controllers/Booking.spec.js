@@ -207,6 +207,7 @@ describe('Booking controller', () => {
   it('Should generate tx for cancel booking', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
+    await dbBooking.setAsApproved();
     const tx = await getCancelBookingInstructions(dbBooking.bookingHash);
     expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
     expect(tx).to.have.property('data');

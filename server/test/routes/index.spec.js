@@ -223,6 +223,7 @@ describe('Booking API', () => {
     it('Should delete a booking', async () => {
       const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
+      await dbBooking.setAsApproved();
       const body = { bookingHash: validBookingWithEthPrice.bookingHash };
       const { tx } = await request({ url: `${apiUrl}/booking`, method: 'DELETE', json: true, body });
       expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
@@ -233,6 +234,18 @@ describe('Booking API', () => {
     it('Should retrun 404 for invalid bookingHash', async () => {
       try {
         const body = { bookingHash: 'invalidHash' };
+        await request({ url: `${apiUrl}/booking`, method: 'DELETE', json: true, body });
+        throw new Error('should not be called');
+      } catch (e) {
+        expect(e).to.have.property('error');
+        expect(e.error).to.have.property('code', '#bookingNotFound');
+      }
+    });
+    it('Should retrun 404 for non approved booking', async () => {
+      try {
+        const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+        await dbBooking.save();
+        const body = { bookingHash: validBookingWithEthPrice.bookingHash };
         await request({ url: `${apiUrl}/booking`, method: 'DELETE', json: true, body });
         throw new Error('should not be called');
       } catch (e) {
