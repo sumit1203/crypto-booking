@@ -107,7 +107,7 @@ const instructionsBody = (paymentType, txs, bookingHash, bookingIndex) => {
                                       <table align="left" border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
                                         <tbody>
                                           <tr>
-                                            <td style="width:135px;"><img height="auto" src="https://windingtree.com/assets/img/logo/md-color.svg" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="135"></td>
+                                            <td style="width:135px;"><img height="auto" src="https://booking.windingtree.com/img/logo--gradient_black-text.png" alt="Winding Tree logo" title="Winding Tree logo" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="135"></td>
                                           </tr>
                                         </tbody>
                                       </table>
@@ -253,75 +253,7 @@ const instructionsBody = (paymentType, txs, bookingHash, bookingIndex) => {
             </td>
           </tr>
         </table>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" >
-          <tr>
-            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-              <![endif]-->
-              <div style="Margin:0px auto;max-width:600px;">
-                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
-                  <tbody>
-                    <tr>
-                      <td style="direction:ltr;font-size:0px;padding:20px 0;padding-bottom:15px;padding-left:25px;padding-right:25px;padding-top:10px;text-align:center;vertical-align:top;">
-                        <!--[if mso | IE]>
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                          <tr>
-                            <td class="" style="vertical-align:top;width:550px;" >
-                              <![endif]-->
-                              <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
-                                <table background="#F2F2F2" border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-                                  <tbody>
-                                    <tr>
-                                      <td style="background-color:#F2F2F2;border-radius:5px;vertical-align:top;padding:8px 0;">
-                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:10px 20px;padding-bottom:0;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">To:</div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:0 20px;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${txs[0].to}</div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:15px 20px;padding-bottom:0;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">With this data:</div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:0 20px 10px 20px;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${txs[0].data}</div>
-                                            </td>
-                                          </tr>
-                                        </table>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <!--[if mso | IE]>
-                            </td>
-                          </tr>
-                        </table>
-                        <![endif]-->
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!--[if mso | IE]>
-            </td>
-          </tr>
-        </table>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" >
-          <tr>
-            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-              <![endif]-->
-              ${_helperHotFix(txs)}
-              <!--[if mso | IE]>
-            </td>
-          </tr>
-        </table>
+        ${_helperGetTxHTML(txs, paymentType)}
         <![endif]-->
       </div>
     </body>
@@ -440,69 +372,92 @@ td.full-width-mobile { width: auto !important; }
   return confirmationHtml;
 };
 
-
-const _helperHotFix = (txs) => {
-  if (!txs[1]) return '';
-  return `      <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" >
-          <tr>
-            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-              <![endif]-->
-              <div style="Margin:0px auto;max-width:600px;">
-                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
-                  <tbody>
-                    <tr>
-                      <td style="direction:ltr;font-size:0px;padding:20px 0;padding-bottom:35px;padding-left:25px;padding-right:25px;padding-top:10px;text-align:center;vertical-align:top;">
-                        <!--[if mso | IE]>
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                          <tr>
-                            <td class="" style="vertical-align:top;width:550px;" >
-                              <![endif]-->
-                              <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
-                                <table background="#F2F2F2" border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-                                  <tbody>
-                                    <tr>
-                                      <td style="background-color:#F2F2F2;border-radius:5px;vertical-align:top;padding:8px 0;">
-                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:10px 20px;padding-bottom:0;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">To:</div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:0 20px;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${txs[1].to}</div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:15px 20px;padding-bottom:0;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">With this data:</div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left" style="font-size:0px;padding:0 20px 10px 20px;word-break:break-word;">
-                                              <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${txs[1].data}</div>
-                                            </td>
-                                          </tr>
-                                        </table>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <!--[if mso | IE]>
-                            </td>
-                          </tr>
-                        </table>
-                        <![endif]-->
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!--[if mso | IE]>
-            </td>
-          </tr>
-        </table>`
+function _helperGetTxHTML (txs, paymentType) {
+  let returnHtml = '';
+  for (const tx of txs) {
+    const amountHtml = paymentType === 'lif' ? '' : `
+      <tr>
+        <td align="left" style="font-size:0px;padding:10px 20px;padding-bottom:0;word-break:break-word;">
+          <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">Send:</div>
+        </td>
+      </tr>
+      <tr>
+        <td align="left" style="font-size:0px;padding:0 20px;word-break:break-word;">
+          <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${web3.utils.fromWei(tx.value.toString())} ${paymentType.toUpperCase()}</div>
+        </td>
+      </tr>`;
+    returnHtml += `
+    <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" >
+      <tr>
+        <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+          <![endif]-->
+          <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" >
+            <tr>
+              <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+                <![endif]-->
+                <div style="Margin:0px auto;max-width:600px;">
+                  <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                    <tbody>
+                      <tr>
+                        <td style="direction:ltr;font-size:0px;padding:20px 0;padding-bottom:35px;padding-left:25px;padding-right:25px;padding-top:10px;text-align:center;vertical-align:top;">
+                          <!--[if mso | IE]>
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td class="" style="vertical-align:top;width:550px;" >
+                                <![endif]-->
+                                <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                  <table background="#F2F2F2" border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                    <tbody>
+                                      <tr>
+                                        <td style="background-color:#F2F2F2;border-radius:5px;vertical-align:top;padding:8px 0;">
+                                          <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                            ${amountHtml}
+                                            <tr>
+                                              <td align="left" style="font-size:0px;padding:10px 20px;padding-bottom:0;word-break:break-word;">
+                                                <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">To:</div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td align="left" style="font-size:0px;padding:0 20px;word-break:break-word;">
+                                                <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${tx.to}</div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td align="left" style="font-size:0px;padding:15px 20px;padding-bottom:0;word-break:break-word;">
+                                                <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">With this data:</div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td align="left" style="font-size:0px;padding:0 20px 10px 20px;word-break:break-word;">
+                                                <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${tx.data}</div>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <!--[if mso | IE]>
+                              </td>
+                            </tr>
+                          </table>
+                          <![endif]-->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!--[if mso | IE]>
+              </td>
+            </tr>
+          </table>
+          <!--[if mso | IE]>
+        </td>
+      </tr>
+    </table>`;
+  }
+  return returnHtml;
 }
 module.exports = {
   confirmationBody,
