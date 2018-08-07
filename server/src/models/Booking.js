@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-auto-increment');
 const Schema = mongoose.Schema;
 const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
   BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
 const { encrypt, decrypt } = require('../services/crypto');
-
+autoIncrement.initialize(mongoose.connection);
 // from https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 function _isEmail (email) {
   // eslint-disable-next-line no-useless-escape
@@ -19,7 +20,7 @@ function _isBirthDate (birthDate) {
 }
 
 function _isPhone (phone) {
-  const re = /^\+\d{13}$/;
+  const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
   return re.test(String(phone));
 }
 
@@ -206,6 +207,26 @@ Booking.statics.generate = function (data, privateKey) {
   return booking;
 };
 
+Booking.statics.resetIndex = function () {
+  return new Promise((resolve, reject) => {
+    const BookingModel = this.model('Booking');
+    BookingModel.resetCount((err, nextCount) => {
+      if (err) return reject(err);
+      return resolve(nextCount);
+    });
+  });
+};
+
+Booking.statics.nextIndex = function () {
+  return new Promise((resolve, reject) => {
+    const BookingModel = this.model('Booking');
+    BookingModel.nextCount((err, nextCount) => {
+      if (err) return reject(err);
+      return resolve(nextCount);
+    });
+  });
+};
+
 function _errorHandler (error) {
   if (error.name === 'MongoError' && error.code === 11000) {
     return handleApplicationError('duplicateBooking');
@@ -227,5 +248,7 @@ function _errorHandler (error) {
     return handleApplicationError(firstError.message);
   }
 }
+
+Booking.plugin(autoIncrement.plugin, { model: 'Booking', field: 'bookingIndex' });
 
 module.exports = { Booking: mongoose.model('Booking', Booking) };

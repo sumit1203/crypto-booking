@@ -31,6 +31,11 @@ module.exports = {
     short: 'Invalid eth price.',
     long: 'The cryptoPrice must be a number.',
   },
+  noBookingHashFromClient: {
+    status: 409,
+    short: 'No booking hash provided',
+    long: 'A booking hash must be sent to find the booking',
+  },
   whiteList: {
     status: 403,
     short: 'IP is not whitelisted.',
