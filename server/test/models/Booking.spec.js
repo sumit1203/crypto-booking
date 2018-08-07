@@ -6,6 +6,7 @@ const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('.
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
 const { decrypt } = require('../../src/services/crypto');
 const { web3 } = require('../../src/services/web3');
+const sinon = require('sinon');
 
 function basicValidationExpect (validation, field) {
   expect(validation).to.have.property('errors');
@@ -361,6 +362,28 @@ describe('Booking model', () => {
         expect(booking).to.have.property('roomType');
         expect(booking.roomType).to.be.a('string');
         expect(booking).to.have.property('status', BOOKING_STATUS.pending);
+      });
+    });
+    describe('resetIndex', () => {
+      it('Should return a promise', () => {
+        expect(Booking.resetIndex()).to.be.an.instanceof(Promise);
+      });
+      it('Should call function resetCount of the plugin autoIncrement', async () => {
+        sinon.spy(Booking, 'resetCount');
+        await Booking.resetIndex();
+        expect(Booking.resetCount).to.have.property('calledOnce', true);
+        Booking.resetCount.restore();
+      });
+    });
+    describe('nextIndex', () => {
+      it('Should return a promise', () => {
+        expect(Booking.nextIndex()).to.be.an.instanceof(Promise);
+      });
+      it('Should call function nextCount of the plugin autoIncrement', async () => {
+        sinon.spy(Booking, 'nextCount');
+        await Booking.nextIndex();
+        expect(Booking.nextCount).to.have.property('calledOnce', true);
+        Booking.nextCount.restore();
       });
     });
   });

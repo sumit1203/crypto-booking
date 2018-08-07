@@ -1,8 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
-import ImageSlider from '../../../ImageSlider'
-import { roomType } from '../../propTypes'
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import ImageSlider from '../../../ImageSlider';
+import { roomType } from '../../propTypes';
+import MarkdownRenderer from 'react-markdown-renderer';
+
 
 class Room extends React.Component {
   onClick = () => {
@@ -15,7 +17,9 @@ class Room extends React.Component {
     const roomIndex = this.props.roomIndex;
     return (
       <React.Fragment>
-        <ImageSlider id={id} images={images}/>
+
+        <ImageSlider id={"carousel--"+id} images={images}/>
+
         <div className="card-img-overlay text-right d-block d-lg-none">
             <h5 className="h6 lead badge badge-warning">
               <b className="font--alt">{price * 0.8} €</b><br/> Night
@@ -42,7 +46,7 @@ class Room extends React.Component {
           </header>
 
 
-          <ul className="nav nav-tabs my-1" id="myTab" role="tablist" style={{position: 'relative'}}>
+          <ul className="nav nav-tabs my-1" id="myTab" role="tablist">
             <li className="nav-item">
               <a className="nav-link active" id={"description-tab-"+roomIndex} data-toggle="tab" href={"#description-"+roomIndex} role="tab" aria-controls="description" aria-selected="true">
                 Description
@@ -57,9 +61,7 @@ class Room extends React.Component {
 
           <div className="tab-content" id="tab-content">
             <div className="tab-pane fade show active" id={"description-"+roomIndex} role="tabpanel" aria-labelledby="description-tab">
-              <p className="card-text text-left">
-                {description}
-              </p>
+              <MarkdownRenderer markdown={description} className="card-text text-left"/>
             </div>
             <div className="tab-pane fade" id={"amenities-"+roomIndex} role="tabpanel" aria-labelledby="amenities-tab">
               <ul className="pl-1">
@@ -82,7 +84,7 @@ class Room extends React.Component {
             </ul>
           </div>
 
-        <div className="card-footer text-left">
+        <div className="card-footer text-center text-md-left">
 
 
           <a href="#book-a-room" className={classnames('btn btn-secondary mb-1 mb-md-0',{'disabled': isFull})}

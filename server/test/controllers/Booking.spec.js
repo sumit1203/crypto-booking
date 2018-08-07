@@ -19,7 +19,6 @@ const {
   updateRoom,
 } = require('../../src/controllers/Booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
-const { setCryptoIndex } = require('../../src/services/crypto');
 const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 const { BOOKING_POC_ADDRESS } = require('../../src/config');
 
@@ -32,8 +31,8 @@ describe('Booking controller', () => {
   before(() => {
     sandbox = sinon.createSandbox();
   });
-  beforeEach(() => {
-    setCryptoIndex(0);
+  beforeEach(async () => {
+    await BookingModel.resetIndex();
     sandbox.stub(sgMail, 'send')
       .returns((data, cb) => ({ id: '<Some.id@server>', message: 'Queued. Thank you.' }));
   });
@@ -70,7 +69,7 @@ describe('Booking controller', () => {
 
   it('Should create a new booking with a diffent public key if already exists', async function () {
     const { booking: booking1 } = await createBooking(validBooking);
-    setCryptoIndex(0);
+    await BookingModel.resetIndex();
     const { booking: booking2 } = await createBooking(validBooking);
     expect(booking1.bookingHash).to.be.not.equal(booking2.bookingHash);
   });
@@ -153,7 +152,7 @@ describe('Booking controller', () => {
   it('Should set confirmationEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    const booking = await confirmBooking(dbBooking._id);
+    const booking = await confirmBooking(dbBooking.bookingHash);
     expect(booking).to.have.property('confirmationEmailSent', true);
     expect(booking).to.have.property('status', BOOKING_STATUS.approved);
     expect(booking).to.have.property('changesEmailSent');
@@ -161,7 +160,7 @@ describe('Booking controller', () => {
   it('Should set changesEmailSent as true', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     const { changesEmailSent } = await dbBooking.save();
-    const booking = await changesEmailSentBooking(dbBooking._id);
+    const booking = await changesEmailSentBooking(dbBooking.bookingHash);
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking.changesEmailSent).to.be.at.least(changesEmailSent);
   });
@@ -191,7 +190,7 @@ describe('Booking controller', () => {
   it('Should cancel the booking', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
-    await cancelBooking(dbBooking.id);
+    await cancelBooking(dbBooking.bookingHash);
     const updatedBooking = await readBooking({ id: dbBooking.id });
     const sendFake = sandbox.getFakes()[0];
     expect(updatedBooking).to.have.property('status', BOOKING_STATUS.canceled);
@@ -208,6 +207,7 @@ describe('Booking controller', () => {
   it('Should generate tx for cancel booking', async () => {
     const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
+    await dbBooking.setAsApproved();
     const tx = await getCancelBookingInstructions(dbBooking.bookingHash);
     expect(tx).to.have.property('to', BOOKING_POC_ADDRESS);
     expect(tx).to.have.property('data');

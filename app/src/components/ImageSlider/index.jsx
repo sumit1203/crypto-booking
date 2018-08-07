@@ -12,16 +12,24 @@ class ImageSlider extends React.Component {
   render () {
     const {images, id, className} = this.props
     return (
-      <div id={id} className={classnames("carousel", "slide", className)} data-ride="carousel">
-        <ol className="carousel-indicators">
-          {images.map((image, index) => (<li key={index} className={!index ? 'active': ''} data-target={`#${id}`} data-slide-to={index}/>))}
-        </ol>
+      <div id={id} className={classnames("carousel", "slide", className)} data-ride="carousel" data-interval={6000}>
+
+        {/*
+          // Disabled unless requested
+          <ol className="carousel-indicators">
+            {images.map((image, index) => (<li key={index} className={!index ? 'active': ''} data-target={`#${id}`} data-slide-to={index}/>))}
+          </ol>
+        */}
+
         <div className="carousel-inner">
-          {images.map((image, index) => (
-            <div key={index} className={`carousel-item ${!index ? 'active' : ''}`}>
-              <img className="d-block w-100 h-100" src={image} alt={`slide ${index}`}/>
-            </div>
-          ))}
+          {images.map((image, index) => {
+
+            // Limit the slider to 4 images
+            return index <= 3 &&
+              <div key={index} className={`carousel-item ${!index ? 'active' : ''}`}>
+                <img className="d-block w-100 h-100" src={image} alt={`slide ${index}`}/>
+              </div>
+          })}
         </div>
         <a className="carousel-control-prev" href={`#${id}`} role="button" data-slide="prev">
           <span className="carousel-control-prev-icon" aria-hidden="true"/>
