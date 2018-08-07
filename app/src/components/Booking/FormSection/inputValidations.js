@@ -4,6 +4,6 @@ export function validateEmail(email) {
 }
 
 export function validatePhone (phone) {
-  const re = /^\+\d{13}$/;
+  const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
   return re.test(String(phone));
 }
