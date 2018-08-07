@@ -1,8 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
-import ImageSlider from '../../../ImageSlider'
-import { roomType } from '../../propTypes'
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import ImageSlider from '../../../ImageSlider';
+import { roomType } from '../../propTypes';
+import MarkdownRenderer from 'react-markdown-renderer';
+
 
 class Room extends React.Component {
   onClick = () => {
@@ -59,9 +61,7 @@ class Room extends React.Component {
 
           <div className="tab-content" id="tab-content">
             <div className="tab-pane fade show active" id={"description-"+roomIndex} role="tabpanel" aria-labelledby="description-tab">
-              <p className="card-text text-left">
-                {description}
-              </p>
+              <MarkdownRenderer markdown={description} className="card-text text-left"/>
             </div>
             <div className="tab-pane fade" id={"amenities-"+roomIndex} role="tabpanel" aria-labelledby="amenities-tab">
               <ul className="pl-1">
