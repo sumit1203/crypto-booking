@@ -12,7 +12,7 @@ class RoomsSection extends React.Component {
         <div className="container">
           <div className="row">
             <div className="col">
-              <h2 className="text-white my-2 h3 pt-2 pt-lg-0">
+              <h2 className="text-white my-2 h3">
                 Rooms for hackers with discount
               </h2>
             </div>
