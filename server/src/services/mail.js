@@ -72,12 +72,9 @@ const sendInstructions = async ({ txs, booking, offerSignature, signatureData, c
 
 const sendBookingInfo = async (booking, { from, to }) => {
   try {
-    const { personalInfo, roomType, roomNumber, status } = booking;
-    const nights = [];
-    for (let i = booking.from; i <= booking.to; i++) {
-      nights.push(i);
-    }
-    const html = informationBody({ personalInfo, nights, roomType, room: roomNumber, status });
+    const { personalInfo, roomType, status, fromDate, toDate, remaindingMinues } = booking;
+
+    const html = informationBody({ personalInfo, from: fromDate, to: toDate, roomType, status, remaindingMinues });
 
     return sgMail.send({ from, to, subject: 'Hotel information for EthBerlin', html });
   } catch (e) {
