@@ -10,7 +10,6 @@
     "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
     "now-start": "serve --single ./public",
     "alias": "now alias --team windingtree --token=$NOW_TOKEN",
-    "postalias": "./scripts/cloudflare-cachepurge.sh",
     "postinstall": "npm install https://github.com/windingtree/wt-ui.git#develop"
   },
   "devDependencies": {
