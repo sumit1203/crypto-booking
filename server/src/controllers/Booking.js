@@ -127,7 +127,7 @@ async function sendBookingInfoByEmail (bookingHash, index) {
 }
 
 const checkBookingExpired = async () => {
-  const limit = Math.floor(Date.now() / 1000 - SIGNATURE_TIME_LIMIT * 60);
+  const limit = Math.floor(Date.now() / 1000 - 2 * SIGNATURE_TIME_LIMIT * 60);
   const bookings = await BookingModel.find({
     $and: [
       { signatureTimestamp: { $lt: limit } },
