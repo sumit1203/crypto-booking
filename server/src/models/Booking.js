@@ -199,6 +199,10 @@ Booking.method({
     const day = 5 + this.to + 1;/* are nights so we need to add one more day */
     return `${day}/9/2018`;
   },
+  getRemaindingMinutes: function () {
+    const limit = Math.floor(Date.now() / 1000 - 2 * SIGNATURE_TIME_LIMIT * 60);
+    return Math.abs(Math.floor((limit - this.signatureTimestamp) / 60));
+  },
 });
 
 // Error Handler

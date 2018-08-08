@@ -55,6 +55,9 @@ async function createBooking (data) {
 function _prepareForExport (bookingModel, privateKey) {
   const booking = bookingModel.toObject();
   booking.personalInfo = bookingModel.decryptPersonalInfo(privateKey);
+  booking.fromDate = bookingModel.getFromDate();
+  booking.toDate = bookingModel.getToDate();
+  booking.remaindingMinues = bookingModel.getRemaindingMinutes();
   return booking;
 }
 
