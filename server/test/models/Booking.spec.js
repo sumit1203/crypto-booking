@@ -386,5 +386,17 @@ describe('Booking model', () => {
         Booking.nextCount.restore();
       });
     });
+    describe('getFromDate', () => {
+      it('Should return an string 6/9/2018', () => {
+        const booking = new Booking(validBookingDB);
+        expect(booking.getFromDate()).to.be.equal('6/9/2018');
+      });
+    });
+    describe('getFromDate', () => {
+      it('Should return an string 10/9/2018', () => {
+        const booking = new Booking(validBookingDB);
+        expect(booking.getToDate()).to.be.equal('10/9/2018');
+      });
+    });
   });
 });
