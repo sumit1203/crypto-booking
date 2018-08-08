@@ -171,10 +171,10 @@ describe('Booking controller', () => {
     const sendFake = sandbox.getFakes()[0];
     expect(sendFake).to.have.property('calledOnce', true);
   });
-  it('Should set a booking as pending', async () => {
+  it('Should set a booking as canceled', async () => {
     const dbBooking = BookingModel.generate({
       ...validBookingWithEthPrice,
-      signatureTimestamp: Math.floor(Date.now() / 1000 - (SIGNATURE_TIME_LIMIT + 15) * 60),
+      signatureTimestamp: Math.floor(Date.now() / 1000 - 2 * SIGNATURE_TIME_LIMIT * 60 - 1),
     }, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     const bookingsExpred = await checkBookingExpired();
