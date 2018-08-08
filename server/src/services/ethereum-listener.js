@@ -1,7 +1,8 @@
 const { bookingPoc } = require('./web3');
 const { readBooking, confirmBooking, cancelBooking, updateRoom } = require('../controllers/Booking');
 const { sendConfirmation, sendBookingChange } = require('./mail.js');
-const { STARTING_BLOCK, BOOKING_STATUS } = require('../config');
+const { STARTING_BLOCK } = require('../config');
+const { BOOKING_STATUS } = require('../constants');
 
 let _nextBlockToProcess = STARTING_BLOCK;
 
