@@ -46,7 +46,7 @@ export default class RoomBooking extends React.Component {
      return (
        <Fragment key={room.id}>
         <input id={`radio-${room.id}`} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-        <label htmlFor={`radio-${room.id}`} className="d-flex d-md-inline align-items-center justify-content-center col-6" style={{whiteSpace: 'initial'}}>
+        <label htmlFor={`radio-${room.id}`} style={{whiteSpace: 'initial'}}>
           <i className="mdi mdi-check-circle d-none d-sm-inline"/>
           {index === 0 ? ' Twin Bed' : index === 1 && ' King Bed'}
         </label>
@@ -113,23 +113,32 @@ export default class RoomBooking extends React.Component {
                 {/*TODO: in case one of the options is unavailable use the class "disabled" and the attribute "disabled" on that item*/}
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Preferred room type </h5>
-                  <div className="btn-group btn-group--switch w-100" role="group" aria-label="Room type">
-                    {this.renderRoomTypes()}
+                  <div className="form-row">
+                    <div className="col-12 mb-1 mb-sm-0">
+                      <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
+                        {this.renderRoomTypes()}
+                      </div>
+                    </div>
                   </div>
                 </section>
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Reservation date </h5>
                   <div className="form-row">
-                    <div className="col-12 col-sm-6 mb-1 mb-sm-0">
-                      {
-                        days.map((day) => (
-                          <div key={day}>
-                            <input type="checkbox" name="days" id={"days-" + day} value={day} onChange={onDaysChange} checked={day >= from && day <= to}/>
-                            <label htmlFor={"days-" + day}>&nbsp; {5 + day}
-                            </label>
-                          </div>
-                        ))
-                      }
+                    <div className="col-12 mb-1 mb-sm-0">
+
+                      <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
+
+                        {
+                          days.map((day) => (
+                            <Fragment key={day}>
+                              <input type="checkbox" name="days" id={"days-" + day} value={day} onChange={onDaysChange} checked={day >= from && day <= to}/>
+                              <label htmlFor={"days-" + day} className="font--alt">{5 + day}</label>
+                            </Fragment>
+                          ))
+                        }
+
+                      </div>
+
                     </div>
                   </div>
                 </section>
