@@ -135,7 +135,7 @@ const confirmationBody = (event, secretCode) => {
                                   </tr>
                                   <tr>
                                     <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                                      <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${secretCode} ${secretCode.slice(3, 6)} ${secretCode.slice(6)}.</div>
+                                      <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">${secretCode}.</div>
                                     </td>
                                   </tr>
                                   <tr>
