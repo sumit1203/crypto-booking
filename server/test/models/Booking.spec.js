@@ -2,7 +2,7 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const { Booking } = require('../../src/models/Booking');
-const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../../src/constants');
+const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
 const { decrypt } = require('../../src/services/crypto');
 const { web3 } = require('../../src/services/web3');
@@ -384,6 +384,29 @@ describe('Booking model', () => {
         await Booking.nextIndex();
         expect(Booking.nextCount).to.have.property('calledOnce', true);
         Booking.nextCount.restore();
+      });
+    });
+    describe('getFromDate', () => {
+      it('Should return an string 6/9/2018', () => {
+        const booking = new Booking(validBookingDB);
+        expect(booking.getFromDate()).to.be.equal('6/9/2018');
+      });
+    });
+    describe('getFromDate', () => {
+      it('Should return an string 10/9/2018', () => {
+        const booking = new Booking(validBookingDB);
+        expect(booking.getToDate()).to.be.equal('10/9/2018');
+      });
+    });
+    describe('getRemaindingMinutes', () => {
+      it('Should return 30 minutes', () => {
+        const booking = new Booking(validBookingDB);
+        expect(booking.getRemaindingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT);
+      });
+      it(`Should return ${SIGNATURE_TIME_LIMIT - 1} minutes`, () => {
+        const booking = new Booking(validBookingDB);
+        booking.signatureTimestamp = booking.signatureTimestamp - 60;
+        expect(booking.getRemaindingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT - 1);
       });
     });
   });

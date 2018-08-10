@@ -28,8 +28,8 @@ class FormSection extends React.Component {
     this.web3 = new Web3(WEB3_PROVIDER)
     this.state = {
       paymentType: 'eth',
-      from: '2018-09-06',
-      to: '',
+      from: 1,
+      to: 5,
       fullName: null,
       birthDate: null,
       email: '',
@@ -39,7 +39,8 @@ class FormSection extends React.Component {
       fromDateMax: '2018-09-09',
       price: null,
       guestCount: '1',
-      errorMessage: ''
+      errorMessage: '',
+      totalDays: Array.from(new Array(5)).map((a, i) => i+1),
     }
   }
 
@@ -61,25 +62,19 @@ class FormSection extends React.Component {
     this.setState({paymentType: e.target.value}, this.computePrice)
   }
 
-  onFromDateChange = (e) => {
-    const from = e.target.value
-    if (!from) return
-    const {to} = this.state
-    const fromDate = new Date(from)
-    const toDate = new Date(to)
-    if (fromDate.getUTCDate() < 6 || fromDate.getUTCDate() >= toDate.getUTCDate()) return
-    this.setState({from, toDateMin: this._addDay(from, 1)}, this.computePrice)
+  onDaysChange = (e) => {
+    const day = parseInt(e.target.value)
+    const {to, from} = this.state
+    let dayFrom = Math.min(from, day)
+    let dayTo = Math.max(to, day)
+
+    if(!e.target.checked){
+      dayFrom = Math.min(day, 4 /*min from day 9*/)
+      dayTo = Math.min(day+1, 5 /*max from day 10*/)
+    }
+    this.setState({from: dayFrom, to: dayTo}, this.computePrice)
   }
 
-  onToDateChange = (e) => {
-    const to = e.target.value
-    if (!to) return
-    const {from} = this.state
-    const toDate = new Date(to)
-    const fromDate = new Date(from)
-    if (toDate.getUTCDate() <= fromDate.getUTCDate() || toDate.getUTCDate() > 10) return
-    this.setState({to, fromDateMax: this._addDay(to, -1)}, this.computePrice)
-  }
   onFullNameChange = (e) => {
     this.setState({fullName: e.target.value})
   }
@@ -112,9 +107,7 @@ class FormSection extends React.Component {
     const {from, to, paymentType} = this.state;
     const {price} = roomType;
     if (!from || !to || !price) return
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    const daysCount = (new Date (toDate - fromDate)).getDate()
+    const daysCount = to - from;
     const discount = paymentType === 'lif' ? 0.8 : 1
     const total = price * daysCount * discount
     this.setState({price: total})
@@ -131,13 +124,14 @@ class FormSection extends React.Component {
   onSubmit = async ({guestEthAddress, captchaToken}) => {
     const {from, to, fullName, birthDate, email, phone, guestCount, paymentType} = this.state
     const {id: roomType} = this.props.selectedRoom
-    const mappedFromDate = this._mapDateToInteger(from)
-    const mappedToDate = this._mapDateToInteger(to) - 1
+    const mappedFromDate = from
+    const mappedToDate = to - 1
     const nights = []
     for (let i = mappedFromDate; i <= mappedToDate; i++) {
       nights.push(i)
     }
     const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call()
+
     if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
       this.setState({isFull: true})
       return
@@ -187,7 +181,7 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone, loading} = this.state
+    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone, loading, totalDays} = this.state
     const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
     if (instructions || loading) return <CheckEmail onClose={this.onCloseModal} instructions={instructions} loading={loading}/>
@@ -212,14 +206,14 @@ class FormSection extends React.Component {
           paymentType={paymentType}
           onPaymentTypeChange={this.onPaymentTypeChange}
           guestCount={guestCount}
+          days={totalDays}
           onGuestCountChange={this.onGuestCountChange}
           onRoomTypeChange={this.onRoomTypeChange}
-          onFromDateChange={this.onFromDateChange}
-          onToDateChange={this.onToDateChange}
           onFullNameChange={this.onFullNameChange}
           onBirthDateChange={this.onBirthDateChange}
           onEmailChange={this.onEmailChange}
           onPhoneChange={this.onPhoneChange}
+          onDaysChange={this.onDaysChange}
           onSubmit={this.onSubmit}/>
       </Fragment>
     )

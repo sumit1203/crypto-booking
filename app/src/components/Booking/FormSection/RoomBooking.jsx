@@ -65,6 +65,7 @@ export default class RoomBooking extends React.Component {
       from,
       price,
       paymentType,
+      days,
       onPaymentTypeChange,
       guestCount,
       onGuestCountChange,
@@ -74,6 +75,7 @@ export default class RoomBooking extends React.Component {
       onBirthDateChange,
       onEmailChange,
       onPhoneChange,
+      onDaysChange,
     } = this.props;
     const {isValidEmail, isValidPhone, isConfirmModalOpen} = this.state
     return (
@@ -119,10 +121,15 @@ export default class RoomBooking extends React.Component {
                   <h5 className="mb-1"> Reservation date </h5>
                   <div className="form-row">
                     <div className="col-12 col-sm-6 mb-1 mb-sm-0">
-                      <input className="form-control form-control-lg" type="date" min="2018-09-06" max={fromDateMax} onChange={onFromDateChange} value={from} required/>
-                    </div>
-                    <div className=" col-12 col-sm-6">
-                      <input className="form-control form-control-lg" type="date" name="to" min={toDateMin} max="2018-09-10" onChange={onToDateChange} value={to} required/>
+                      {
+                        days.map((day) => (
+                          <div key={day}>
+                            <input type="checkbox" name="days" id={"days-" + day} value={day} onChange={onDaysChange} checked={day >= from && day <= to}/>
+                            <label htmlFor={"days-" + day}>&nbsp; {5 + day}
+                            </label>
+                          </div>
+                        ))
+                      }
                     </div>
                   </div>
                 </section>
@@ -168,8 +175,9 @@ RoomBooking.propTypes = {
   fromDateMax: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   phone: PropTypes.string.isRequired,
-  from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
+  from: PropTypes.number.isRequired,
+  to: PropTypes.number.isRequired,
+  days: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRoom: roomType,
   guestCount: PropTypes.string,
   price: PropTypes.number,
@@ -178,8 +186,7 @@ RoomBooking.propTypes = {
   onPaymentTypeChange: PropTypes.func.isRequired,
   onRoomTypeChange: PropTypes.func.isRequired,
   onGuestCountChange: PropTypes.func.isRequired,
-  onFromDateChange: PropTypes.func.isRequired,
-  onToDateChange: PropTypes.func.isRequired,
+  onDaysChange: PropTypes.func.isRequired,
   onFullNameChange: PropTypes.func.isRequired,
   onBirthDateChange: PropTypes.func.isRequired,
   onEmailChange: PropTypes.func.isRequired,
