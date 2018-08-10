@@ -35,12 +35,10 @@ class FormSection extends React.Component {
       email: '',
       phone: '+',
       instructions: null,
-      toDateMin: '2018-09-07',
-      fromDateMax: '2018-09-09',
       price: null,
       guestCount: '1',
+      errorMessage: '',
       totalDays: Array.from(new Array(5)).map((a, i) => i+1),
-      errorMessage: 'asdasdasdasdasd'
     }
   }
 
@@ -118,6 +116,7 @@ class FormSection extends React.Component {
     $('.alert').addClass('show')
     setTimeout(() => {
       $('.alert').removeClass('show')
+      this.setState({errorMessage: ''})
     }, 3000)
   }
 
@@ -155,8 +154,14 @@ class FormSection extends React.Component {
           'Content-Type': 'application/json'
         }
       })).json()
+
       if (response.status >= 400) {
         console.error(response)
+        // HOT FIX to remove blackscreen on error. We should remove bootstrap or use https://react-bootstrap.github.io/
+        const modal = document.querySelector('.modal-backdrop')
+        if(modal){
+          modal.remove()
+        }
         this.setState({errorMessage: response.long, loading: false}, this.showErrorAlert)
         return
       }
@@ -175,26 +180,23 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone, loading, totalDays} = this.state
+    const { errorMessage, from, to, instructions, isFull, price, paymentType, guestCount, email, phone, loading, totalDays} = this.state
     const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
-
     if (instructions || loading) return <CheckEmail onClose={this.onCloseModal} instructions={instructions} loading={loading}/>
     return (
       <Fragment>
-          <div className="alert fade fixed-top alert-danger text-center" role="alert">
+          { errorMessage && (<div className="alert fade fixed-top alert-danger text-center" role="alert">
             <span>{errorMessage}</span>
             <button type="button" className="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-          </div>
+          </div>)}
         <RoomBooking
           from={from}
           to={to}
           roomTypes={roomTypes}
           selectedRoom={selectedRoom}
-          toDateMin={toDateMin}
-          fromDateMax={fromDateMax}
           price={price}
           email={email}
           phone={phone}
