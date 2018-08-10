@@ -124,6 +124,7 @@ class FormSection extends React.Component {
     $('.alert').addClass('show')
     setTimeout(() => {
       $('.alert').removeClass('show')
+      this.setState({errorMessage: ''})
     }, 3000)
   }
 
@@ -192,12 +193,12 @@ class FormSection extends React.Component {
     if (instructions || loading) return <CheckEmail onClose={this.onCloseModal} instructions={instructions} loading={loading}/>
     return (
       <Fragment>
-          <div className="alert fade fixed-top alert-danger text-center" role="alert">
+          { errorMessage && (<div className="alert fade fixed-top alert-danger text-center" role="alert">
             <span>{errorMessage}</span>
             <button type="button" className="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-          </div>
+          </div>)}
         <RoomBooking
           from={from}
           to={to}
