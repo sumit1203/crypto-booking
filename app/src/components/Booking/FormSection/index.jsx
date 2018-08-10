@@ -160,8 +160,14 @@ class FormSection extends React.Component {
           'Content-Type': 'application/json'
         }
       })).json()
+
       if (response.status >= 400) {
         console.error(response)
+        // HOT FIX to remove blackscreen on error. We should remove bootstrap or use https://react-bootstrap.github.io/
+        const modal = document.querySelector('.modal-backdrop')
+        if(modal){
+          modal.remove()
+        }
         this.setState({errorMessage: response.long, loading: false}, this.showErrorAlert)
         return
       }
@@ -183,7 +189,6 @@ class FormSection extends React.Component {
     const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone, loading} = this.state
     const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
-
     if (instructions || loading) return <CheckEmail onClose={this.onCloseModal} instructions={instructions} loading={loading}/>
     return (
       <Fragment>
