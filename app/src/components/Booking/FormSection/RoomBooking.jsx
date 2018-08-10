@@ -57,8 +57,6 @@ export default class RoomBooking extends React.Component {
 
   render() {
     const {
-      toDateMin,
-      fromDateMax,
       phone,
       to,
       email,
@@ -171,8 +169,6 @@ export default class RoomBooking extends React.Component {
 }
 
 RoomBooking.propTypes = {
-  toDateMin: PropTypes.string.isRequired,
-  fromDateMax: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   phone: PropTypes.string.isRequired,
   from: PropTypes.number.isRequired,

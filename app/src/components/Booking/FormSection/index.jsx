@@ -35,8 +35,6 @@ class FormSection extends React.Component {
       email: '',
       phone: '+',
       instructions: null,
-      toDateMin: '2018-09-07',
-      fromDateMax: '2018-09-09',
       price: null,
       guestCount: '1',
       errorMessage: '',
@@ -181,7 +179,7 @@ class FormSection extends React.Component {
   }
 
   render () {
-    const { errorMessage, from, to, instructions, isFull, price, toDateMin, fromDateMax, paymentType, guestCount, email, phone, loading, totalDays} = this.state
+    const { errorMessage, from, to, instructions, isFull, price, paymentType, guestCount, email, phone, loading, totalDays} = this.state
     const {selectedRoom, roomTypes} = this.props
     if (isFull) return <FullyBooked onClose={this.onCloseModal}/>
     if (instructions || loading) return <CheckEmail onClose={this.onCloseModal} instructions={instructions} loading={loading}/>
@@ -198,8 +196,6 @@ class FormSection extends React.Component {
           to={to}
           roomTypes={roomTypes}
           selectedRoom={selectedRoom}
-          toDateMin={toDateMin}
-          fromDateMax={fromDateMax}
           price={price}
           email={email}
           phone={phone}
