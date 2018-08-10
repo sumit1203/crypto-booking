@@ -34,12 +34,12 @@ const Footer = () => (
               <div className="col-6 col-sm-6 col-md-6 col-lg-4">
                 <div className="row">
                   <div className="col-8">
-                    <a href="https://ethberlin.com" className="nav-link px-0 text--alpha-inverse">
+                    <a href="https://ethberlin.com" target="_blank" rel="noopener noreferrer" className="nav-link px-0 text--alpha-inverse">
                       <img src={logoEB} alt="ETH Berlin" className="img-fluid"/>
                     </a>
                   </div>
                   <div className="col-4">
-                    <a href="https://www.hotel-i31.de" className="nav-link px-0 text--alpha-inverse">
+                    <a href="https://www.hotel-i31.de" target="_blank" rel="noopener noreferrer" className="nav-link px-0 text--alpha-inverse">
                       <img src={logoI31} alt="I-31 Hotel" className="img-fluid"/>
                     </a>
                   </div>
@@ -64,43 +64,43 @@ const Footer = () => (
             <ul className="social list-inline text-center text-md-right">
 
               <li className="list-inline-item">
-                <a href="https://github.com/windingtree" title="GitHub" className="text-white text--alpha">
+                <a href="https://github.com/windingtree" target="_blank" rel="noopener noreferrer" title="GitHub" className="text-white text--alpha">
                   <i className="mdi mdi-24px mdi-github-circle"></i>
                 </a>
               </li>
 
               <li className="list-inline-item">
-                <a href="https://twitter.com/windingtree" title="Twitter" className="text-white text--alpha">
+                <a href="https://twitter.com/windingtree" target="_blank" rel="noopener noreferrer" title="Twitter" className="text-white text--alpha">
                   <i className="mdi mdi-24px mdi-twitter"></i>
                 </a>
               </li>
 
               <li className="list-inline-item">
-                <a href="http://blog.windingtree.com/" title="Medium" className="text-white text--alpha">
+                <a href="http://blog.windingtree.com/" target="_blank" rel="noopener noreferrer" title="Medium" className="text-white text--alpha">
                   <i className="mdi mdi-24px mdi-medium"></i>
                 </a>
               </li>
 
               <li className="list-inline-item">
-                <a href="https://www.youtube.com/channel/UCFuemEOhCfenYMoNdjD0Aew" title="YouTube" className="text-white text--alpha">
+                <a href="https://www.youtube.com/channel/UCFuemEOhCfenYMoNdjD0Aew" target="_blank" rel="noopener noreferrer" title="YouTube" className="text-white text--alpha">
                   <i className="mdi mdi-24px mdi-youtube"></i>
                 </a>
               </li>
 
               <li className="list-inline-item">
-                <a href="https://t.me/windingtree" title="Telegram" className="text-white text--alpha">
+                <a href="https://t.me/windingtree" target="_blank" rel="noopener noreferrer" title="Telegram" className="text-white text--alpha">
                   <i className="mdi mdi-24px mdi-telegram"></i>
                 </a>
               </li>
 
               <li className="list-inline-item">
-                <a href="https://reddit.com/r/windingtree" title="Reddit" className="text-white text--alpha">
+                <a href="https://reddit.com/r/windingtree" target="_blank" rel="noopener noreferrer" title="Reddit" className="text-white text--alpha">
                   <i className="mdi mdi-24px mdi-reddit"></i>
                 </a>
               </li>
 
               <li className="list-inline-item">
-                <a href="https://bitcointalk.org/index.php?topic=1946065" title="BitcoinTalk" className="text-white text--alpha">
+                <a href="https://bitcointalk.org/index.php?topic=1946065" target="_blank" rel="noopener noreferrer" title="BitcoinTalk" className="text-white text--alpha">
                   <i className="mdi mdi-24px mdi-bitcoin"></i>
                 </a>
               </li>

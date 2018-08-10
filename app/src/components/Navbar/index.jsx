@@ -7,7 +7,7 @@ export default class Navbar extends React.Component {
       <nav className="navbar navbar-light bg-white navbar-expand-lg" id="navbar" style={{opacity: 1}}>
         <div className="container">
 
-          <a href="https://windingtree.com" className="navbar-brand d-block">Winding Tree</a>
+          <a href="https://windingtree.com" target="_blank" rel="noopener noreferrer" className="navbar-brand d-block">Winding Tree</a>
 
           <button className="navbar-toggler px-0 border-0" id="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
             <i className="mdi mdi-24px mdi-menu"></i>

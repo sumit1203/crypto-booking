@@ -19,7 +19,7 @@ const LearnMoreSection = () => (
             Check our website and meet our engineers on ETH Berlin
           </p>
           <footer>
-            <a href="https://windingtree.com" className="btn btn-outline-light">
+            <a href="https://windingtree.com" target="_blank" rel="noopener noreferrer" className="btn btn-outline-light">
               Learn more about Winding Tree
             </a>
           </footer>
