@@ -46,6 +46,7 @@ class FormSection extends React.Component {
 
   componentDidMount () {
     this.bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS)
+    this.computePrice()
   }
 
   _mapDateToInteger = (date) => {
