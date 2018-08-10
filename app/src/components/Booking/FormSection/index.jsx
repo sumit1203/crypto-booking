@@ -39,7 +39,7 @@ class FormSection extends React.Component {
       fromDateMax: '2018-09-09',
       price: null,
       guestCount: '1',
-      errorMessage: 'asdasdasdasdasd'
+      errorMessage: ''
     }
   }
 
