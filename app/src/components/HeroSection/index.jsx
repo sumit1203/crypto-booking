@@ -39,10 +39,10 @@ export default class HeroSection extends React.Component {
             <div className="row">
               <div className="col text-center">
                 <img src={LogoEB} width="150" alt="ETH Berlin" style={{position: 'relative', top: -4}}/>
-                <span className="mx-1 h5">•</span>
-                <span className="h5"><b>Berlin, Germany</b></span>
-                <span className="mx-1 h5">•</span>
-                <span className="h5">September 7-10, 2018</span>
+                <span className="mx-1 h5 d-none d-sm-inline">•</span>
+                <span className="h5 d-block d-sm-inline mb-sm-0"><b>Berlin, Germany</b></span>
+                <span className="mx-1 h5 d-none d-md-inline">•</span>
+                <span className="h5 d-block d-md-inline">September 7-10, 2018</span>
               </div>
             </div>
           </div>
