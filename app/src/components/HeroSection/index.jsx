@@ -1,7 +1,7 @@
 import React from 'react';
-
 import LogoEB from '../../img/content/logo-ethberlin.png';
 import BackgroundLif from '../../img/style/lif-token-bg.svg';
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 export default class HeroSection extends React.Component {
   render () {
@@ -26,9 +26,9 @@ export default class HeroSection extends React.Component {
                 <p className="mb-2 text-white h1">
                   Book a room and save <span className="font--alt">20%</span> with Winding Tree
                 </p>
-                <a href="#pick-room" className="btn btn-primary btn-lg">
-                  <span>Book with discount</span>
-                </a>
+                <AnchorLink href="#pick-room" className="btn btn-primary btn-lg">
+                  Book with discount
+                </AnchorLink>
               </div>
             </div>
           </div>

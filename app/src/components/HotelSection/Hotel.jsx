@@ -1,5 +1,6 @@
 import React from 'react';
 import MarkdownRenderer from 'react-markdown-renderer';
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 export default class Hotel extends React.Component {
 
@@ -26,10 +27,9 @@ export default class Hotel extends React.Component {
           </div>
           <div className="col-md-4 text-center">
             <i className="mdi mdi-48px mdi-xxl mdi-office-building d-block mb-1 mb-md-2 text-white"/>
-            {/* TODO: Smooth-scroll to booking section */}
-            <a href="#pick-room" className="btn btn-outline-light">
+            <AnchorLink href="#pick-room" className="btn btn-outline-light">
               Pick a room
-            </a>
+            </AnchorLink>
           </div>
         </div>
 
