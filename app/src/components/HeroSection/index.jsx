@@ -20,9 +20,9 @@ export default class HeroSection extends React.Component {
           <div className="container py-0 py-md-1 py-lg-2">
             <div className="row justify-content-center text-center">
               <div className="col-sm-11 col-lg-10">
-                <h3 className="mb-1 text-white lead">
-                  ETH Berlin accomodation service
-                </h3>
+                <h1 className="mb-1 text-white h3 lead">
+                  ETH Berlin accomodation service <span className="d-none">by Winding Tree</span>
+                </h1>
                 <p className="mb-2 text-white h1">
                   Book a room and save <span className="font--alt">20%</span> with Winding Tree
                 </p>
