@@ -22,7 +22,7 @@ export default class Hotel extends React.Component {
               <MarkdownRenderer markdown={description} className="text-white mb-1"/>
               <p className="text-white">
                 <b>For more info please check</b>
-                <a className="ml-1 btn btn-sm btn-secondary" href={url}>&nbsp;{url}</a>
+                <a className="ml-1 btn btn-sm btn-secondary" href={url} target="_blank" rel="noopener noreferrer">&nbsp;{url}</a>
               </p>
           </div>
           <div className="col-md-4 text-center">

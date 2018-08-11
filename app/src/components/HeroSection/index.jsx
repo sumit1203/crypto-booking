@@ -34,6 +34,7 @@ export default class HeroSection extends React.Component {
           </div>
         </div>
         <a className="bg-white block-shadow d-block" style={{padding: '21px 0 18px 0', position: 'relative'}} href="https://ethberlin.com"
+           target="_blank" rel="noopener noreferrer"
            title="Visit the oficial website.">
           <div className="container">
             <div className="row">
