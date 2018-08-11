@@ -32,7 +32,7 @@ class HotelContainer extends React.Component {
       <Hotel
         name={hotelData.name}
         description={hotelData.description}
-        location={hotelData.location}
+        hotelLocation={hotelData.location}
         url={hotelData.contacts.general.url}
       />
     );
