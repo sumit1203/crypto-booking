@@ -3,8 +3,9 @@ const bitcoin = require('bitcoinjs-lib');
 const { web3 } = require('./web3');
 const {
   MASTER_KEY,
+  OWNER_PRIVATE_KEY,
+  OWNER_ADDRESS,
 } = require('../config');
-
 const { handleApplicationError } = require('../errors');
 
 function _getExtendedKeyByIndex (index) {
@@ -58,4 +59,43 @@ function decrypt (text, hash, algorithm = 'aes256') {
   return dec;
 }
 
-module.exports = { encrypt, decrypt, generateKeyPair, getKeyPair };
+const readKey = async () => {
+  // TODO: Store encrypted
+  const key = {
+    privateKey: OWNER_PRIVATE_KEY,
+    address: OWNER_ADDRESS,
+  };
+  return key;
+};
+
+const signOffer = async (booking, key) => {
+  const signatureData = {
+    roomType: booking.roomType,
+    weiPerNight: booking.weiPerNight,
+    signatureTimestamp: booking.signatureTimestamp,
+    paymentType: booking.paymentType,
+    bookingHash: booking.bookingHash,
+  };
+  const hashedMessage = web3.utils.soliditySha3(
+    { type: 'string', value: signatureData.roomType },
+    { type: 'uint256', value: signatureData.weiPerNight },
+    { type: 'uint256', value: signatureData.signatureTimestamp },
+    { type: 'string', value: signatureData.paymentType },
+    { type: 'bytes32', value: signatureData.bookingHash }
+  );
+
+  web3.eth.accounts.wallet.add(key);
+  const accounts = web3.eth.accounts.wallet;
+  const offerSignature = await web3.eth.sign(hashedMessage, accounts[0].address);
+  web3.eth.accounts.wallet.clear();
+  return { signatureData, offerSignature };
+};
+
+module.exports = {
+  encrypt,
+  decrypt,
+  generateKeyPair,
+  getKeyPair,
+  signOffer,
+  readKey,
+};
