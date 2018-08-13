@@ -2,7 +2,6 @@ const sgMail = require('@sendgrid/mail');
 const {
   confirmationBody,
   instructionsBody,
-  bookingChangeBody,
   informationBody,
   bookingCanceledBody,
 } = require('./html-generator');
@@ -27,16 +26,6 @@ const sendConfirmation = async (event, secretCode, to) => {
   try {
     const html = confirmationBody(event, secretCode);
     return sgMail.send({ from: FROM_EMAIL, to, subject: 'Hotel confirmation for EthBerlin', html });
-  } catch (e) {
-    // TODO: Handle errors
-    throw e;
-  }
-};
-
-const sendBookingChange = async (event, secretCode, to) => {
-  try {
-    const html = bookingChangeBody(event, secretCode);
-    return sgMail.send({ from: FROM_EMAIL, to, subject: 'Hotel changes for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
     throw e;
@@ -87,7 +76,6 @@ module.exports = {
   sendRawEmail,
   sendConfirmation,
   sendInstructions,
-  sendBookingChange,
   sendBookingInfo,
   sendBookingCanceled,
 };

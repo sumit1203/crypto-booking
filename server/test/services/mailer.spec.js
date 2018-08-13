@@ -10,7 +10,6 @@ const {
   sendRawEmail,
   sendConfirmation,
   sendBookingInfo,
-  sendBookingChange,
   sendBookingCanceled,
 } = require('../../src/services/mail');
 
@@ -42,11 +41,6 @@ describe('Mail service', () => {
     expect(sendFake).to.have.property('calledOnce', true);
   });
 
-  it('Should send a booking change email', async () => {
-    await sendBookingChange(events.BookingChanged, 'asd 123 fgh', toEmail);
-    const sendFake = sandbox.getFakes()[0];
-    expect(sendFake).to.have.property('calledOnce', true);
-  });
   it('Should send a booking cancel email', async () => {
     await sendBookingCanceled('some booking hash', toEmail);
     const sendFake = sandbox.getFakes()[0];

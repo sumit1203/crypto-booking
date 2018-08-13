@@ -1,6 +1,6 @@
 const { bookingPoc } = require('./web3');
 const { readBooking, confirmBooking, cancelBooking, updateRoom } = require('./booking');
-const { sendConfirmation, sendBookingChange } = require('./mail.js');
+const { sendConfirmation } = require('./mail.js');
 const { STARTING_BLOCK } = require('../config');
 const { BOOKING_STATUS } = require('../constants');
 
@@ -24,18 +24,6 @@ async function onBookingDone (args) {
   }
 };
 
-const onBookingChange = async (event) => {
-  const booking = await readBooking({ bookingHash: event.returnValues.bookingHash });
-  if (!booking) {
-    return console.error(`Can not find booking for event: ${event.event}, blockNumber: ${event.blockNumber}, logIndex: ${event.blockNumber}`);
-  }
-  if (booking.guestEthAddress === event.returnValues.newGuest) {
-    return;
-  }
-  sendBookingChange(event, event.returnValues.bookingHash, booking.personalInfo.email);
-  confirmBooking(booking.id);
-};
-
 async function onBookingCancel (args) {
   try {
     const { event, blockNumber, returnValues: { bookingHash } } = args;
@@ -53,7 +41,6 @@ async function onBookingCancel (args) {
 }
 
 const eventTypes = {
-  'BookingChanged': onBookingChange,
   'BookingDone': onBookingDone,
   'BookingCanceled': onBookingCancel,
 };
