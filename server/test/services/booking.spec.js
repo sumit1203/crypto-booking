@@ -17,7 +17,7 @@ const {
   cancelBooking,
   getCancelBookingInstructions,
   updateRoom,
-} = require('../../src/controllers/Booking');
+} = require('../../src/services/booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 const { BOOKING_POC_ADDRESS } = require('../../src/config');

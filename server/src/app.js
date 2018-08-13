@@ -9,7 +9,7 @@ const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
 const routes = require('./routes');
-const { checkBookingExpired } = require('./controllers/Booking');
+const { checkBookingExpired } = require('./services/booking');
 const { checkEtherumUpdates } = require('./services/ethereum-listener');
 
 const app = express();
