@@ -20,6 +20,7 @@ jobs:
     script:
     - npm i -g now
     - echo 'Deploying to NOW'
+    - export GIT_REV=`git rev-parse --short HEAD`
     - cd server && npm run deploy && npm run alias
   - stage: deploy-app
     install: true
