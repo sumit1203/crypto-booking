@@ -11,7 +11,7 @@ const {
   sendConfirmation,
   sendBookingInfo,
   sendBookingChange,
-  sendBookingCanceled
+  sendBookingCanceled,
 } = require('../../src/services/mail');
 
 const { testHtmlBody, events, toEmail } = require('../utils/test-data');
