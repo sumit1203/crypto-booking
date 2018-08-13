@@ -9,7 +9,7 @@ if (!MONGODB_URI) {
 const dbURI = `mongodb://${MONGODB_URI}`;
 
 // Create the database connection
-mongoose.connect(dbURI);
+mongoose.connect(dbURI, { useNewUrlParser: true });
 
 // CONNECTION EVENTS
 // When successfully connected
