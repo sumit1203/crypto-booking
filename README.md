@@ -39,6 +39,17 @@ This is the steps to create a new server release.
 
  This will trigger the deploy in `Travis-CI`
 
+### App
+
+This is the steps to create a new app release.
+
+- Update version in `server/package.json`
+- Merge branch into `develop`
+- Merge `develop` into `master`
+- Merge `master` into `release/app`
+
+This will trigger the deploy in `Travis-CI`
+
 ## Collaborate!
 
 If you want to help and even get a reward for it, you can take any issue by asking to be assigned to it with an estimation. For example: "Can I take this issue? I can have it done in two days".

@@ -3,7 +3,7 @@ require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const { Booking } = require('../../src/models/Booking');
 const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
-const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
+const { validBookingDB, validBookingWithEthPrice, testPrivateKey } = require('../utils/test-data');
 const { decrypt } = require('../../src/services/crypto');
 const { web3 } = require('../../src/services/web3');
 const sinon = require('sinon');
@@ -15,8 +15,8 @@ function basicValidationExpect (validation, field) {
 
 describe('Booking model', () => {
   describe('bookingHash', () => {
-    it('Should throw an error if bookingHash is not defined', () => {
-      const booking = Booking.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    it('Should throw an error if bookingHash is not defined', async () => {
+      const booking = await Booking.generate(validBookingWithEthPrice);
       booking.bookingHash = '';
       const validation = booking.validateSync();
       basicValidationExpect(validation, 'bookingHash');
@@ -304,13 +304,13 @@ describe('Booking model', () => {
     describe('decryptPersonalInfo', () => {
       it('Should decode personal info', () => {
         const booking = new Booking(validBookingDB);
-        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, validBookingWithEthPrice.privateKey);
-        const decryptPersonalInfo = booking.decryptPersonalInfo(validBookingWithEthPrice.privateKey);
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, testPrivateKey);
+        const decryptPersonalInfo = booking.decryptPersonalInfo(testPrivateKey);
         expect(decryptPersonalInfo).to.be.deep.equal(validBookingWithEthPrice.personalInfo);
       });
       it('Should return an empty object on invalid bookingHash', () => {
         const booking = new Booking(validBookingDB);
-        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, validBookingWithEthPrice.privateKey);
+        booking.encryptPersonalInfo(validBookingWithEthPrice.personalInfo, testPrivateKey);
         const decryptPersonalInfo = booking.decryptPersonalInfo('fakeBookinHash');
         expect(decryptPersonalInfo).to.be.deep.equal({});
       });
@@ -342,7 +342,7 @@ describe('Booking model', () => {
     });
     describe('generate', () => {
       it('Should generate no error using validBooking data', async () => {
-        const booking = Booking.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+        const booking = await Booking.generate(validBookingWithEthPrice);
         const validation = await booking.validateSync();
         expect(validation).to.be.a('undefined');
         expect(booking).to.have.property('bookingHash');

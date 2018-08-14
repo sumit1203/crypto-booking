@@ -2,9 +2,10 @@ const path = require('path');
 require('dotenv').config({
   path: path.resolve(
     process.cwd(),
-    (process.env.NODE_ENV == 'production') ? '.env' :'.env.development'
+    '.env'
   )
 });
+console.log(process.cwd(), process.env.MASTER_KEY)
 console.log('Starting server on ', process.env.NODE_ENV, 'env');
 
 const { app } = require('./app');
