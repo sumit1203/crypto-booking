@@ -145,8 +145,6 @@ const validBookingWithEthPrice = {
   to: 4,
   cryptoPrice: 1,
   guestCount: 1,
-  privateKey: '0xc9803c313dda9f39b7733dc845bc9b93788f8bbb4f9dbe0d4c2657634f966154',
-  bookingHash: '0x1ab512eb0d6ba16d0aa20b616b257a3c55b5a395e80d0fcbf5963ac694d5b309',
   roomNumber: 3,
 };
 const validBookingDB = {
@@ -188,6 +186,8 @@ const events = {
 
 const toEmail = process.env.TO_EMAIL || 'example@windingtree.com';
 
+const testPrivateKey = '0xc9803c313dda9f39b7733dc845bc9b93788f8bbb4f9dbe0d4c2657634f966154';
+
 module.exports = {
   testHtmlBody,
   validBooking,
@@ -197,4 +197,5 @@ module.exports = {
   ToPlainObjectTestClass,
   events,
   toEmail,
+  testPrivateKey
 };
