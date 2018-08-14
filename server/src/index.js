@@ -5,6 +5,7 @@ require('dotenv').config({
     '.env'
   )
 });
+console.log(process.cwd(), process.env.MASTER_KEY)
 console.log('Starting server on ', process.env.NODE_ENV, 'env');
 
 const { app } = require('./app');
