@@ -10,14 +10,14 @@ export default class Loader extends React.Component {
 
       block ?
         label ?
-        <div className="loader" style={{height: block}}>
+        <div className="loader" style={{height: block, opacity: 0}}>
           <div>
             <i className="mdi mdi-loading mdi-36px"/>
             <p>{label}</p>
           </div>
         </div>
         :
-        <div className="loader" style={{height: block}}>
+        <div className="loader" style={{height: block, opacity: 0}}>
           <i className="mdi mdi-loading mdi-36px"/>
         </div>
       :

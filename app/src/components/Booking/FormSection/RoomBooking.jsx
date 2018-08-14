@@ -46,7 +46,7 @@ export default class RoomBooking extends React.Component {
      return (
        <Fragment key={room.id}>
         <input id={`radio-${room.id}`} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-        <label htmlFor={`radio-${room.id}`} className="d-flex d-md-inline align-items-center justify-content-center col-6" style={{whiteSpace: 'initial'}}>
+        <label htmlFor={`radio-${room.id}`} style={{whiteSpace: 'initial'}}>
           <i className="mdi mdi-check-circle d-none d-sm-inline"/>
           {index === 0 ? ' Twin Bed' : index === 1 && ' King Bed'}
         </label>
@@ -57,14 +57,13 @@ export default class RoomBooking extends React.Component {
 
   render() {
     const {
-      toDateMin,
-      fromDateMax,
       phone,
       to,
       email,
       from,
       price,
       paymentType,
+      days,
       onPaymentTypeChange,
       guestCount,
       onGuestCountChange,
@@ -74,6 +73,7 @@ export default class RoomBooking extends React.Component {
       onBirthDateChange,
       onEmailChange,
       onPhoneChange,
+      onDaysChange,
     } = this.props;
     const {isValidEmail, isValidPhone, isConfirmModalOpen} = this.state
     return (
@@ -111,18 +111,32 @@ export default class RoomBooking extends React.Component {
                 {/*TODO: in case one of the options is unavailable use the class "disabled" and the attribute "disabled" on that item*/}
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Preferred room type </h5>
-                  <div className="btn-group btn-group--switch w-100" role="group" aria-label="Room type">
-                    {this.renderRoomTypes()}
+                  <div className="form-row">
+                    <div className="col-12 mb-1 mb-sm-0">
+                      <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
+                        {this.renderRoomTypes()}
+                      </div>
+                    </div>
                   </div>
                 </section>
                 <section className="text-center mb-2">
                   <h5 className="mb-1"> Reservation date </h5>
                   <div className="form-row">
-                    <div className="col-12 col-sm-6 mb-1 mb-sm-0">
-                      <input className="form-control form-control-lg" type="date" min="2018-09-06" max={fromDateMax} onChange={onFromDateChange} value={from} required/>
-                    </div>
-                    <div className=" col-12 col-sm-6">
-                      <input className="form-control form-control-lg" type="date" name="to" min={toDateMin} max="2018-09-10" onChange={onToDateChange} value={to} required/>
+                    <div className="col-12 mb-1 mb-sm-0">
+
+                      <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
+
+                        {
+                          days.map((day) => (
+                            <Fragment key={day}>
+                              <input type="checkbox" name="days" id={"days-" + day} value={day} onChange={onDaysChange} checked={day >= from && day <= to}/>
+                              <label htmlFor={"days-" + day} className="font--alt">{5 + day}</label>
+                            </Fragment>
+                          ))
+                        }
+
+                      </div>
+
                     </div>
                   </div>
                 </section>
@@ -164,12 +178,11 @@ export default class RoomBooking extends React.Component {
 }
 
 RoomBooking.propTypes = {
-  toDateMin: PropTypes.string.isRequired,
-  fromDateMax: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   phone: PropTypes.string.isRequired,
-  from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
+  from: PropTypes.number.isRequired,
+  to: PropTypes.number.isRequired,
+  days: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRoom: roomType,
   guestCount: PropTypes.string,
   price: PropTypes.number,
@@ -178,8 +191,7 @@ RoomBooking.propTypes = {
   onPaymentTypeChange: PropTypes.func.isRequired,
   onRoomTypeChange: PropTypes.func.isRequired,
   onGuestCountChange: PropTypes.func.isRequired,
-  onFromDateChange: PropTypes.func.isRequired,
-  onToDateChange: PropTypes.func.isRequired,
+  onDaysChange: PropTypes.func.isRequired,
   onFullNameChange: PropTypes.func.isRequired,
   onBirthDateChange: PropTypes.func.isRequired,
   onEmailChange: PropTypes.func.isRequired,

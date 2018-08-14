@@ -1,6 +1,6 @@
 {
   "name": "crypto-booking-app",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Web app to show hotel inventory from WT api.",
   "scripts": {
     "test": "eslint .",
@@ -10,7 +10,6 @@
     "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
     "now-start": "serve --single ./public",
     "alias": "now alias --team windingtree --token=$NOW_TOKEN",
-    "postalias": "./scripts/cloudflare-cachepurge.sh",
     "postinstall": "npm install https://github.com/windingtree/wt-ui.git#develop"
   },
   "devDependencies": {
@@ -55,12 +54,15 @@
     "bootstrap": "^4.1.3",
     "classnames": "^2.2.6",
     "jquery": "^3.3.1",
+    "leaflet": "^1.3.3",
     "popper.js": "^1.14.3",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
+    "react-anchor-link-smooth-scroll": "^1.0.11",
     "react-dom": "^16.4.1",
     "react-google-recaptcha": "^0.13.0",
     "react-hot-loader": "^4.3.3",
+    "react-leaflet": "^2.0.0",
     "react-loadable": "^5.4.0",
     "react-markdown-renderer": "^1.4.0",
     "react-router": "^4.3.1",
