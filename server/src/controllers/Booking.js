@@ -20,7 +20,7 @@ async function _generateBooking (data) {
   const { privateKey, publicKey, index: bookingIndex } = generateKeyPair(index);
   data.bookingHash = publicKey;
   try {
-    const bookingModel = BookingModel.generate(data, privateKey);
+    const bookingModel = await BookingModel.generate(data, privateKey);
     await bookingModel.save();
     return { bookingModel, privateKey, bookingIndex };
   } catch (e) {

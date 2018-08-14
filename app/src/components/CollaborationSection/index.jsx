@@ -13,9 +13,14 @@ export default class CollaborationSection extends React.Component {
           <div className="container py-lg-1">
               <div className="row justify-content-center">
                 <div className="col-md-10 col-lg-9 text-center">
-                  <p className="mb-1 h3">Winding Tree provides ETH Berlin accomodation services together with our partner Botique Hotel i31.</p>
-                  <p className="h4"style={{fontWeight: 'normal'}}>We offer a <b>20% discount</b> to hackers and engineers who pay with
-                  <AnchorLink href="#paying-with-lif">Lif token</AnchorLink>.</p>
+                  <p className="mb-1 h3">
+                    Winding Tree provides ETH Berlin accomodation services together with our
+                    partner Botique Hotel i31.
+                  </p>
+                  <p className="h4"style={{fontWeight: 'normal'}}>
+                    We offer a <b>20% discount</b> to hackers and engineers
+                    who pay with <AnchorLink href="#paying-with-lif">Lif token</AnchorLink>.
+                  </p>
                 </div>
               </div>
 
