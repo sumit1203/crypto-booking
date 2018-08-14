@@ -151,7 +151,7 @@ describe('Booking API', () => {
 
   describe('GET /api/booking/:bookingHash', () => {
     it('Should read a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+      const dbBooking = await BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const index = 0;
       const booking = await request({ url: `${apiUrl}/booking/${dbBooking.bookingHash}?bookingIndex=${index}`, method: 'GET', json: true });
@@ -182,7 +182,7 @@ describe('Booking API', () => {
 
   describe('POST /api/booking/emailInfo', () => {
     it('Should read a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+      const dbBooking = await BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const body = { bookingHash: dbBooking.bookingHash };
       const response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
@@ -200,7 +200,7 @@ describe('Booking API', () => {
     });
     it('should respond with 429 when throttling limit is exceeded', async () => {
       throttling.turnOnThrottling();
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+      const dbBooking = await BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       const body = { bookingHash: dbBooking.bookingHash };
       let response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
@@ -221,7 +221,7 @@ describe('Booking API', () => {
 
   describe('DELETE /api/booking', () => {
     it('Should delete a booking', async () => {
-      const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+      const dbBooking = await BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
       await dbBooking.save();
       await dbBooking.setAsApproved();
       const body = { bookingHash: validBookingWithEthPrice.bookingHash };
@@ -243,7 +243,7 @@ describe('Booking API', () => {
     });
     it('Should retrun 404 for non approved booking', async () => {
       try {
-        const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+        const dbBooking = await BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
         await dbBooking.save();
         const body = { bookingHash: validBookingWithEthPrice.bookingHash };
         await request({ url: `${apiUrl}/booking`, method: 'DELETE', json: true, body });
