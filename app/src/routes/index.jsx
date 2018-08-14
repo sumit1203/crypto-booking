@@ -5,7 +5,8 @@ import 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { hot } from "react-hot-loader"
+import { hot } from "react-hot-loader";
+import Loader from '../components/Loader';
 
 const LoadableHome = Loadable({
     loader: () => import(
@@ -13,7 +14,7 @@ const LoadableHome = Loadable({
         /* webpackMode: "lazy" */
         './Home'),
     loading() {
-        return <div>Loading...</div>
+        return <Loader block={200} label="Loading..."/>
     }
 });
 

@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import ImageSlider from '../../../ImageSlider';
 import { roomType } from '../../propTypes';
 import MarkdownRenderer from 'react-markdown-renderer';
-
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 class Room extends React.Component {
   onClick = () => {
@@ -86,15 +86,15 @@ class Room extends React.Component {
 
         <div className="card-footer text-center text-md-left">
 
-
-          <a href="#book-a-room" className={classnames('btn btn-secondary mb-1 mb-md-0',{'disabled': isFull})}
-            style={isFull ? {textDecoration: 'line-through', opacity: 0.5}: {}}
-            onClick={this.onClick}>
+          <AnchorLink href="#book-a-room" className={classnames('btn btn-secondary mb-1 mb-md-0',{'disabled': isFull})}
+            style={isFull ? {textDecoration: 'line-through', opacity: 0.5}: {}} onClick={this.onClick}>
             Book <span className="d-md-none d-lg-inline">this room</span>
-          </a>
-          <a href="#paying-with-lif" className="d-block d-md-inline float-none float-md-right pl-0 pl-md-1">
+          </AnchorLink>
+
+          <AnchorLink href="#paying-with-lif" className="d-block d-md-inline float-none float-md-right pl-0 pl-md-1">
             How to pay<br className="d-none d-md-block"/> with Lif?
-          </a>
+          </AnchorLink>
+
           <p className="w-100  text-light" style={{marginTop: 35, position: 'absolute'}}>
             { isFull &&
               <small>

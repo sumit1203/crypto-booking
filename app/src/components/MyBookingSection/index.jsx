@@ -78,6 +78,7 @@ export default class MyBookingSection extends React.Component {
     $('.alert').addClass('show')
     setTimeout(() => {
       $('.alert').removeClass('show')
+      this.setState({errorMessage: ''})
     }, 3000)
   }
 
@@ -85,12 +86,13 @@ export default class MyBookingSection extends React.Component {
     const {cancelTx, errorMessage} = this.state
     return (
       <Fragment>
-        <div className="alert fade fixed-top alert-danger text-center" role="alert">
+        {errorMessage && (<div className="alert fade fixed-top alert-danger text-center" role="alert">
           <span>{errorMessage}</span>
           <button type="button" className="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
+        </div>)
+      }
         <article className="py-3 py-md-5 border-bottom" id="my-booking">
           <div className="container">
             <div className="row justify-content-center">
