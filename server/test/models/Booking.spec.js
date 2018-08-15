@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
+const { connectDB, disconnectDB } = require('../../src/models');
 const { Booking } = require('../../src/models/Booking');
 const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 const { validBookingDB, validBookingWithEthPrice } = require('../utils/test-data');
@@ -14,6 +15,12 @@ function basicValidationExpect (validation, field) {
 }
 
 describe('Booking model', () => {
+  before(async () => {
+    connectDB();
+  });
+  after(async () => {
+    disconnectDB();
+  });
   describe('bookingHash', () => {
     it('Should throw an error if bookingHash is not defined', () => {
       const booking = Booking.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);

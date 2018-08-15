@@ -3,9 +3,7 @@ require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const sgMail = require('@sendgrid/mail');
 const sinon = require('sinon');
-require('../../src/models');
 const mongoose = require('mongoose');
-const BookingModel = mongoose.model('Booking');
 const {
   createBooking,
   readBooking,
@@ -21,15 +19,15 @@ const {
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 const { BOOKING_POC_ADDRESS } = require('../../src/config');
+const { disconnectDB, connectDB } = require('../../src/models');
 
-after(() => {
-  mongoose.connection.close();
-});
-
-describe('Booking controller', () => {
+describe('Booking service', () => {
   let sandbox;
-  before(() => {
+  let BookingModel;
+  before(async () => {
     sandbox = sinon.createSandbox();
+    BookingModel = mongoose.model('Booking');
+    await connectDB();
   });
   beforeEach(async () => {
     await BookingModel.resetIndex();
@@ -42,7 +40,10 @@ describe('Booking controller', () => {
   afterEach(async function () {
     await BookingModel.remove({}).exec();
   });
-
+  after(async () => {
+    await disconnectDB();
+    await disconnectDB();
+  });
   it('Should create a valid booking', async function () {
     const { booking, offerSignature, bookingIndex, privateKey } = await createBooking(validBooking);
     expect(booking).to.have.property('bookingHash');
