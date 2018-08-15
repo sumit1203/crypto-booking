@@ -58,8 +58,16 @@ app.use((err, req, res, next) => {
 const ethereunListenerCron = cron.schedule('* * * * *', checkEtherumUpdates);
 const expiredBookingCron = cron.schedule('*/5 * * * *', checkBookingExpired);
 
+const startServer = (port) => {
+  return app.listen(port, () => {
+    console.log(`Server running at ${port}!`);
+    console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  });
+};
+
 module.exports = {
   app,
   ethereunListenerCron,
   expiredBookingCron,
+  startServer,
 };

@@ -4,13 +4,12 @@ require('dotenv').config({
     process.cwd(),
     (process.env.NODE_ENV === 'production') ? '.env' : '.env.development'),
 });
-console.log('Starting server on ', process.env.NODE_ENV, 'env');
 
-const { app } = require('./app');
+const { startServer } = require('./app');
 const { SERVER_PORT } = require('./config');
 
-const server = app.listen(SERVER_PORT, () => {
-  console.log(`Server running at ${SERVER_PORT}!`);
-});
+const server = startServer(SERVER_PORT);
 
-module.exports = server;
+module.exports = {
+  server,
+};
