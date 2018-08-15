@@ -41,7 +41,7 @@ describe('POST /api/booking/emailInfo', () => {
     await disconnectDB();
   });
   it('Should read a booking', async () => {
-    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    const dbBooking = await BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     const body = { bookingHash: dbBooking.bookingHash };
     const response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
@@ -59,7 +59,7 @@ describe('POST /api/booking/emailInfo', () => {
   });
   it('should respond with 429 when throttling limit is exceeded', async () => {
     throttling.turnOnThrottling();
-    const dbBooking = BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
+    const dbBooking = await BookingModel.generate(validBookingWithEthPrice, validBookingWithEthPrice.privateKey);
     await dbBooking.save();
     const body = { bookingHash: dbBooking.bookingHash };
     let response = await request({ url: `${apiUrl}/booking/emailInfo`, method: 'POST', json: true, body });
