@@ -75,7 +75,7 @@ const events = {
   BookingDone: {
     event: 'BookingDone',
     transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
-    blockNumber: STARTING_BLOCK,
+    blockNumber: parseInt(STARTING_BLOCK),
     returnValues: {
       roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],
@@ -87,7 +87,7 @@ const events = {
   BookingCanceled: {
     event: 'BookingCanceled',
     transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
-    blockNumber: STARTING_BLOCK + 5,
+    blockNumber: parseInt(STARTING_BLOCK) + 5,
     returnValues: {
       roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],

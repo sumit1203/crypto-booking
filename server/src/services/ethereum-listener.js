@@ -4,7 +4,7 @@ const { sendConfirmation } = require('./mail.js');
 const { STARTING_BLOCK } = require('../config');
 const { BOOKING_STATUS } = require('../constants');
 
-let _nextBlockToProcess = STARTING_BLOCK;
+let _nextBlockToProcess = parseInt(STARTING_BLOCK);
 
 async function onBookingDone (args) {
   try {
