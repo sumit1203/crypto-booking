@@ -57,17 +57,21 @@ class ConfirmModal extends React.Component {
                 </button>
               </div>
               <div className="modal-body">
-                <p className="mb-1"> Select your preferred payment method.</p>
+                <p> Select your preferred payment method.</p>
                 <div className="row mb-1">
-                  <div className="col-sm-8">
-                    <div className="row no-gutters mb-1">
-                      <div className="col-4">
-                        <img src={payment} style={{position: 'relative', right: -30}} alt="icon" width="100"
-                             className="img-fluid"/>
+                  <div className="col col-sm-8">
+                    <div className="row no-gutters mb-1 mt-1">
+                      <div className="col-4 d-none d-sm-block">
+                        <img src={payment}
+                          className="img-fluid"
+                          style={{position: 'relative', right: -30}}
+                          width="100"
+                          alt="Payment icon"
+                        />
                       </div>
-                      <div className="col-8">
-                        <div className="form-check" style={{marginBottom: '0.3em', paddingTop: 7}}>
-                          <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
+                      <div className="col-8 align-self-center">
+                        <div className="form-check">
+                          <input className="form-check-input"
                                  type="radio" name="pay-type" id="pay-eth" value="eth" required
                                  onChange={onPaymentTypeChange} checked={paymentType === 'eth'}/>
                           <label className="form-check-label" htmlFor="pay-eth">
@@ -75,7 +79,7 @@ class ConfirmModal extends React.Component {
                           </label>
                         </div>
                         <div className="form-check">
-                          <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
+                          <input className="form-check-input"
                                  type="radio" name="pay-type" id="pay-lif" value="lif" required
                                  onChange={onPaymentTypeChange} checked={paymentType === 'lif'}/>
                           <label className="form-check-label" htmlFor="pay-lif">
@@ -85,15 +89,15 @@ class ConfirmModal extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-sm-4">
-                    <div style={{marginTop: -10}}>
-                      <p>
-                        <small>Final price:</small>
-                      </p>
-                      <div className="badge badge-light px-1">
-                        <span className="h3">$<span className="h2 font--alt">{this.props.price}</span></span>.
-                      </div>
+                  <div className="col col-sm-4 align-self-center">
+                  <div className="float-right">
+                    <p>
+                      <small>Final price:</small>
+                    </p>
+                    <div className="badge badge-light px-1">
+                      <span className="h3">$<span className="h2 font--alt">{this.props.price}</span></span>.
                     </div>
+                  </div>
                   </div>
                 </div>
                 <div className="row">
@@ -101,8 +105,8 @@ class ConfirmModal extends React.Component {
                     <p className="mb-1">
                       Provide the address from which you will pay.
                     </p>
-                    <div className="mb-1 px-1">
-                      <div className="form-group form-row mb-0">
+                    <div className="mb-1 pl-sm-1">
+                      <div className="form-group form-row mb-2 mb-sm-1">
                         <label htmlFor="guestAddress" className="col-md-4 col-lg-3 col-form-label col-form-label-lg">
                           <b>Your Address</b>
                         </label>
@@ -111,8 +115,7 @@ class ConfirmModal extends React.Component {
                             type="text"
                             id="guestAddress"
                             autoComplete="off"
-                            className="form-control form-control-lg w-100"
-                            style={{width: 450}}
+                            className="form-control form-control-lg w-100 align-self-center"
                             onChange={this.onAddressChange}
                             placeholder='0xe99356bde974bbe08721d77712168fa070aa8da2'
                             required
@@ -122,7 +125,14 @@ class ConfirmModal extends React.Component {
                     </div>
                   </div>
                 </div>
-                <ReCAPTCHA ref={this.setReCaptchaRef} sitekey={CAPTCHA_SITE_KEY} theme='light' onChange={this.onCaptchaChange}/>
+
+                <ReCAPTCHA
+                  ref={this.setReCaptchaRef}
+                  sitekey={CAPTCHA_SITE_KEY}
+                 theme='light'
+                  onChange={this.onCaptchaChange}
+                />
+
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-dismiss="modal">Cancel</button>
