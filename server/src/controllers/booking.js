@@ -1,8 +1,5 @@
 const { readBooking, getCancelBookingInstructions, createBooking } = require('../services/booking');
-const {
-  BOOKING_POC_ADDRESS,
-  FROM_EMAIL,
-} = require('../config');
+const { BOOKING_POC_ADDRESS } = require('../config');
 const { sendInstructions } = require('../services/mail');
 const { getInstructionsTxs } = require('../services/web3');
 
@@ -21,13 +18,9 @@ const create = async (req, res, next) => {
       signatureData,
       contractAddress: BOOKING_POC_ADDRESS,
       bookingIndex,
+      nights,
     };
-
-    sendInstructions(data, {
-      from: FROM_EMAIL,
-      to: booking.personalInfo.email,
-      subject: 'Hotel reservation instructions',
-    });
+    sendInstructions(data, booking.personalInfo.email);
     res.json(data);
   } catch (e) {
     return next(e);
