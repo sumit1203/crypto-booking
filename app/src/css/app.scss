@@ -9,13 +9,10 @@
   to   { opacity: 1; }
 }
 
-
-// Cards (adjustments)
-.card {
-  .card-img-overlay {pointer-events: none}
-  ul li::first-letter {text-transform: uppercase;}
+// Small Link buttons after large buttons
+.btn-lg + br + .btn-sm {
+  margin-top: 0.5em;
 }
-
 
 // Map popup
 .map-popup {
@@ -26,9 +23,31 @@
   }
 }
 
-// Small Link buttons after large buttons
-.btn-lg + br + .btn-sm {
-  margin-top: 0.5em;
+// CARDS-ROOMS
+
+// Cards (adjustments)
+.card {
+  .card-img-overlay {pointer-events: none}
+  ul li::first-letter {text-transform: uppercase;}
+}
+
+.full-room {
+  margin-bottom: 30px!important;
+
+  @media all and (max-width: 578px) {
+    margin-bottom: 80px!important;
+    &:last-child {margin-bottom: 30px!important; }
+  }
+
+  .btn.disabled {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+
+  .full-room__message {
+    position: absolute;
+    margin-top: 35px;
+  }
 }
 
 // MODALS

@@ -87,7 +87,7 @@ class Room extends React.Component {
         <div className="card-footer text-center text-md-left">
 
           <AnchorLink href="#book-a-room" className={classnames('btn btn-secondary mb-1 mb-md-0',{'disabled': isFull})}
-            style={isFull ? {textDecoration: 'line-through', opacity: 0.5}: {}} onClick={this.onClick}>
+            onClick={this.onClick}>
             Book <span className="d-md-none d-lg-inline">this room</span>
           </AnchorLink>
 
@@ -95,16 +95,16 @@ class Room extends React.Component {
             How to pay<br className="d-none d-md-block"/> with Lif?
           </AnchorLink>
 
-          <p className="w-100  text-light" style={{marginTop: 35, position: 'absolute'}}>
-            { isFull &&
+          { isFull &&
+            <p className="text-light full-room__message">
               <small>
                 <em>
                   <i className="mdi mdi-28px mdi-information-outline"/>&nbsp;
                   Sorry, <span className="d-inline d-sm-none d-lg-inline">these </span> rooms <span className="d-inline d-sm-none d-lg-inline">these are </span> fully booked
                 </em>
               </small>
-            }
-          </p>
+            </p>
+          }
         </div>
       </React.Fragment>
 
