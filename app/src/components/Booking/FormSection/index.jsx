@@ -10,18 +10,6 @@ import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
 
 import { roomType } from '../propTypes'
 
-function _formatDate (date) {
-  const d = new Date(date)
-  let month = '' + (d.getUTCMonth() + 1)
-  let day = '' + d.getUTCDate()
-  const year = d.getUTCFullYear()
-
-  if (month.length < 2) month = '0' + month
-  if (day.length < 2) day = '0' + day
-
-  return [year, month, day].join('-')
-}
-
 class FormSection extends React.Component {
   constructor (props) {
     super(props)
@@ -45,16 +33,6 @@ class FormSection extends React.Component {
   componentDidMount () {
     this.bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS)
     this.computePrice()
-  }
-
-  _mapDateToInteger = (date) => {
-    return (new Date(date)).getUTCDate() - 5
-  }
-
-  _addDay = (date, num) => {
-    const fromDate = new Date(date)
-    const nextDate = fromDate.setUTCDate(fromDate.getUTCDate() + num)
-    return _formatDate(nextDate)
   }
 
   onPaymentTypeChange = (e) => {
