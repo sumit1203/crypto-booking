@@ -45,25 +45,32 @@ const eventTypes = {
   'BookingCanceled': onBookingCancel,
 };
 
-const checkEtherumUpdates = () => {
-  const options = {
-    fromBlock: _nextBlockToProcess,
-    toBlock: 'latest',
-  };
+const options = {
+  fromBlock: _nextBlockToProcess,
+  toBlock: 'latest',
+};
 
-  bookingPoc.getPastEvents('allEvents', options, (err, events) => {
-    if (err) {
-      return console.error(err);
+const _eventDispatcher = (err, events) => {
+  const startingBlock = _nextBlockToProcess;
+  if (err) {
+    return console.error(err);
+  }
+  events.forEach((event) => {
+    if (eventTypes[event.event]) {
+      eventTypes[event.event](event);
     }
-    events.forEach((event) => {
-      if (eventTypes[event.event]) {
-        eventTypes[event.event](event);
-      }
-      _nextBlockToProcess = event.blockNumber + 1;
-    });
+    _nextBlockToProcess = event.blockNumber + 1;
   });
+  return { startingBlock, nextBlock: _nextBlockToProcess };
+};
+
+const checkEtherumUpdates = () => {
+  bookingPoc.getPastEvents('allEvents', options, _eventDispatcher);
 };
 
 module.exports = {
   checkEtherumUpdates,
+  onBookingDone,
+  onBookingCancel,
+  _eventDispatcher,
 };

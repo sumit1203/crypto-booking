@@ -1,3 +1,4 @@
+const { STARTING_BLOCK } = require('../../src/config');
 class ToPlainObjectTestClass {
   constructor () {
     this.name = 'some name';
@@ -71,20 +72,22 @@ const validBookingDB = {
 };
 
 const events = {
-  BookingChanged: {
+  BookingDone: {
+    event: 'BookingDone',
     transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
-    blockNumber: '123',
+    blockNumber: STARTING_BLOCK,
     returnValues: {
       roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],
       room: '1',
       newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
-      bookingHash: 'someHash',
+      guest: 'someHash',
     },
   },
-  BookingDone: {
+  BookingCanceled: {
+    event: 'BookingCanceled',
     transactionHash: '0x13c30cb0f5bc3d96c70bdced5f55cbe90286a20481d84fe998edd330ffe9893d',
-    blockNumber: '123',
+    blockNumber: STARTING_BLOCK + 5,
     returnValues: {
       roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],
@@ -141,7 +144,7 @@ const instructionsData = {
      bookingHash: '0x1ab512eb0d6ba16d0aa20b616b257a3c55b5a395e80d0fcbf5963ac694d5b309' },
   contractAddress: '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D',
   bookingIndex: 0,
-  nights: [ 1, 2, 3, 4 ]
+  nights: [ 1, 2, 3, 4 ],
 };
 
 module.exports = {
