@@ -51,6 +51,8 @@
   },
   "nyc": {
     "exclude": [
+      "src/config",
+      "src/constants.js",
       "scripts/",
       "test/"
     ]
