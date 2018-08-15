@@ -26,6 +26,10 @@
   }
 }
 
+// Small Link buttons after large buttons
+.btn-lg + br + .btn-sm {
+  margin-top: 0.5em;
+}
 
 // MODALS
 #modalConfirm {
@@ -35,3 +39,4 @@
     margin-right: 5px;
   }
 }
+
