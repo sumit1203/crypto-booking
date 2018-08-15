@@ -1,92 +1,3 @@
-const testHtmlBody = (name) => {
-  const testHtml = `
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-<head>
-<meta name="viewport" content="width=device-width" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Actionable emails e.g. reset password</title>
-
-
-<style type="text/css">
-img {
-max-width: 100%;
-}
-body {
--webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
-}
-body {
-background-color: #f6f6f6;
-}
-@media only screen and (max-width: 640px) {
-  body {
-    padding: 0 !important;
-  }
-  h1 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h2 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h3 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h4 {
-    font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h1 {
-    font-size: 22px !important;
-  }
-  h2 {
-    font-size: 18px !important;
-  }
-  h3 {
-    font-size: 16px !important;
-  }
-  .container {
-    padding: 0 !important; width: 100% !important;
-  }
-  .content {
-    padding: 0 !important;
-  }
-  .content-wrap {
-    padding: 10px !important;
-  }
-}
-</style>
-</head>
-
-<body itemscope itemtype="http://schema.org/EmailMessage" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
-  <table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
-  <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-      <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
-      <td class="container" width="600" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
-          <div class="content" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
-              <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 1px solid #e9e9e9;" bgcolor="#fff">
-                  <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                      <td class="content-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">
-                          <meta itemprop="name" content="Confirm Email" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
-                          <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                              <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                                  <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                      This is a test email. Please ${name} dont report spam :).
-                                  </td>
-                              </tr>
-                          </table>
-                      </td>
-                  </tr>
-            </table>
-          </div>
-      </td>
-  </tr>
-  </table>
-</body>
-</html>
-`;
-
-  return testHtml;
-};
-
 class ToPlainObjectTestClass {
   constructor () {
     this.name = 'some name';
@@ -188,8 +99,52 @@ const toEmail = process.env.TO_EMAIL || 'example@windingtree.com';
 
 const testPrivateKey = '0xc9803c313dda9f39b7733dc845bc9b93788f8bbb4f9dbe0d4c2657634f966154';
 
+const instructionsData = {
+  txs: [{
+    to: '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D',
+    data: '0x5245A',
+    value: '2386078202863535600',
+    gas: 1000000,
+  }],
+  booking: {
+    confirmationEmailSent: false,
+    status: 'pending',
+    roomNumber: null,
+    guestEthAddress: '0xe91036d59eAd8b654eE2F5b354245f6D7eD2487e',
+    paymentAmount: 596519550715883900,
+    paymentType: 'eth',
+    roomType: 'pure-cozy',
+    from: 1,
+    to: 4,
+    guestCount: 1,
+    bookingHash: '0x1ab512eb0d6ba16d0aa20b616b257a3c55b5a395e80d0fcbf5963ac694d5b309',
+    signatureTimestamp: 1534332702,
+    changesEmailSent: 1534334502.715,
+    encryptedPersonalInfo: 'b3090912c53d480d94103d7d178858eaeec23973f89d099eef7bf6933530983f5f0e7f8986d314331daaed4a9661b4fbeac0d04b8d90b478f8155a8ea1eee56efbaaed162bf33b6a91e5588482720f297d313482c0724e4d9cbf3b8a042e12df32c9be298dd2f038d52f357633e916cf8f0d6c796c74e672c9a7bda50b3bc827426e973475c9f2683b7525775f1f5c2b217ca29e33282be30da92b2eeddfa2babc35647bb4feb11f734eb1b71bf5b3b5626e18f70206a7a94855c2ce469911664fe9c362597d0320a2f519ae9512898a',
+    bookingIndex: 0,
+    __v: 0,
+    personalInfo:
+      { fullName: 'Some name',
+        email: 'email@email.com',
+        birthDate: '1987-12-17',
+        phone: '+420605852377' },
+    fromDate: '6/9/2018',
+    toDate: '10/9/2018',
+    remaindingMinues: 30,
+    weiPerNight: '596519550715883900' },
+  offerSignature: '0x90ed0690290346a82a82fd33b6cf40f61cf2357a671bceb705392592c81625e07125e1ad34037ab5bf221a6bd129c27ce4e8d860c6e408ffd5adaea774a387b91b',
+  signatureData:
+   { roomType: 'pure-cozy',
+     weiPerNight: '596519550715883900',
+     signatureTimestamp: 1534332702,
+     paymentType: 'eth',
+     bookingHash: '0x1ab512eb0d6ba16d0aa20b616b257a3c55b5a395e80d0fcbf5963ac694d5b309' },
+  contractAddress: '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D',
+  bookingIndex: 0,
+  nights: [ 1, 2, 3, 4 ]
+};
+
 module.exports = {
-  testHtmlBody,
   validBooking,
   validLifBooking,
   validBookingDB,
@@ -197,5 +152,6 @@ module.exports = {
   ToPlainObjectTestClass,
   events,
   toEmail,
-  testPrivateKey
+  testPrivateKey,
+  instructionsData,
 };
