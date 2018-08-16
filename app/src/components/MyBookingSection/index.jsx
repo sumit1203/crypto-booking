@@ -123,7 +123,7 @@ export default class MyBookingSection extends React.Component {
                   <div className="form-group">
                     <button className="btn btn-primary" type="submit"> Retrieve booking data</button>
                     <br/>
-                    <button className="btn btn-link btn-sm text-danger"style={{marginTop: '.5em'}} type="button" onClick={this.onCancel}> Cancel my Booking</button>
+                    <button className="btn btn-link btn-sm text-danger" type="button" onClick={this.onCancel}> Cancel my Booking</button>
                   </div>
                 </form>
               </div>

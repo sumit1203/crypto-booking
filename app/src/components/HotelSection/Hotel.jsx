@@ -23,7 +23,7 @@ export default class Hotel extends React.Component {
               </p>
           </div>
           <div className="col-sm-12 col-md-7 col-lg-4 text-center">
-            <div className="mb-2 mt-2 mt-md-1 mb-md-1 map-container" style={{position: 'relative', width: "100%", height: 300}}>
+            <div className="mb-2 mt-2 mt-md-1 mb-md-1 map-container">
               <HotelMap hotelLocation={hotelLocation} hotelName={name}/>
             </div>
             {/* <AnchorLink href="#pick-room" className="btn btn-outline-light">
