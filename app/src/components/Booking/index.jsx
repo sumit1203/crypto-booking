@@ -25,13 +25,17 @@ export default class BookingContainer extends React.Component {
   async componentDidMount() {
       const bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
     try {
+      const {data} = await (await fetch('https://api.coinmarketcap.com/v2/ticker/2728/?convert=EUR')).json()
+      const lifQuotation = data.quotes.EUR.price
       const roomTypesResponse = await fetch(`${HOTEL_URL}/roomTypes`);
       const roomTypes = await roomTypesResponse.json();
       const mappedRooms = await Object.values(roomTypes).reduce(async (acc, room) => {
         acc = await acc
         const isFull = await !this._isRoomTypeAvailable(bookingPoC, room.id)
         const price = PRICES_BY_ROOMTYPE[room.id]
-        return [...acc, {...room, isFull, price}]
+        const lifPrice = Math.round(price * lifQuotation/0.5)
+        const ethPrice = Math.round(price * 0.8)
+        return [...acc, {...room, isFull, price, lifPrice, ethPrice}]
       }, [])
       this.setState({isLoading: false, roomTypes: mappedRooms, selectedRoom: mappedRooms[0]});
     }catch (e) {
