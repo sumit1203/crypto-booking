@@ -144,7 +144,28 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);
     expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
   });
-
+  it('Should read a booking without and index', async () => {
+    const dbBooking = await BookingModel.generate(validBookingWithEthPrice);
+    await dbBooking.save();
+    const booking = await readBooking({ bookingHash: dbBooking.bookingHash });
+    expect(booking).to.have.property('_id');
+    expect(booking).to.have.property('bookingHash');
+    expect(booking.bookingHash).to.be.a('string');
+    expect(booking).to.have.property('guestEthAddress', validBookingWithEthPrice.guestEthAddress);
+    expect(booking).to.have.property('paymentAmount');
+    expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
+    expect(booking).to.have.property('signatureTimestamp');
+    expect(booking.signatureTimestamp).to.have.a('number');
+    expect(booking).to.have.property('personalInfo');
+    expect(booking.personalInfo).to.have.property('fullName', validBookingWithEthPrice.personalInfo.fullName);
+    expect(booking.personalInfo).to.have.property('email', validBookingWithEthPrice.personalInfo.email);
+    expect(booking.personalInfo).to.have.property('birthDate', validBookingWithEthPrice.personalInfo.birthDate);
+    expect(booking.personalInfo).to.have.property('phone', validBookingWithEthPrice.personalInfo.phone);
+    expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
+    expect(booking).to.have.property('to', validBookingWithEthPrice.to);
+    expect(booking).to.have.property('from', validBookingWithEthPrice.from);
+    expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
+  });
   it('Should return null if the id not exists', async () => {
     const booking = await readBooking({ id: 'fake id' });
     expect(booking).to.be.equal(null);
