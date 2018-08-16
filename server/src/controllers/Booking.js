@@ -75,7 +75,8 @@ async function readBooking (filter, index) {
   if (filter.bookingHash) {
     const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
     if (!bookingModel) return null;
-    const { privateKey } = getKeyPair(filter.bookingHash, index);
+    const bookingIndex = index || bookingModel.bookingIndex;
+    const { privateKey } = getKeyPair(filter.bookingHash, bookingIndex);
     return _prepareForExport(bookingModel, privateKey);
   }
   return null;
