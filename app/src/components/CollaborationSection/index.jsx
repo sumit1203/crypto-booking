@@ -7,9 +7,9 @@ export default class CollaborationSection extends React.Component {
 
     return (
       <article className="section-wrapper py-5">
-          <div className="container py-lg-1">
+          <div className="container py-md-2 py-lg-3">
               <div className="row justify-content-center">
-                <div className="col-md-10 col-lg-9 text-center">
+                <div className="col-lg-10 text-center">
                   <p className="mb-1 h3">
                     Winding Tree provides ETH Berlin accomodation services together with our
                     partner Botique Hotel i31.

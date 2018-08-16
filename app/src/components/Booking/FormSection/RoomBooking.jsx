@@ -77,7 +77,7 @@ export default class RoomBooking extends React.Component {
     } = this.props;
     const {isValidEmail, isValidPhone, isConfirmModalOpen} = this.state
     return (
-      <article id='book-a-room' className="section-wrapper bg-light py-3 py-md-5">
+      <article id='book-a-room' className="section-wrapper bg-light py-3 py-md-4">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-10 col-lg-8">
@@ -159,7 +159,7 @@ export default class RoomBooking extends React.Component {
                 </div>
                 <section className="text-center">
                   {price && <PriceLabel value={price}/>}
-                  <button className="btn btn-primary btn-lg" type="submit">Proceed with booking</button>
+                  <button className="btn btn-primary" type="submit">Proceed with booking</button>
                     <br/>
                     <button className="btn btn-sm btn-link btn-light text-dark" onClick={this.showRulesModal}>
                       Hotel rules

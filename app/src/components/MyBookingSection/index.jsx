@@ -93,7 +93,7 @@ export default class MyBookingSection extends React.Component {
           </button>
         </div>)
       }
-        <article className="py-3 py-md-5 border-bottom" id="my-booking">
+        <article className="py-3 py-md-4 bg-white border-bottom" id="my-booking">
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-md-8 text-center">
@@ -121,7 +121,7 @@ export default class MyBookingSection extends React.Component {
                            required/>
                   </div>
                   <div className="form-group">
-                    <button className="btn btn-primary btn-lg" type="submit"> Retrieve booking data</button>
+                    <button className="btn btn-primary" type="submit"> Retrieve booking data</button>
                     <br/>
                     <button className="btn btn-link btn-sm text-danger"style={{marginTop: '.5em'}} type="button" onClick={this.onCancel}> Cancel my Booking</button>
                   </div>

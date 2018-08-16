@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 import Room from './Room'
 
 import {roomType} from '../propTypes'
@@ -8,18 +9,27 @@ class RoomsSection extends React.Component {
   render () {
     const {roomTypes, onRoomTypeChange} = this.props
     return (
-      <article id="pick-room" className="section-wrapper bg--gradient-toright pt-1 pb-4 text-center text-md-left">
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <h2 className="text-white my-2 h3">
-                Rooms for hackers with discount
-              </h2>
+      <article id="pick-room" className="section-wrapper bg-light pt-0 pb-0 pb-md-1 pb-lg-2 text-center text-md-left">
+          <header>
+            <div className="container">
+              <div className="row flex-column flex-md-row align-items-center">
+                <div className="col-sm-8">
+                  <h3 className="h4 text-dark mb-1 mb-md-0">
+                    Rooms for hackers with discount
+                  </h3>
+                </div>
+                <div className="col-sm-4 text-center">
+                  <AnchorLink href="#pick-room" className="btn btn-outline-dark">
+                    Pick a room
+                  </AnchorLink>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="card-deck">
+          </header>
+        <div className="container">
+          <div className="py-3 card-deck">
             {roomTypes.map((room,index) => (
-              <div key={room.id} className={`card ${room.isFull && 'full-room'}`}>
+              <div key={room.id} className={`card ${room.isFull ? 'full-room' : ''}`}>
                 <Room room={room} roomIndex={index} onSelect={onRoomTypeChange}/>
               </div>
             ))

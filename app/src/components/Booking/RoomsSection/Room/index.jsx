@@ -46,7 +46,7 @@ class Room extends React.Component {
           </header>
 
 
-          <ul className="nav nav-tabs my-1" id="myTab" role="tablist">
+          <ul className="nav nav-tabs my-1" role="tablist">
             <li className="nav-item">
               <a className="nav-link active" id={"description-tab-"+roomIndex} data-toggle="tab" href={"#description-"+roomIndex} role="tab" aria-controls="description" aria-selected="true">
                 Description
