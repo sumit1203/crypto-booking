@@ -28,3 +28,10 @@ jobs:
     - npm i -g now
     - echo 'Deploying to NOW'
     - cd app && npm run deploy-now && npm run alias
+  - stage: deploy-ropsten
+    install: true
+    if: branch = develop AND type = push
+    script:
+    - npm i -g now
+    - cd server && npm run deploy-ropsten && npm run alias-ropsten && cd ..
+    - cd app && npm run deploy-ropsten && npm run alias-ropsten && cd ..
