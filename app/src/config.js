@@ -1,4 +1,3 @@
-
 const configProd = {
   HOTEL_URL: 'https://demo-api.windingtree.com/hotels/0x4Ee2BC4804D1A75AEBa5C76D25cc2c036B136140',
   WEB3_PROVIDER: 'https://ropsten.infura.io/CusDXRIFRTuTeUQlhKjc',
@@ -20,8 +19,7 @@ const config = process.env.NODE_ENV === 'production' ? configProd : configDev;
 if (process.env.ETH_NET === 'ropsten') {
   config.WEB3_PROVIDER = 'https://ropsten.infura.io/CusDXRIFRTuTeUQlhKjc';
   config.BOOKING_POC_ADDRESS = '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D';
-  config.SIGNER_API = 'https://crypto-booking-server-ropsten.windingtree.com';
-  config.CAPTCHA_SITE_KEY = '6LfKmmcUAAAAADUI1_CpxzyQ1JHz_bYiQ6Tw3vPF';
+  config.SIGNER_API = 'https://crypto-booking-server-qa.windingtree.com';
 }
 
 module.exports = config;
