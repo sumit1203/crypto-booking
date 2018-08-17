@@ -4,7 +4,7 @@ const configProd = {
   WEB3_PROVIDER: 'https://ropsten.infura.io/CusDXRIFRTuTeUQlhKjc',
   BOOKING_POC_ADDRESS: '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D',
   SIGNER_API: 'https://crypto-booking-server.windingtree.com',
-  CAPTCHA_SITE_KEY: '6LfKmmcUAAAAADUI1_CpxzyQ1JHz_bYiQ6Tw3vPF'
+  CAPTCHA_SITE_KEY: '6LfKmmcUAAAAADUI1_CpxzyQ1JHz_bYiQ6Tw3vPF',
 };
 
 const configDev = {
@@ -12,7 +12,16 @@ const configDev = {
   WEB3_PROVIDER: 'http://localhost:8545',
   BOOKING_POC_ADDRESS: '0xb8699080ea54e2377e9e011102eb6bd42d233565',
   SIGNER_API: 'http://localhost:3001',
-  CAPTCHA_SITE_KEY: '6LfKmmcUAAAAADUI1_CpxzyQ1JHz_bYiQ6Tw3vPF'
+  CAPTCHA_SITE_KEY: '6LfKmmcUAAAAADUI1_CpxzyQ1JHz_bYiQ6Tw3vPF',
 };
 
-module.exports = process.env.NODE_ENV == 'production' ? configProd : configDev;
+const config = process.env.NODE_ENV === 'production' ? configProd : configDev;
+
+if (process.env.ETH_NET === 'ropsten') {
+  config.WEB3_PROVIDER = 'https://ropsten.infura.io/CusDXRIFRTuTeUQlhKjc';
+  config.BOOKING_POC_ADDRESS = '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D';
+  config.SIGNER_API = 'https://crypto-booking-server-ropsten.windingtree.com';
+  config.CAPTCHA_SITE_KEY = '6LfKmmcUAAAAADUI1_CpxzyQ1JHz_bYiQ6Tw3vPF';
+}
+
+module.exports = config;
