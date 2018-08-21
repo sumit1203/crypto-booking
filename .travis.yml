@@ -14,17 +14,20 @@ jobs:
   - stage: test
     script:
     - npm run test-server
-  - stage: deploy-server
+  - stage: deploy-ropsten
     install: true
-    if: branch = release/server AND type = push
+    if: branch = develop AND type = push
     script:
     - npm i -g now
-    - echo 'Deploying to NOW'
-    - cd server && npm run deploy && npm run alias
-  - stage: deploy-app
+    - export GIT_REV=`git rev-parse --short HEAD`
+    - cd server && npm run deploy-ropsten && npm run alias-ropsten && cd ..
+    - cd app && npm run deploy-ropsten && npm run alias-ropsten && cd ..
+  - stage: deploy
     install: true
-    if: branch = release/app AND type = push
+    if: tag IS present
     script:
     - npm i -g now
+    - export GIT_REV=`git rev-parse --short HEAD`
     - echo 'Deploying to NOW'
-    - cd app && npm run deploy-now && npm run alias
+    - cd server && npm run deploy && npm run alias && cd ..
+    - cd app && npm run deploy-now && npm run alias && cd ..

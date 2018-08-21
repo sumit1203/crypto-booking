@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import PriceLabel from './PriceLabel';
 import ConfirmModal from './ConfirmModal';
 import RulesModal from './RulesModal';
+import CancellationPolicyModal from './CancellationPolicyModal';
 import { roomType } from '../propTypes';
 import $ from 'jquery'
 import {validateEmail, validatePhone} from './inputValidations'
@@ -18,10 +19,18 @@ export default class RoomBooking extends React.Component {
     }
 
   }
+
   showRulesModal = (e) => {
     e.preventDefault()
     $('#modalRules').modal('show')
   }
+
+  showCancellationPolicyModal = (e) => {
+    e.preventDefault()
+    $('#modalCancellationPolicy').modal('show')
+  }
+
+
 
   onConfirmModalClose = () => {
     this.setState({isConfirmModalOpen: false})
@@ -160,10 +169,14 @@ export default class RoomBooking extends React.Component {
                 <section className="text-center">
                   {price && <PriceLabel value={price}/>}
                   <button className="btn btn-primary" type="submit">Proceed with booking</button>
-                    <br/>
-                    <button className="btn btn-sm btn-link btn-light text-dark" onClick={this.showRulesModal}>
-                      Hotel rules
-                    </button>
+                  <br/>
+                  <button className="btn btn-sm btn-link btn-light text-dark" onClick={this.showCancellationPolicyModal}>
+                    Cancellation and refund policy
+                  </button>
+                  <br/>
+                  <button className="m-0 btn btn-sm btn-link btn-light text-dark" onClick={this.showRulesModal}>
+                    Hotel rules
+                  </button>
                 </section>
               </form>
             </div>
@@ -172,6 +185,7 @@ export default class RoomBooking extends React.Component {
         {isConfirmModalOpen && <ConfirmModal onSubmit={this.handleConfirmModalOnSubmit} price={price} paymentType={paymentType}
                                              onClose={this.onConfirmModalClose} onPaymentTypeChange={onPaymentTypeChange}/>}
         <RulesModal/>
+        <CancellationPolicyModal/>
       </article>
     );
   }
