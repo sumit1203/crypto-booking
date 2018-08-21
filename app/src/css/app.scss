@@ -9,6 +9,10 @@
   to   { opacity: 1; }
 }
 
+// Small Link buttons after large buttons
+.btn + br + .btn-sm {
+  margin-top: 0.7em;
+}
 
 // Cards (adjustments)
 .card {
