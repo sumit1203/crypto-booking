@@ -35,15 +35,38 @@
 }
 
 .map-container {
+
   position: relative;
-  width: 300px!important;
   margin: 0 auto;
-  height: 300px;
-  border-radius: 5px;
   overflow: hidden;
   border: 5px solid #fff;
   box-shadow: 1px 5px 5px rgba(0,0,0,.2);
-  border-radius: 50%;
+  border-radius: 5px;
+
+  &, > div {
+    height: 350px;
+  }
+
+  .leaflet-control-attribution {
+    top: -11px;
+  }
+
+  @media all and (min-width: 400px) {
+    border-radius: 50%;
+
+    &, > div {
+      width: 350px;
+    }
+
+      .leaflet-control-zoom {
+        top: 130px;
+      }
+      .leaflet-control-attribution {
+        display:none;
+      }
+  }
+
+
 }
 
 
