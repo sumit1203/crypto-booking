@@ -8,8 +8,10 @@
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --mode=production",
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
     "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
+    "deploy-now-ropsten": "NODE_ENV=production ETH_NET=ropsten now --team windingtree --token $NOW_TOKEN",
+    "alias-ropsten": "now alias --team windingtree --token=$NOW_TOKEN -A now-ropsten.json",
     "now-start": "serve --single ./public",
-    "alias": "now alias --team windingtree --token=$NOW_TOKEN",
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN -A now-mainnet.json",
     "postinstall": "npm install https://github.com/windingtree/wt-ui.git#develop"
   },
   "devDependencies": {
@@ -72,8 +74,4 @@
     "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets",
     "windingtree-ui": "git+https://github.com/windingtree/wt-ui.git#develop"
   },
-  "now": {
-    "name": "crypto-booking",
-    "alias": "booking.windingtree.com"
-  }
 }
