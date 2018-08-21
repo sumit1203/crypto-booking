@@ -44,7 +44,7 @@ class ConfirmModal extends React.Component {
   }
 
   render () {
-    const {paymentType, onPaymentTypeChange} = this.props
+    const {paymentType, onPaymentTypeChange, price} = this.props
     return (
       <div className="modal" id="modalConfirm" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
@@ -91,7 +91,7 @@ class ConfirmModal extends React.Component {
                         <small>Final price:</small>
                       </p>
                       <div className="badge badge-light px-1">
-                        <span className="h3">$<span className="h2 font--alt">{this.props.price}</span></span>.
+                        <span className="h3">$<span className="h2 font--alt">{price}</span></span>.
                       </div>
                     </div>
                   </div>

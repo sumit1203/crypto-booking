@@ -26,7 +26,7 @@ class FormSection extends React.Component {
       price: null,
       guestCount: '1',
       errorMessage: '',
-      totalDays: Array.from(new Array(5)).map((a, i) => i+1),
+      totalDays: (new Array(5)).map((a, i) => i+1),
     }
   }
 
@@ -82,11 +82,11 @@ class FormSection extends React.Component {
 
   computePrice = (roomType = this.props.selectedRoom) => {
     const {from, to, paymentType} = this.state;
-    const {price} = roomType;
-    if (!from || !to || !price) return
+    const {ethPrice, lifPrice} = roomType;
+    if (!from || !to) return
     const daysCount = to - from;
-    const discount = paymentType === 'lif' ? 0.8 : 1
-    const total = price * daysCount * discount
+    const price = paymentType === 'lif' ? lifPrice : ethPrice
+    const total = price * daysCount
     this.setState({price: total})
   }
 
@@ -198,7 +198,7 @@ class FormSection extends React.Component {
 FormSection.propTypes = {
   selectedRoom: roomType,
   onRoomTypeChange: PropTypes.func.isRequired,
-  roomTypes: PropTypes.arrayOf(roomType).isRequired
+  roomTypes: PropTypes.arrayOf(roomType).isRequired,
 }
 
 export default FormSection
