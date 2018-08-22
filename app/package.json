@@ -73,5 +73,5 @@
     "websocket": "^1.0.26",
     "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets",
     "windingtree-ui": "git+https://github.com/windingtree/wt-ui.git#develop"
-  },
+  }
 }
