@@ -1,6 +1,4 @@
 {
-  "now": {
-    "name": "crypto-booking",
-    "alias": "booking.windingtree.com"
-  }
+  "name": "crypto-booking",
+  "alias": "booking.windingtree.com"
 }

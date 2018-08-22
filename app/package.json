@@ -9,9 +9,9 @@
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
     "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
     "deploy-now-ropsten": "NODE_ENV=production ETH_NET=ropsten now --team windingtree --token $NOW_TOKEN",
-    "alias-ropsten": "now alias --team windingtree --token=$NOW_TOKEN booking-qa.windingtree.com",
+    "alias-ropsten": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-qa.json",
     "now-start": "serve --single ./public",
-    "alias": "now alias --team windingtree --token=$NOW_TOKEN booking.windingtree.com",
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-mainnet.json",
     "postinstall": "npm install https://github.com/windingtree/wt-ui.git#develop"
   },
   "devDependencies": {
