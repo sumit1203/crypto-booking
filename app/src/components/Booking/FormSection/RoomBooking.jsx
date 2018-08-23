@@ -55,7 +55,7 @@ export default class RoomBooking extends React.Component {
      return (
        <Fragment key={room.id}>
         <input id={`radio-${room.id}`} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-        <label htmlFor={`radio-${room.id}`} style={{whiteSpace: 'initial'}}>
+        <label htmlFor={`radio-${room.id}`}>
           <i className="mdi mdi-check-circle d-none d-sm-inline"/>
           {index === 0 ? ' Twin Bed' : index === 1 && ' King Bed'}
         </label>
@@ -84,7 +84,7 @@ export default class RoomBooking extends React.Component {
     } = this.props;
     const {isValidEmail, isValidPhone, isConfirmModalOpen} = this.state
     return (
-      <article id='book-a-room' className="section-wrapper bg-light py-3 py-md-5">
+      <article id='book-a-room' className="section-wrapper bg-light py-3 py-md-4">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-10 col-lg-8">
@@ -96,10 +96,10 @@ export default class RoomBooking extends React.Component {
               </header>
               <form onSubmit={this.onSubmit}>
                 <section>
-                  <h5 className="mb-1 text-center">Guests</h5>
+                  <h5 className="text-center">Guests</h5>
                   <div className="row justify-content-center">
-                    <div className="media mb-2">
-                      <i className="mdi mdi-account mdi-48px text-dark mr-1" style={{marginTop: -17}}/>
+                    <div className="media mb-2 d-flex align-items-center">
+                      <i className="mdi mdi-account mdi-48px text-dark mr-1"/>
                       <div className="media-body">
                         <div className="form-check">
                           <input className="form-check-input" type="radio" name="guests" id="guests1" value='1' onChange={onGuestCountChange} checked={guestCount === '1'} required/>
@@ -166,15 +166,15 @@ export default class RoomBooking extends React.Component {
                 </div>
                 <section className="text-center">
                   {price && <PriceLabel value={price}/>}
-                  <button className="btn btn-primary btn-lg" type="submit">Proceed with booking</button>
-                    <br/>
-                    <button className="btn btn-sm btn-link btn-light text-dark" onClick={this.showCancellationPolicyModal}>
-                      Cancellation and refund policy
-                    </button>
-                    <br/>
-                    <button className="m-0 btn btn-sm btn-link btn-light text-dark" onClick={this.showRulesModal}>
-                      Hotel rules
-                    </button>
+                  <button className="btn btn-primary" type="submit">Proceed with booking</button>
+                  <br/>
+                  <button className="btn btn-sm btn-link btn-light text-dark" onClick={this.showCancellationPolicyModal}>
+                    Cancellation and refund policy
+                  </button>
+                  <br/>
+                  <button className="m-0 btn btn-sm btn-link btn-light text-dark" onClick={this.showRulesModal}>
+                    Hotel rules
+                  </button>
                 </section>
               </form>
             </div>
