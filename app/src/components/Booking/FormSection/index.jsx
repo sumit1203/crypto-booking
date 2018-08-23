@@ -10,18 +10,6 @@ import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
 
 import { roomType } from '../propTypes'
 
-function _formatDate (date) {
-  const d = new Date(date)
-  let month = '' + (d.getUTCMonth() + 1)
-  let day = '' + d.getUTCDate()
-  const year = d.getUTCFullYear()
-
-  if (month.length < 2) month = '0' + month
-  if (day.length < 2) day = '0' + day
-
-  return [year, month, day].join('-')
-}
-
 class FormSection extends React.Component {
   constructor (props) {
     super(props)
@@ -38,23 +26,13 @@ class FormSection extends React.Component {
       price: null,
       guestCount: '1',
       errorMessage: '',
-      totalDays: Array.from(new Array(5)).map((a, i) => i+1),
+      totalDays: (new Array(5)).map((a, i) => i+1),
     }
   }
 
   componentDidMount () {
     this.bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS)
     this.computePrice()
-  }
-
-  _mapDateToInteger = (date) => {
-    return (new Date(date)).getUTCDate() - 5
-  }
-
-  _addDay = (date, num) => {
-    const fromDate = new Date(date)
-    const nextDate = fromDate.setUTCDate(fromDate.getUTCDate() + num)
-    return _formatDate(nextDate)
   }
 
   onPaymentTypeChange = (e) => {
@@ -104,11 +82,11 @@ class FormSection extends React.Component {
 
   computePrice = (roomType = this.props.selectedRoom) => {
     const {from, to, paymentType} = this.state;
-    const {price} = roomType;
-    if (!from || !to || !price) return
+    const {ethPrice, lifPrice} = roomType;
+    if (!from || !to) return
     const daysCount = to - from;
-    const discount = paymentType === 'lif' ? 0.8 : 1
-    const total = price * daysCount * discount
+    const price = paymentType === 'lif' ? lifPrice : ethPrice
+    const total = price * daysCount
     this.setState({price: total})
   }
 
@@ -220,7 +198,7 @@ class FormSection extends React.Component {
 FormSection.propTypes = {
   selectedRoom: roomType,
   onRoomTypeChange: PropTypes.func.isRequired,
-  roomTypes: PropTypes.arrayOf(roomType).isRequired
+  roomTypes: PropTypes.arrayOf(roomType).isRequired,
 }
 
 export default FormSection

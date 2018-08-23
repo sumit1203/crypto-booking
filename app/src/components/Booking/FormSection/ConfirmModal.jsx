@@ -44,7 +44,7 @@ class ConfirmModal extends React.Component {
   }
 
   render () {
-    const {paymentType, onPaymentTypeChange} = this.props
+    const {paymentType, onPaymentTypeChange, price} = this.props
     return (
       <div className="modal" id="modalConfirm" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
@@ -94,7 +94,7 @@ class ConfirmModal extends React.Component {
                     <p>
                       <small>Final price:</small>
                     </p>
-                    <div className="badge badge-light px-1">
+                    <div className="badge badge-light px-1 mr-sm-1">
                       <span className="h3">$<span className="h2 font--alt">{this.props.price}</span></span>.
                     </div>
                   </div>
@@ -106,16 +106,16 @@ class ConfirmModal extends React.Component {
                       Provide the address from which you will pay.
                     </p>
                     <div className="mb-1 pl-sm-1">
-                      <div className="form-group form-row mb-2 mb-sm-1">
+                      <div className="form-group form-row mb-2 mb-sm-1 align-items-center">
                         <label htmlFor="guestAddress" className="col-md-4 col-lg-3 col-form-label col-form-label-lg">
                           <b>Your Address</b>
                         </label>
-                        <div className="col-md-8 col-lg-9">
+                        <div className="col-md-8 col-lg-9 pr-sm-1">
                           <input
                             type="text"
                             id="guestAddress"
                             autoComplete="off"
-                            className="form-control form-control-lg w-100 align-self-center"
+                            className="form-control form-control-lg w-100"
                             onChange={this.onAddressChange}
                             placeholder='0xe99356bde974bbe08721d77712168fa070aa8da2'
                             required

@@ -20,8 +20,9 @@ jobs:
     script:
     - npm i -g now
     - export GIT_REV=`git rev-parse --short HEAD`
+    - export ETH_NET=ropsten
     - cd server && npm run deploy-ropsten && npm run alias-ropsten && cd ..
-    - cd app && npm run deploy-ropsten && npm run alias-ropsten && cd ..
+    - cd app && npm run deploy-now-ropsten && npm run alias-ropsten && cd ..
   - stage: deploy
     install: true
     if: tag IS present

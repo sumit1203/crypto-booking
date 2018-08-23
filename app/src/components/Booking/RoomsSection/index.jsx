@@ -43,7 +43,7 @@ class RoomsSection extends React.Component {
 
 RoomsSection.propTypes = {
   onRoomTypeChange: PropTypes.func.isRequired,
-  roomTypes: PropTypes.arrayOf(roomType).isRequired
+  roomTypes: PropTypes.arrayOf(roomType).isRequired,
 }
 
 export default RoomsSection

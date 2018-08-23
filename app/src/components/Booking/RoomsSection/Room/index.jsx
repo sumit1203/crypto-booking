@@ -13,8 +13,8 @@ class Room extends React.Component {
   }
 
   render () {
-    const {images, name, price, description, isFull, amenities, id} = this.props.room;
-    const roomIndex = this.props.roomIndex;
+    const {roomIndex, room} = this.props;
+    const {images, name, price, description, isFull, amenities, id, lifPrice, ethPrice} = room;
     return (
       <React.Fragment>
 
@@ -22,7 +22,7 @@ class Room extends React.Component {
 
         <div className="card-img-overlay text-right d-block d-lg-none">
             <h5 className="h6 lead badge badge-warning">
-              <b className="font--alt">{price * 0.8} €</b><br/> Night
+              <b className="font--alt">{price} €</b><br/> Night
             </h5>
         </div>
 
@@ -38,7 +38,7 @@ class Room extends React.Component {
                 <h4 className="col-sm-12 col-md-8">{name}</h4>
                 <div className="col-sm-12 col-md-4 text-md-right">
                   <span className="h5 lead">
-                    <b className="font--alt">{price * 0.8}€</b><span className="text-muted">/Night</span>
+                    <b className="font--alt">{price}€</b><span className="text-muted">/Night</span>
                   </span>
                 </div>
               </div>
@@ -79,8 +79,8 @@ class Room extends React.Component {
 
           <div className="card-footer text-left bg-white">
             <ul className="list-unstyled">
-              <li> <b>Price in ETH</b>: <span className="font--alt">{price}</span>€<span className="text-muted">/Night</span> </li>
-              <li> <b>Price in Lif</b>: <span className="font--alt">{price * 0.8}</span>€<span className="text-muted">/Night</span> </li>
+              <li> <b>Price in ETH</b>: <span className="font--alt">{ethPrice}</span>€<span className="text-muted">/Night</span> </li>
+              <li> <b>Price in Lif</b>: <span className="font--alt">{lifPrice}</span>€<span className="text-muted">/Night</span> </li>
             </ul>
           </div>
 
