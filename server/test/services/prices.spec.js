@@ -18,7 +18,7 @@ describe('Prices services', () => {
     expect(price).to.be.a('number');
   });
   it('Should fetch price', async () => {
-    const price = await fetchPrice('líf]');
+    const price = await fetchPrice('líf');
     expect(price).to.be.a('number');
   });
 });
