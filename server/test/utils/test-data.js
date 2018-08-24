@@ -80,8 +80,8 @@ const events = {
       roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],
       room: '1',
-      newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
-      guest: 'someHash',
+      guest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
+      bookingHash: 'someHash',
     },
   },
   BookingCanceled: {
@@ -92,8 +92,8 @@ const events = {
       roomType: 'pure-cozy',
       nights: [1, 2, 3, 4],
       room: '1',
-      newGuest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
-      guest: 'someHash',
+      guest: '0x8A14027640DCE9C1DA9395b6D9D0c68c3EA3dF57',
+      bookingHash: 'someHash',
     },
   },
 };
