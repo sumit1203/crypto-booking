@@ -1,6 +1,6 @@
 {
   "name": "crypto-booking-server",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Nodejs server to sign room offers and manage bookings.",
   "scripts": {
     "start": "NODE_ENV=production GIT_REV=`git rev-parse --short HEAD` node ./src/index.js",
@@ -8,7 +8,9 @@
     "test": "rimraf .nyc_output && GIT_REV=`git rev-parse --short HEAD` NODE_ENV=test ./node_modules/.bin/nyc --reporter=text ./node_modules/mocha/bin/mocha test/**/*.spec.js --timeout 20000",
     "lint": "eslint src test",
     "deploy": "now --team windingtree --token $NOW_TOKEN -e GIT_REV -e BOOKING_POC_ADDRESS -e WHITELIST -e SERVER_PORT -e STARTING_BLOCK -e MONGODB_URI -e MAIL_API_KEY -e FROM_EMAIL -e OWNER_PRIVATE_KEY -e OWNER_ADDRESS -e WEB3_PROVIDER -e RECAPTCHA_SECRET -e MASTER_KEY -e LIF_TOKEN_ADDRESS",
-    "alias": "now alias --team windingtree --token=$NOW_TOKEN",
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-mainnet.json",
+    "deploy-ropsten": "now --team windingtree --token $NOW_TOKEN -e GIT_REV -e BOOKING_POC_ADDRESS=$BOOKING_POC_ADDRESS_ROPSTEN -e WHITELIST -e SERVER_PORT -e STARTING_BLOCK -e MONGODB_URI=$MONGODB_URI_QA -e MAIL_API_KEY -e FROM_EMAIL -e OWNER_PRIVATE_KEY=$OWNER_PRIVATE_KEY_ROPSTEN -e OWNER_ADDRESS=$OWNER_ADDRESS_ROPSTEN -e WEB3_PROVIDER=$WEB3_PROVIDER_ROPSTEN -e RECAPTCHA_SECRET -e MASTER_KEY=$MASTER_KEY_ROPSTEN -e LIF_TOKEN_ADDRESS=$LIF_TOKEN_ADDRESS_ROPSTEN",
+    "alias-ropsten": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-qa.json",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
@@ -44,10 +46,6 @@
   },
   "engines": {
     "node": "10.6.0"
-  },
-  "now": {
-    "name": "crypto-booking-server",
-    "alias": "crypto-booking-server.windingtree.com"
   },
   "nyc": {
     "exclude": [

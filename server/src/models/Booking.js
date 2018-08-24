@@ -155,6 +155,7 @@ Booking.method({
     try {
       encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, privateKey);
     } catch (e) {
+      console.error(e);
       encodedPersonalInfo = null;
     }
     if (!web3.utils.isHex(encodedPersonalInfo)) {

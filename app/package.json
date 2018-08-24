@@ -1,15 +1,17 @@
 {
   "name": "crypto-booking-app",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Web app to show hotel inventory from WT api.",
   "scripts": {
     "test": "eslint .",
     "start": "NODE_ENV=development ./node_modules/.bin/webpack-dev-server",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --mode=production",
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
-    "deploy-now": "NODE_ENV=production now --team windingtree --token $NOW_TOKEN",
+    "deploy-now": "now --team windingtree --token $NOW_TOKEN --local-config=now-mainnet.json",
+    "deploy-now-ropsten": "now --team windingtree --token $NOW_TOKEN --local-config=now-qa.json",
+    "alias-ropsten": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-qa.json",
     "now-start": "serve --single ./public",
-    "alias": "now alias --team windingtree --token=$NOW_TOKEN",
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-mainnet.json",
     "postinstall": "npm install https://github.com/windingtree/wt-ui.git#develop"
   },
   "devDependencies": {
@@ -71,9 +73,5 @@
     "websocket": "^1.0.26",
     "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets",
     "windingtree-ui": "git+https://github.com/windingtree/wt-ui.git#develop"
-  },
-  "now": {
-    "name": "crypto-booking",
-    "alias": "booking.windingtree.com"
   }
 }

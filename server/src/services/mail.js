@@ -19,6 +19,8 @@ const sendConfirmation = async (event, secretCode, to) => {
     return sgMail.send({ from: FROM_EMAIL, to, subject: 'Hotel confirmation for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
+    console.error('Error sending confirmation email');
+    console.error(e);
     throw e;
   }
 };
@@ -29,6 +31,8 @@ async function sendBookingCanceled (secretCode, to) {
     return sgMail.send({ from: FROM_EMAIL, to, subject: 'Hotel cancel for EthBerlin', html });
   } catch (e) {
     // TODO: Handle errors
+    console.error('Error sending canceled booking email');
+    console.error(e);
     throw e;
   }
 }
@@ -40,6 +44,8 @@ const sendInstructions = async ({ txs, booking, offerSignature, signatureData, c
   } catch (e) {
     console.log(e);
     // TODO: Handle errors
+    console.error('Error sending instructions email');
+    console.error(e);
     throw e;
   }
 };
@@ -52,7 +58,8 @@ const sendBookingInfo = async (booking, { from, to }) => {
 
     return sgMail.send({ from, to, subject: 'Hotel information for EthBerlin', html });
   } catch (e) {
-    // TODO: Handle errors
+    console.error('Error sending confirmation email');
+    console.error(e);
     throw handleApplicationError('sendBookingInfoFail', e);
   }
 };

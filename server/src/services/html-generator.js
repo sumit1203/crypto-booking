@@ -767,7 +767,7 @@ const informationBody = ({ roomType, from, to, personalInfo, status, remaindingM
                                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
                                   <tr>
                                     <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                                      <div style="font-family:Raleway, Helvetica, Arial;font-size:19px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">Your booking is ready!</div>
+                                      <div style="font-family:Raleway, Helvetica, Arial;font-size:19px;font-weight:bold;line-height:18px;text-align:left;color:#000000;">Your booking information</div>
                                     </td>
                                   </tr>
                                   <tr>

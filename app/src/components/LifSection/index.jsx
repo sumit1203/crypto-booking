@@ -6,7 +6,7 @@ import logoOpenledger from "../../img/content/cards/openledger.png";
 import logoForkdelta from "../../img/content/cards/forkdelta.png";
 
 const LifSection = () => (
-  <article className="py-3 py-md-5" id="paying-with-lif">
+  <article className="py-3 py-md-4" id="paying-with-lif">
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-8">
