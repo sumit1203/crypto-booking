@@ -9,7 +9,7 @@ const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
 const routes = require('./routes');
-const { checkBookingExpired } = require('./controllers/Booking');
+const { checkBookingExpired } = require('./services/booking');
 const { checkEtherumUpdates } = require('./services/ethereum-listener');
 
 const app = express();
@@ -58,8 +58,16 @@ app.use((err, req, res, next) => {
 const ethereunListenerCron = cron.schedule('* * * * *', checkEtherumUpdates);
 const expiredBookingCron = cron.schedule('*/5 * * * *', checkBookingExpired);
 
+const startServer = (port) => {
+  return app.listen(port, () => {
+    console.log(`Server running at ${port}!`);
+    console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  });
+};
+
 module.exports = {
   app,
   ethereunListenerCron,
   expiredBookingCron,
+  startServer,
 };

@@ -5,7 +5,7 @@ const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
   BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
-const { encrypt, decrypt, generateKeyPair, getKeyPair } = require('../services/crypto');
+const { encrypt, decrypt, generateKeyPair } = require('../services/crypto');
 
 autoIncrement.initialize(mongoose.connection);
 // from https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
@@ -21,7 +21,7 @@ function _isBirthDate (birthDate) {
 }
 
 function _isPhone (phone) {
-  const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  const re = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im;
   return re.test(String(phone));
 }
 
@@ -218,8 +218,9 @@ Booking.statics.generate = async function (data) {
     BookingModel.nextCount((err, nextCount) => {
       if (err) return reject(err);
       return resolve(nextCount);
-    })}));
-  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair(index);
+    });
+  }));
+  const { privateKey, publicKey } = generateKeyPair(index);
   data.bookingHash = publicKey;
   const { personalInfo, cryptoPrice, ...rest } = data;
   const BookingModel = this.model('Booking');

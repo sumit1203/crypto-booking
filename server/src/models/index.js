@@ -9,7 +9,13 @@ if (!MONGODB_URI) {
 const dbURI = `mongodb://${MONGODB_URI}`;
 
 // Create the database connection
-mongoose.connect(dbURI);
+const connectDB = async () => {
+  await mongoose.connect(dbURI, { useNewUrlParser: true });
+};
+
+const disconnectDB = async () => {
+  await mongoose.connection.close();
+};
 
 // CONNECTION EVENTS
 // When successfully connected
@@ -43,3 +49,8 @@ fs.readdirSync(__dirname).forEach(function (file) {
   }
   require(`${__dirname}/${file}`);
 });
+
+module.exports = {
+  connectDB,
+  disconnectDB,
+};

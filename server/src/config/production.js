@@ -1,11 +1,3 @@
-const path = require('path');
-require('dotenv').config({
-  path: path.resolve(
-    process.cwd(),
-    '.env'
-  )
-});
-
 module.exports = {
   BOOKING_POC_ADDRESS: process.env.BOOKING_POC_ADDRESS || '0x028C2ed488804A80e8355590575979397403078C',
   LIF_TOKEN_ADDRESS: process.env.LIF_TOKEN_ADDRESS || '0xeb9951021698b42e4399f9cbb6267aa35f82d59d',
