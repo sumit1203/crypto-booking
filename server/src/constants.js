@@ -18,4 +18,5 @@ module.exports = {
     canceled: 'canceled',
     approved: 'approved',
   },
+  LIF_DISCOUNT: 0.2,
 };
