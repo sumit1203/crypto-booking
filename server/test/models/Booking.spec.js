@@ -323,7 +323,32 @@ describe('Booking model', () => {
       });
     });
     xdescribe('generatePaymentAmount', () => {});
-    xdescribe('getWeiPerNight', () => {});
+    describe('getWeiPerNight', () => {
+      it('Should throw and error if cryptoPrice is not a number', async () => {
+        const booking = new Booking(validBookingDB);
+        try {
+          booking.getWeiPerNight('Not a number');
+          throw Error('should not be called');
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidCryptoPrice');
+        }
+      });
+      it('Should throw and error if roomType is not valid', async () => {
+        const booking = new Booking(validBookingDB);
+        try {
+          booking.roomType = 'invalidRoomType';
+          booking.getWeiPerNight(1);
+          throw Error('should not be called');
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidRoomType');
+        }
+      });
+      it('Should return room\'s price in wei per night', async () => {
+        const booking = new Booking(validBookingDB);
+        const cryptoPrice = 0.541;
+        expect(booking.getWeiPerNight(cryptoPrice)).to.be.a('string');
+      });
+    });
     describe('setAsPending', () => {
       it('Should set the booking as pending', async () => {
         const booking = new Booking(validBookingDB);

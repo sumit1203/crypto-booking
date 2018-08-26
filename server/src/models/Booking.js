@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const Schema = mongoose.Schema;
 const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
-  BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
+  BOOKING_ROOM_TYPES, BOOKING_STATUS, LIF_DISCOUNT } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
 const { encrypt, decrypt, generateKeyPair } = require('../services/crypto');
@@ -178,7 +178,12 @@ Booking.method({
     if (BOOKING_ROOM_TYPES.indexOf(this.roomType) === -1) {
       throw handleApplicationError('invalidRoomType');
     }
-    return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / cryptoPrice).toString(), 'ether');
+    const discount = this.paymentType === BOOKING_PAYMENT_TYPES.lif ? LIF_DISCOUNT : 0;
+    let priceInCrypto = ROOM_TYPE_PRICES[this.roomType] * (1 - discount) / cryptoPrice;
+    const decimals = 4;
+    const fixedAdd = 0.0001;
+    priceInCrypto = Math.round((priceInCrypto + fixedAdd) * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return web3.utils.toWei(priceInCrypto.toString(), 'ether');
   },
   setAsPending: function () {
     this.status = BOOKING_STATUS.pending;
