@@ -1,19 +1,18 @@
 import React, { Fragment } from 'react'
 import $ from 'jquery'
 import PropTypes from 'prop-types'
-import Web3 from 'web3'
 import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
-import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
+import { BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
 
 import { roomType } from '../propTypes'
+import BookingContainer from '../index'
 
 class FormSection extends React.Component {
   constructor (props) {
     super(props)
-    this.web3 = new Web3(WEB3_PROVIDER)
     this.state = {
       paymentType: 'eth',
       from: 1,
@@ -31,7 +30,7 @@ class FormSection extends React.Component {
   }
 
   componentDidMount () {
-    this.bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS)
+    this.bookingPoC = new BookingContainer.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS)
     this.computePrice()
   }
 

@@ -12,9 +12,9 @@ const PRICES_BY_ROOMTYPE = {
 }
 
 export default class BookingContainer extends React.Component {
+  static web3 = web3 ? new Web3(web3.currentProvider) : new Web3(WEB3_PROVIDER)
   constructor(props) {
     super(props)
-    this.web3 = new Web3(WEB3_PROVIDER);
     this.state = {
       isLoading: true,
       roomTypes: [],
@@ -23,7 +23,7 @@ export default class BookingContainer extends React.Component {
   }
 
   async componentDidMount() {
-      const bookingPoC = new this.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
+      const bookingPoC = new BookingContainer.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
     try {
       const {data} = await (await fetch('https://api.coinmarketcap.com/v2/ticker/2728/?convert=EUR')).json()
       const lifQuotation = data.quotes.EUR.price
