@@ -323,11 +323,11 @@ describe('Booking model', () => {
       });
     });
     xdescribe('generatePaymentAmount', () => {});
-    describe('getWeiPerNight', () => {
+    describe('getWeiPerNight', async () => {
       it('Should throw and error if cryptoPrice is not a number', async () => {
         const booking = new Booking(validBookingDB);
         try {
-          booking.getWeiPerNight('Not a number');
+          await booking.getWeiPerNight('Not a number');
           throw Error('should not be called');
         } catch (e) {
           expect(e.code).to.be.equal('#invalidCryptoPrice');
@@ -337,7 +337,7 @@ describe('Booking model', () => {
         const booking = new Booking(validBookingDB);
         try {
           booking.roomType = 'invalidRoomType';
-          booking.getWeiPerNight(1);
+          await booking.getWeiPerNight(1);
           throw Error('should not be called');
         } catch (e) {
           expect(e.code).to.be.equal('#invalidRoomType');
@@ -346,7 +346,13 @@ describe('Booking model', () => {
       it('Should return room\'s price in wei per night', async () => {
         const booking = new Booking(validBookingDB);
         const cryptoPrice = 0.541;
-        expect(booking.getWeiPerNight(cryptoPrice)).to.be.a('string');
+        expect(await booking.getWeiPerNight(cryptoPrice)).to.be.a('string');
+      });
+      it('Should return room\'s price in wei per night with lif token', async () => {
+        const booking = new Booking(validBookingDB);
+        booking.paymentType = BOOKING_PAYMENT_TYPES.lif;
+        const cryptoPrice = 0.541;
+        expect(await booking.getWeiPerNight(cryptoPrice)).to.be.a('string');
       });
     });
     describe('setAsPending', () => {

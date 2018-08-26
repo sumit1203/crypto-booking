@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const Schema = mongoose.Schema;
-const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
-  BOOKING_ROOM_TYPES, BOOKING_STATUS, LIF_DISCOUNT } = require('../constants');
+const { SIGNATURE_TIME_LIMIT, BOOKING_PAYMENT_TYPES,
+  BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
 const { encrypt, decrypt, generateKeyPair } = require('../services/crypto');
+const { getRoomPrice } = require('../services/prices');
 
 autoIncrement.initialize(mongoose.connection);
 // from https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
@@ -168,18 +169,17 @@ Booking.method({
       return {};
     }
   },
-  generatePaymentAmount: function (cryptoPrice) {
-    this.paymentAmount = this.getWeiPerNight(cryptoPrice);
+  generatePaymentAmount: async function (cryptoPrice) {
+    this.paymentAmount = await this.getWeiPerNight(cryptoPrice);
   },
-  getWeiPerNight: function (cryptoPrice) {
+  getWeiPerNight: async function (cryptoPrice) {
     if (typeof cryptoPrice !== 'number') {
       throw handleApplicationError('invalidCryptoPrice');
     }
     if (BOOKING_ROOM_TYPES.indexOf(this.roomType) === -1) {
       throw handleApplicationError('invalidRoomType');
     }
-    const discount = this.paymentType === BOOKING_PAYMENT_TYPES.lif ? LIF_DISCOUNT : 0;
-    let priceInCrypto = ROOM_TYPE_PRICES[this.roomType] * (1 - discount) / cryptoPrice;
+    let priceInCrypto = await getRoomPrice(this.roomType, this.paymentType) / cryptoPrice;
     const decimals = 4;
     const fixedAdd = 0.0001;
     priceInCrypto = Math.round((priceInCrypto + fixedAdd) * Math.pow(10, decimals)) / Math.pow(10, decimals);
@@ -231,7 +231,7 @@ Booking.statics.generate = async function (data) {
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
   booking.encryptPersonalInfo(personalInfo, privateKey);
-  booking.generatePaymentAmount(cryptoPrice);
+  await booking.generatePaymentAmount(cryptoPrice);
   return booking;
 };
 
