@@ -4,7 +4,10 @@ const { sendConfirmation } = require('./mail.js');
 const { STARTING_BLOCK } = require('../config');
 const { BOOKING_STATUS } = require('../constants');
 
-let _nextBlockToProcess = parseInt(STARTING_BLOCK);
+const options = {
+  fromBlock: parseInt(STARTING_BLOCK),
+  toBlock: 'latest',
+};
 
 async function onBookingDone (args) {
   try {
@@ -45,14 +48,9 @@ const eventTypes = {
   'BookingCanceled': onBookingCancel,
 };
 
-const options = {
-  fromBlock: _nextBlockToProcess,
-  toBlock: 'latest',
-};
-
 const _eventDispatcher = (err, events) => {
-  console.log(`${events.length} events since block ${_nextBlockToProcess}`);
-  const startingBlock = _nextBlockToProcess;
+  const startingBlock = options.fromBlock;
+  console.log(`${events.length} events since block ${startingBlock}`);
   if (err) {
     return console.error(err);
   }
@@ -60,9 +58,9 @@ const _eventDispatcher = (err, events) => {
     if (eventTypes[event.event]) {
       eventTypes[event.event](event);
     }
-    _nextBlockToProcess = event.blockNumber + 1;
+    options.fromBlock = event.blockNumber + 1;
   });
-  return { startingBlock, nextBlock: _nextBlockToProcess };
+  return { startingBlock, nextBlock: options.fromBlock };
 };
 
 const checkEtherumUpdates = () => {
