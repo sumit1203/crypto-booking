@@ -1,4 +1,4 @@
-require('./models');
+const { connectDB } = require('./models');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -59,6 +59,7 @@ const ethereunListenerCron = cron.schedule('* * * * *', checkEtherumUpdates);
 const expiredBookingCron = cron.schedule('*/5 * * * *', checkBookingExpired);
 
 const startServer = (port) => {
+  connectDB();
   return app.listen(port, () => {
     console.log(`Server running at ${port}!`);
     console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
