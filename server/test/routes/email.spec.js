@@ -9,7 +9,7 @@ const sgMail = require('@sendgrid/mail');
 const { validBookingWithEthPrice } = require('../utils/test-data');
 const { SERVER_PORT } = require('../../src/config');
 const { ethereunListenerCron, expiredBookingCron } = require('../../src/app');
-const { disconnectDB, connectDB } = require('../../src/models');
+const { disconnectDB } = require('../../src/models');
 const { startServer } = require('../../src/app');
 
 describe('POST /api/booking/emailInfo', () => {
@@ -23,7 +23,6 @@ describe('POST /api/booking/emailInfo', () => {
     expiredBookingCron.destroy();
     sandbox = sinon.createSandbox();
     BookingModel = mongoose.model('Booking');
-    await connectDB();
   });
   afterEach(async function () {
     await BookingModel.remove({}).exec();

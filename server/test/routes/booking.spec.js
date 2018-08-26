@@ -9,7 +9,7 @@ const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
 const prices = require('../../src/services/prices');
 const { turnOffRecaptcha, turnOnRecaptcha } = require('../../src/middlewares/recaptcha');
-const { disconnectDB, connectDB } = require('../../src/models');
+const { disconnectDB } = require('../../src/models');
 const { startServer } = require('../../src/app');
 
 const { validBooking, validLifBooking, validBookingWithEthPrice } = require('../utils/test-data');
@@ -24,7 +24,6 @@ describe('Bookings', () => {
       server = startServer(SERVER_PORT);
       sandbox = sinon.createSandbox();
       BookingModel = mongoose.model('Booking');
-      await connectDB();
     });
     afterEach(async function () {
       await BookingModel.remove({}).exec();

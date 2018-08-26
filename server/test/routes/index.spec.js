@@ -2,11 +2,11 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const request = require('request-promise-native');
-const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
+const { SERVER_PORT, BOOKING_POC_ADDRESS, WEB3_PROVIDER } = require('../../src/config');
 const { version } = require('../../package.json');
 const { validBooking } = require('../utils/test-data');
 const { ethereunListenerCron, expiredBookingCron } = require('../../src/app');
-const { disconnectDB, connectDB } = require('../../src/models');
+const { disconnectDB } = require('../../src/models');
 const { startServer } = require('../../src/app');
 
 describe('GET /', () => {
@@ -15,7 +15,6 @@ describe('GET /', () => {
     server = startServer(SERVER_PORT);
     ethereunListenerCron.destroy();
     expiredBookingCron.destroy();
-    await connectDB();
   });
   after(async () => {
     await server.close();
@@ -30,5 +29,6 @@ describe('GET /', () => {
     expect(resp).to.have.property('version', version);
     expect(resp).to.have.property('bookingPoC', BOOKING_POC_ADDRESS);
     expect(resp).to.have.property('commit');
+    expect(resp).to.have.property('provider', WEB3_PROVIDER);
   });
 });
