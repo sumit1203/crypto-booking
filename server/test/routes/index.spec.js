@@ -6,7 +6,7 @@ const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
 const { version } = require('../../package.json');
 const { validBooking } = require('../utils/test-data');
 const { ethereunListenerCron, expiredBookingCron } = require('../../src/app');
-const { disconnectDB, connectDB } = require('../../src/models');
+const { disconnectDB } = require('../../src/models');
 const { startServer } = require('../../src/app');
 
 describe('GET /', () => {
@@ -15,7 +15,6 @@ describe('GET /', () => {
     server = startServer(SERVER_PORT);
     ethereunListenerCron.destroy();
     expiredBookingCron.destroy();
-    await connectDB();
   });
   after(async () => {
     await server.close();
