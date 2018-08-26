@@ -2,7 +2,7 @@
 require('dotenv').config({ path: './test/utils/.env' });
 const { expect } = require('chai');
 const request = require('request-promise-native');
-const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
+const { SERVER_PORT, BOOKING_POC_ADDRESS, WEB3_PROVIDER } = require('../../src/config');
 const { version } = require('../../package.json');
 const { validBooking } = require('../utils/test-data');
 const { ethereunListenerCron, expiredBookingCron } = require('../../src/app');
@@ -29,5 +29,6 @@ describe('GET /', () => {
     expect(resp).to.have.property('version', version);
     expect(resp).to.have.property('bookingPoC', BOOKING_POC_ADDRESS);
     expect(resp).to.have.property('commit');
+    expect(resp).to.have.property('provider', WEB3_PROVIDER);
   });
 });
