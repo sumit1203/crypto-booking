@@ -51,6 +51,7 @@ const options = {
 };
 
 const _eventDispatcher = (err, events) => {
+  console.log(`${events.length} events since block ${_nextBlockToProcess}`);
   const startingBlock = _nextBlockToProcess;
   if (err) {
     return console.error(err);
