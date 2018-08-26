@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cron = require('node-cron');
 
-const { BOOKING_POC_ADDRESS, GIT_REV } = require('./config');
+const { BOOKING_POC_ADDRESS, GIT_REV, WEB3_PROVIDER } = require('./config');
 const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
     version,
     bookingPoC: BOOKING_POC_ADDRESS,
     commit: GIT_REV,
+    provider: WEB3_PROVIDER,
   };
   res.status(200).json(response);
 });
