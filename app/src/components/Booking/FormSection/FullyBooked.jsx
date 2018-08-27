@@ -5,7 +5,7 @@ import $ from 'jquery'
 class FullyBooked extends React.Component {
   componentDidMount() {
     $('#fullyBooked').modal('show')
-    $('#fullyBooked').on('hidden.bs.modal', function () {
+    $('#fullyBooked').on('hidden.bs.modal', () => {
       this.props.onClose()
     })
   }
