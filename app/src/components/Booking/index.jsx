@@ -31,7 +31,7 @@ export default class BookingContainer extends React.Component {
       const roomTypes = await roomTypesResponse.json();
       const mappedRooms = await Object.values(roomTypes).reduce(async (acc, room) => {
         acc = await acc
-        const isFull = await !this._isRoomTypeAvailable(bookingPoC, room.id)
+        const isFull = !(await this._isRoomTypeAvailable(bookingPoC, room.id))
         const price = PRICES_BY_ROOMTYPE[room.id]
         const lifPrice = Math.round(price * lifQuotation/0.5)
         const ethPrice = Math.round(price * 0.8)
@@ -50,11 +50,11 @@ export default class BookingContainer extends React.Component {
 
   _isRoomTypeAvailable = async(bookingPoC, roomType) => {
     const nights = [1,2,3,4];
-    return nights.reduce(async (acc, night) => {
-      acc = await acc;
+    const availabilityByNight = await Promise.all(nights.map(async (night) => {
       const availability = await this._availability(bookingPoC, roomType, [night]);
-      return !!acc || !!availability
-    }, {})
+      return availability.some(a => !!parseInt(a))
+    }))
+    return availabilityByNight.some(a => a)
   };
 
   onRoomTypeChange = (selectedRoom) => {
