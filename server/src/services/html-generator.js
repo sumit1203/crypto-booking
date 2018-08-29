@@ -1,6 +1,7 @@
 const { web3 } = require('./web3');
 const { BOOKING_STATUS } = require('../constants');
 const confirmationBody = (event, secretCode) => {
+  let nights = event.returnValues.nights.map(i => i + 5);
   const confirmationHtml = `
   <!doctype html>
   <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -125,7 +126,7 @@ const confirmationBody = (event, secretCode) => {
                                   </tr>
                                   <tr>
                                     <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                                      <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">Hey you, owner of ${event.returnValues.guest}, have a ${event.returnValues.roomType} for ${event.returnValues.nights} nights. The room is ${event.returnValues.room}.</div>
+                                      <div style="font-family:Raleway, Helvetica, Arial;font-size:14px;line-height:18px;text-align:left;color:#434343;">We have confirmed a ${event.returnValues.roomType} room number ${event.returnValues.room} for guest ${event.returnValues.guest}. have a  for ${nights} nights. The room is .</div>
                                     </td>
                                   </tr>
                                   <tr>
