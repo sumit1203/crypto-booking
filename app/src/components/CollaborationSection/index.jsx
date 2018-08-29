@@ -15,15 +15,12 @@ export default class CollaborationSection extends React.Component {
                     partner Botique Hotel i31.
                   </p>
                   <p className="h4 lead">
-                    We offer a <b>20% discount</b> to hackers and engineers
-                    who pay with <AnchorLink href="#paying-with-lif">Lif token</AnchorLink>.
+                    We offer at least a <b>20% discount</b> to hackers and engineers who pay
+                    with <AnchorLink href="#paying-with-lif"><b>LIF</b></AnchorLink> or <b>ETH</b>.
                   </p>
                 </div>
               </div>
-
-
             </div>
-
       </article>
     );
   }
