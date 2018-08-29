@@ -33,7 +33,7 @@ async function createBooking (data) {
   data.cryptoPrice = await fetchPrice(data.paymentType);
   const { bookingModel, bookingIndex, privateKey } = await _generateBooking(data);
   const booking = _prepareForExport(bookingModel, privateKey);
-  booking.weiPerNight = bookingModel.getWeiPerNight(data.cryptoPrice);
+  booking.weiPerNight = await bookingModel.getWeiPerNight(data.cryptoPrice);
   const { signatureData, offerSignature } = await signOffer(booking, await readKey());
 
   return {
