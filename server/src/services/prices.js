@@ -9,7 +9,10 @@ const fetchETHPrice = async (unit = 'EUR') => {
 };
 
 const fetchLIFPrice = async (unit = 'EUR') => {
-  return 0.5;
+  const PRICE_URL = 'https://api.coinmarketcap.com/v2/ticker/2728/?convert=EUR';
+  const res = await (await fetch(PRICE_URL)).json();
+  const price = parseFloat(res.data.quotes.EUR.price);
+  return price;
 };
 
 const fetchPrice = async (type) => {
@@ -17,10 +20,7 @@ const fetchPrice = async (type) => {
 };
 
 const getLIFRoomPrice = async (roomType) => {
-  const PRICE_URL = 'https://api.coinmarketcap.com/v2/ticker/2728/?convert=EUR';
-  const res = await (await fetch(PRICE_URL)).json();
-  const price = parseFloat(res.data.quotes.EUR.price);
-  return ROOM_TYPE_PRICES[roomType] * price / 0.5;
+  return ROOM_TYPE_PRICES[roomType] * await fetchLIFPrice() / 0.5;
 };
 
 const getETHRoomPrice = async (roomType) => {
