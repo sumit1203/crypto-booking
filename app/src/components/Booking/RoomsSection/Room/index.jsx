@@ -14,7 +14,7 @@ class Room extends React.Component {
 
   render () {
     const {roomIndex, room} = this.props;
-    const {images, name, price, description, isFull, amenities, id, lifPrice, ethPrice, index} = room;
+    const {images, name, price, description, isFull, amenities, id, lifPrice, ethPrice} = room;
     return (
       <React.Fragment>
 

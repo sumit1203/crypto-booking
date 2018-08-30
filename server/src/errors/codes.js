@@ -9,17 +9,17 @@ module.exports = {
   noMasterKey: {
     status: 500,
     short: 'No master key provided',
-    long: 'A master key must be setted for encrypt info',
+    long: 'A master key must be set to encrypt info',
   },
   noBookingHash: {
     status: 500,
     short: 'No booking hash provided',
-    long: 'A booking hash must be generated for encrypt/decrypt info',
+    long: 'A booking hash must be generated to encrypt/decrypt info',
   },
   noPrivateKey: {
     status: 500,
     short: 'No private key provided',
-    long: 'A private key must be provided for encrypt/decrypt info',
+    long: 'A private key must be provided to encrypt/decrypt info',
   },
   invalidEncryptedPersonalInfo: {
     status: 500,
@@ -44,7 +44,7 @@ module.exports = {
   rateLimit: {
     status: 429,
     short: 'API rate Limit Exceeded',
-    long: 'The rate limit was exceeded. Please try later.',
+    long: 'The rate limit was exceeded. Please try again later.',
   },
   noGuestEthAddress: {
     status: 409,
@@ -54,7 +54,7 @@ module.exports = {
   guestEthAddressChecksum: {
     status: 409,
     short: 'Invalid guest Ethereum address.',
-    long: 'Guest Ethereum address provided have not passed checksum.',
+    long: 'Guest Ethereum address provided has not passed checksum.',
   },
   minAmount: {
     status: 409,
@@ -184,6 +184,6 @@ module.exports = {
   bookingNotFound: {
     status: 404,
     short: 'Booking not found.',
-    long: 'We cannot found booking. If you think that this is an error, please contract Winding Tree team.',
+    long: 'The booking was not found. Please verify the the data you entered. If you think that this is an error, please contact Winding Tree team.',
   },
 };
