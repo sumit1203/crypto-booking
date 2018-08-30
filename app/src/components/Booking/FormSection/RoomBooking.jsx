@@ -128,7 +128,7 @@ export default class RoomBooking extends React.Component {
                           days.map((day) => (
                             <Fragment key={day}>
                               <input type="checkbox" name="days" id={"days-" + day} value={day} onChange={onDaysChange} checked={day >= from && day <= to}/>
-                              <label htmlFor={"days-" + day} className="font--alt">{5 + day}/7</label>
+                              <label htmlFor={"days-" + day} className="font--alt">{5 + day}/9</label>
                             </Fragment>
                           ))
                         }
