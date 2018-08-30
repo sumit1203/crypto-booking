@@ -50,7 +50,7 @@ function _prepareForExport (bookingModel, privateKey) {
   booking.personalInfo = bookingModel.decryptPersonalInfo(privateKey);
   booking.fromDate = bookingModel.getFromDate();
   booking.toDate = bookingModel.getToDate();
-  booking.remaindingMinues = bookingModel.getRemaindingMinutes();
+  booking.remaindingMinutes = bookingModel.getRemaindingMinutes();
   return booking;
 }
 
