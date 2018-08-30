@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
-require('dotenv').config({ path: './test/utils/.env' });
+require('dotenv').config({ path: '../../../.env.test' });
 const { expect } = require('chai');
 const { fetchETHPrice, fetchPrice, fetchLIFPrice } = require('../../src/services/prices');
 

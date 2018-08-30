@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-require('dotenv').config({ path: './test/utils/.env' });
+require('dotenv').config({ path: '../../../.env.test' });
 const { expect } = require('chai');
 const request = require('request-promise-native');
 const { SERVER_PORT, BOOKING_POC_ADDRESS, WEB3_PROVIDER } = require('../../src/config');
