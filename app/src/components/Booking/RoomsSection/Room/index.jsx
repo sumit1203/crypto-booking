@@ -14,7 +14,7 @@ class Room extends React.Component {
 
   render () {
     const {roomIndex, room} = this.props;
-    const {images, name, price, description, isFull, amenities, id, lifPrice, ethPrice} = room;
+    const {images, name, price, description, isFull, amenities, id, lifPrice, ethPrice, index} = room;
     return (
       <React.Fragment>
 
@@ -31,11 +31,11 @@ class Room extends React.Component {
 
           <header className="card-title">
           <h5 className="d-block d-lg-none">
-            {name}
+            {roomIndex === 0 ? ' King-size Bed' : roomIndex === 1 && ' Twin Bed'}
           </h5>
             <div className="d-none d-lg-block">
               <div className="row align-items-center">
-                <h4 className="col-sm-12 col-md-8">{name}</h4>
+                <h4 className="col-sm-12 col-md-8">{roomIndex === 0 ? ' King-size Bed' : roomIndex === 1 && ' Twin Bed'}</h4>
                 <div className="col-sm-12 col-md-4 text-md-right">
                   <span className="h5 lead">
                     <b className="font--alt">{price}€</b><span className="text-muted">/Night</span>
