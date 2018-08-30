@@ -117,7 +117,7 @@ export default class RoomBooking extends React.Component {
                 </section>
                 {/*TODO: in case one of the options is unavailable use the class "disabled" and the attribute "disabled" on that item*/}
                 <section className="text-center mb-2">
-                  <h5 className="mb-1"> Preferred room type </h5>
+                  <h5 className="mb-1"> Type of Room </h5>
                   <div className="form-row">
                     <div className="col-12 mb-1 mb-sm-0">
                       <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
@@ -127,7 +127,7 @@ export default class RoomBooking extends React.Component {
                   </div>
                 </section>
                 <section className="text-center mb-2">
-                  <h5 className="mb-1"> Reservation date </h5>
+                  <h5 className="mb-1"> Reservation Date </h5>
                   <div className="form-row">
                     <div className="col-12 mb-1 mb-sm-0">
 
