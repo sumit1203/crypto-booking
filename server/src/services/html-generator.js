@@ -635,7 +635,7 @@ function bookingCanceledBody (secretCode) {
   return bookingChangeHtml;
 };
 
-const informationBody = ({ roomType, from, to, personalInfo, status, remaindingMinutes }) => {
+const informationBody = ({ roomType, from, to, personalInfo, status, remainingMinutes }) => {
   let bookingDetails;
   switch (status) {
   case BOOKING_STATUS.canceled:
@@ -645,7 +645,7 @@ const informationBody = ({ roomType, from, to, personalInfo, status, remaindingM
     bookingDetails = `we just receive the payment of your booking and it has been approved, you room is a <b>${roomType}</b> from <b>${from}</b> to <b>${to}</b>`;
     break;
   case BOOKING_STATUS.pending:
-    bookingDetails = `we are still wating the payment of your booking for a room <b>${roomType}</b> from <b>${from}</b> to <b>${to}</b>, you have ${remaindingMinutes} minutes to execute your payment, if you ran out of time simply request a new offer`;
+    bookingDetails = `we are still wating the payment of your booking for a room <b>${roomType}</b> from <b>${from}</b> to <b>${to}</b>, you have ${remainingMinutes} minutes to execute your payment, if you ran out of time simply request a new offer`;
     break;
   }
 
