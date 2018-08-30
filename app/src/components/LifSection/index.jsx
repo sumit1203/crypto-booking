@@ -6,7 +6,7 @@ import logoOpenledger from "../../img/content/cards/openledger.png";
 import logoForkdelta from "../../img/content/cards/forkdelta.png";
 
 const LifSection = () => (
-  <article className="py-3 py-md-5" id="paying-with-lif">
+  <article className="py-3 py-md-4" id="paying-with-lif">
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-8">
@@ -20,7 +20,7 @@ const LifSection = () => (
 
           <div className="card-deck">
 
-            <a href="https://idex.market/" target="_blank" rel="noopener noreferrer" className="card card-sm">
+            <a href="https://idex.market/eth/lif" target="_blank" rel="noopener noreferrer" className="card card-sm">
               <div className="card-header d-none d-md-block text-center">
                   <img src={logoIdex} alt="IDEX" className="img-fluid"/>
               </div>
@@ -34,7 +34,7 @@ const LifSection = () => (
               </div>
             </a>
 
-            <a href="http://yobit.io/" target="_blank" rel="noopener noreferrer" className="card card-sm">
+            <a href="https://yobit.io/en/trade/LIF/ETH" target="_blank" rel="noopener noreferrer" className="card card-sm">
               <div className="card-header d-none d-md-block text-center">
                 <img src={logoYobit} alt="YObit" className="img-fluid"/>
               </div>
@@ -48,7 +48,7 @@ const LifSection = () => (
               </div>
             </a>
 
-            <a href="https://openledger.info/" target="_blank" rel="noopener noreferrer" className="card card-sm">
+            <a href="https://openledger.io/market/ETH_LIF" target="_blank" rel="noopener noreferrer" className="card card-sm">
               <div className="card-header d-none d-md-block text-center">
                 <img src={logoOpenledger} alt="Open Ledger" className="img-fluid"/>
               </div>
@@ -62,7 +62,7 @@ const LifSection = () => (
               </div>
             </a>
 
-            <a href="https://forkdelta.github.io/" target="_blank" rel="noopener noreferrer" className="card card-sm">
+            <a href="https://forkdelta.app/#!/trade/LIF-ETH" target="_blank" rel="noopener noreferrer" className="card card-sm">
               <div className="card-header d-none d-md-block text-center">
                 <img src={logoForkdelta} alt="ForkDelta" className="img-fluid"/>
               </div>

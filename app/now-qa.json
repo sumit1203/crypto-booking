@@ -1,0 +1,9 @@
+{
+  "name": "crypto-booking",
+  "alias": "booking-qa.windingtree.com",
+  "build": {
+    "env": {
+      "ETH_NET": "ropsten"
+    }
+  }
+}

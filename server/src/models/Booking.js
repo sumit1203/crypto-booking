@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const Schema = mongoose.Schema;
-const { SIGNATURE_TIME_LIMIT, ROOM_TYPE_PRICES, BOOKING_PAYMENT_TYPES,
+const { SIGNATURE_TIME_LIMIT, BOOKING_PAYMENT_TYPES,
   BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
 const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
-const { encrypt, decrypt, generateKeyPair, getKeyPair } = require('../services/crypto');
+const { encrypt, decrypt, generateKeyPair } = require('../services/crypto');
+const { getRoomPrice } = require('../services/prices');
 
 autoIncrement.initialize(mongoose.connection);
 // from https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
@@ -21,7 +22,7 @@ function _isBirthDate (birthDate) {
 }
 
 function _isPhone (phone) {
-  const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  const re = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im;
   return re.test(String(phone));
 }
 
@@ -155,6 +156,7 @@ Booking.method({
     try {
       encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, privateKey);
     } catch (e) {
+      console.error(e);
       encodedPersonalInfo = null;
     }
     if (!web3.utils.isHex(encodedPersonalInfo)) {
@@ -167,17 +169,21 @@ Booking.method({
       return {};
     }
   },
-  generatePaymentAmount: function (cryptoPrice) {
-    this.paymentAmount = this.getWeiPerNight(cryptoPrice);
+  generatePaymentAmount: async function (cryptoPrice) {
+    this.paymentAmount = await this.getWeiPerNight(cryptoPrice);
   },
-  getWeiPerNight: function (cryptoPrice) {
+  getWeiPerNight: async function (cryptoPrice) {
     if (typeof cryptoPrice !== 'number') {
       throw handleApplicationError('invalidCryptoPrice');
     }
     if (BOOKING_ROOM_TYPES.indexOf(this.roomType) === -1) {
       throw handleApplicationError('invalidRoomType');
     }
-    return web3.utils.toWei((ROOM_TYPE_PRICES[this.roomType] / cryptoPrice).toString(), 'ether');
+    let priceInCrypto = await getRoomPrice(this.roomType, this.paymentType) / cryptoPrice;
+    const decimals = 4;
+    const fixedAdd = 0.0001;
+    priceInCrypto = Math.round((priceInCrypto + fixedAdd) * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return web3.utils.toWei(priceInCrypto.toString(), 'ether');
   },
   setAsPending: function () {
     this.status = BOOKING_STATUS.pending;
@@ -217,14 +223,15 @@ Booking.statics.generate = async function (data) {
     BookingModel.nextCount((err, nextCount) => {
       if (err) return reject(err);
       return resolve(nextCount);
-    })}));
-  const { privateKey, publicKey, index: bookingIndex } = generateKeyPair(index);
+    });
+  }));
+  const { privateKey, publicKey } = generateKeyPair(index);
   data.bookingHash = publicKey;
   const { personalInfo, cryptoPrice, ...rest } = data;
   const BookingModel = this.model('Booking');
   const booking = new BookingModel(rest);
   booking.encryptPersonalInfo(personalInfo, privateKey);
-  booking.generatePaymentAmount(cryptoPrice);
+  await booking.generatePaymentAmount(cryptoPrice);
   return booking;
 };
 

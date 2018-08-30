@@ -26,7 +26,7 @@ class FormSection extends React.Component {
       price: null,
       guestCount: '1',
       errorMessage: '',
-      totalDays: (new Array(5)).map((a, i) => i+1),
+      totalDays: [1,2,3,4,5]
     }
   }
 

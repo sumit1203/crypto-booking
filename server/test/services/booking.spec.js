@@ -1,11 +1,9 @@
 /* eslint-env mocha */
-require('dotenv').config({ path: './test/utils/.env' });
+require('dotenv').config({ path: '../../../.env.test' });
 const { expect } = require('chai');
 const sgMail = require('@sendgrid/mail');
 const sinon = require('sinon');
-require('../../src/models');
 const mongoose = require('mongoose');
-const BookingModel = mongoose.model('Booking');
 const {
   createBooking,
   readBooking,
@@ -17,19 +15,19 @@ const {
   cancelBooking,
   getCancelBookingInstructions,
   updateRoom,
-} = require('../../src/controllers/Booking');
+} = require('../../src/services/booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 const { BOOKING_POC_ADDRESS } = require('../../src/config');
+const { disconnectDB, connectDB } = require('../../src/models');
 
-after(() => {
-  mongoose.connection.close();
-});
-
-describe('Booking controller', () => {
+describe('Booking service', () => {
   let sandbox;
-  before(() => {
+  let BookingModel;
+  before(async () => {
     sandbox = sinon.createSandbox();
+    BookingModel = mongoose.model('Booking');
+    await connectDB();
   });
   beforeEach(async () => {
     await BookingModel.resetIndex();
@@ -42,7 +40,10 @@ describe('Booking controller', () => {
   afterEach(async function () {
     await BookingModel.remove({}).exec();
   });
-
+  after(async () => {
+    await disconnectDB();
+    await disconnectDB();
+  });
   it('Should create a valid booking', async function () {
     const { booking, offerSignature, bookingIndex, privateKey } = await createBooking(validBooking);
     expect(booking).to.have.property('bookingHash');
@@ -144,7 +145,28 @@ describe('Booking controller', () => {
     expect(booking).to.have.property('from', validBookingWithEthPrice.from);
     expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
   });
-
+  it('Should read a booking without and index', async () => {
+    const dbBooking = await BookingModel.generate(validBookingWithEthPrice);
+    await dbBooking.save();
+    const booking = await readBooking({ bookingHash: dbBooking.bookingHash });
+    expect(booking).to.have.property('_id');
+    expect(booking).to.have.property('bookingHash');
+    expect(booking.bookingHash).to.be.a('string');
+    expect(booking).to.have.property('guestEthAddress', validBookingWithEthPrice.guestEthAddress);
+    expect(booking).to.have.property('paymentAmount');
+    expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
+    expect(booking).to.have.property('signatureTimestamp');
+    expect(booking.signatureTimestamp).to.have.a('number');
+    expect(booking).to.have.property('personalInfo');
+    expect(booking.personalInfo).to.have.property('fullName', validBookingWithEthPrice.personalInfo.fullName);
+    expect(booking.personalInfo).to.have.property('email', validBookingWithEthPrice.personalInfo.email);
+    expect(booking.personalInfo).to.have.property('birthDate', validBookingWithEthPrice.personalInfo.birthDate);
+    expect(booking.personalInfo).to.have.property('phone', validBookingWithEthPrice.personalInfo.phone);
+    expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
+    expect(booking).to.have.property('to', validBookingWithEthPrice.to);
+    expect(booking).to.have.property('from', validBookingWithEthPrice.from);
+    expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
+  });
   it('Should return null if the id not exists', async () => {
     const booking = await readBooking({ id: 'fake id' });
     expect(booking).to.be.equal(null);

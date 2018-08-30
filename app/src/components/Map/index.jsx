@@ -12,7 +12,7 @@ export default class LeafletMap extends Component {
     const position = [hotelLocation.latitude, hotelLocation.longitude];
 
     return (
-      <Map center={position} zoom={this.state.zoom} style={{height: 300}}>
+      <Map center={position} zoom={this.state.zoom}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
