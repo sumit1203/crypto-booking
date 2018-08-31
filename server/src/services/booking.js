@@ -1,19 +1,12 @@
 const mongoose = require('mongoose');
 const BookingModel = mongoose.model('Booking');
 const { fetchPrice } = require('../services/prices');
-const { readKey, signOffer } = require('../services/secret-codes');
 const { sendBookingInfo, sendBookingCanceled } = require('../services/mail');
 const { handleApplicationError } = require('../errors');
-const { generateKeyPair, getKeyPair } = require('../services/crypto');
-const {
-  getCancelBookingTx,
-} = require('../services/web3');
+const { generateKeyPair, getKeyPair, readKey, signOffer } = require('../services/crypto');
+const { getCancelBookingTx } = require('../services/web3');
 const { FROM_EMAIL } = require('../config');
-const {
-  SIGNATURE_TIME_LIMIT,
-  BOOKING_PAYMENT_TYPES,
-  BOOKING_STATUS,
-} = require('../constants');
+const { SIGNATURE_TIME_LIMIT, BOOKING_PAYMENT_TYPES, BOOKING_STATUS } = require('../constants');
 
 async function _generateBooking (data) {
   const index = await BookingModel.nextIndex();
@@ -40,7 +33,7 @@ async function createBooking (data) {
   data.cryptoPrice = await fetchPrice(data.paymentType);
   const { bookingModel, bookingIndex, privateKey } = await _generateBooking(data);
   const booking = _prepareForExport(bookingModel, privateKey);
-  booking.weiPerNight = bookingModel.getWeiPerNight(data.cryptoPrice);
+  booking.weiPerNight = await bookingModel.getWeiPerNight(data.cryptoPrice);
   const { signatureData, offerSignature } = await signOffer(booking, await readKey());
 
   return {
@@ -75,7 +68,8 @@ async function readBooking (filter, index) {
   if (filter.bookingHash) {
     const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
     if (!bookingModel) return null;
-    const { privateKey } = getKeyPair(filter.bookingHash, index);
+    const bookingIndex = index || bookingModel.bookingIndex;
+    const { privateKey } = getKeyPair(filter.bookingHash, bookingIndex);
     return _prepareForExport(bookingModel, privateKey);
   }
   return null;

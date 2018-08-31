@@ -1,13 +1,7 @@
 import React from 'react';
 
 const LearnMoreSection = () => (
-  <article className="py-3 py-md-5"
-  style={{
-    backgroundImage: 'url(https://windingtree.com/assets/img/layouts/ready-to-use/bg.png),radial-gradient(circle at 50% -30%, #29cb96, #5f2987 66.6%)',
-    backgroundPosition: 'center bottom, bottom center',
-    backgroundRepeat: 'no-repeat, no-repeat',
-  }}
-  >
+  <article id="learn-more" className="py-3 py-md-5">
     <div className="container">
 
       <div className="row justify-content-center text-center">

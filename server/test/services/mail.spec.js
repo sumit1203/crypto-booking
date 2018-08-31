@@ -1,24 +1,14 @@
 /* eslint-env mocha */
-require('dotenv').config({ path: './test/utils/.env' });
+require('dotenv').config({ path: '../../../.env.test' });
 const { expect } = require('chai');
 const sgMail = require('@sendgrid/mail');
-
 const sinon = require('sinon');
 const { FROM_EMAIL, MAIL_API_KEY } = require('../../src/config');
-
-const {
-  sendRawEmail,
-  sendConfirmation,
-  sendBookingInfo,
-  sendBookingChange,
-  sendBookingCanceled
-} = require('../../src/services/mail');
-
-const { testHtmlBody, events, toEmail } = require('../utils/test-data');
+const { sendConfirmation, sendBookingInfo, sendBookingCanceled, sendInstructions } = require('../../src/services/mail');
+const { events, toEmail, instructionsData } = require('../utils/test-data');
 
 describe('Mail service', () => {
   let sandbox;
-
   before(() => {
     sandbox = sinon.createSandbox();
     sgMail.setApiKey(MAIL_API_KEY);
@@ -30,20 +20,21 @@ describe('Mail service', () => {
   afterEach(() => {
     sandbox.restore();
   });
-  it('Should send an email', async () => {
-    await sendRawEmail(FROM_EMAIL, toEmail, 'Test email', testHtmlBody('User'));
+  it('Should send instructions email for ETH (1 tx)', async () => {
+    await sendInstructions(instructionsData, toEmail);
+    const sendFake = sandbox.getFakes()[0];
+    expect(sendFake).to.have.property('calledOnce', true);
+  });
+  it('Should send instructions email for LÍF (2 txs)', async () => {
+    instructionsData.txs.push(instructionsData.txs[0]);
+    instructionsData.booking.paymentType = 'lif';
+    await sendInstructions(instructionsData, toEmail);
     const sendFake = sandbox.getFakes()[0];
     expect(sendFake).to.have.property('calledOnce', true);
   });
 
   it('Should send a confirmation email', async () => {
     await sendConfirmation(events.BookingDone, 'asd 123 fgh', toEmail);
-    const sendFake = sandbox.getFakes()[0];
-    expect(sendFake).to.have.property('calledOnce', true);
-  });
-
-  it('Should send a booking change email', async () => {
-    await sendBookingChange(events.BookingChanged, 'asd 123 fgh', toEmail);
     const sendFake = sandbox.getFakes()[0];
     expect(sendFake).to.have.property('calledOnce', true);
   });

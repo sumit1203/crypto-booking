@@ -1,15 +1,15 @@
-require('./models');
+const { connectDB } = require('./models');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cron = require('node-cron');
 
-const { BOOKING_POC_ADDRESS, GIT_REV } = require('./config');
+const { BOOKING_POC_ADDRESS, GIT_REV, WEB3_PROVIDER } = require('./config');
 const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
 const routes = require('./routes');
-const { checkBookingExpired } = require('./controllers/Booking');
+const { checkBookingExpired } = require('./services/booking');
 const { checkEtherumUpdates } = require('./services/ethereum-listener');
 
 const app = express();
@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
     version,
     bookingPoC: BOOKING_POC_ADDRESS,
     commit: GIT_REV,
+    provider: WEB3_PROVIDER,
   };
   res.status(200).json(response);
 });
@@ -58,8 +59,17 @@ app.use((err, req, res, next) => {
 const ethereunListenerCron = cron.schedule('* * * * *', checkEtherumUpdates);
 const expiredBookingCron = cron.schedule('*/5 * * * *', checkBookingExpired);
 
+const startServer = (port) => {
+  connectDB();
+  return app.listen(port, () => {
+    console.log(`Server running at ${port}!`);
+    console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  });
+};
+
 module.exports = {
   app,
   ethereunListenerCron,
   expiredBookingCron,
+  startServer,
 };
