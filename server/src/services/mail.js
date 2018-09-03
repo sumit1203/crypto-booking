@@ -52,9 +52,9 @@ const sendInstructions = async ({ txs, booking, offerSignature, signatureData, c
 
 const sendBookingInfo = async (booking, { from, to }) => {
   try {
-    const { personalInfo, roomType, status, fromDate, toDate, remaindingMinues } = booking;
+    const { personalInfo, roomType, status, fromDate, toDate, remainingMinutes } = booking;
 
-    const html = informationBody({ personalInfo, from: fromDate, to: toDate, roomType, status, remaindingMinues });
+    const html = informationBody({ personalInfo, from: fromDate, to: toDate, roomType, status, remainingMinutes });
 
     return sgMail.send({ from, to, subject: 'Hotel information for EthBerlin', html });
   } catch (e) {

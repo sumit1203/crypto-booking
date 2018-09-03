@@ -436,15 +436,15 @@ describe('Booking model', () => {
         expect(booking.getToDate()).to.be.equal('10/9/2018');
       });
     });
-    describe('getRemaindingMinutes', () => {
+    describe('getRemainingMinutes', () => {
       it('Should return 30 minutes', () => {
         const booking = new Booking(validBookingDB);
-        expect(booking.getRemaindingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT);
+        expect(booking.getRemainingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT);
       });
       it(`Should return ${SIGNATURE_TIME_LIMIT - 1} minutes`, () => {
         const booking = new Booking(validBookingDB);
         booking.signatureTimestamp = booking.signatureTimestamp - 60;
-        expect(booking.getRemaindingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT - 1);
+        expect(booking.getRemainingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT - 1);
       });
     });
   });
