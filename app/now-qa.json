@@ -1,5 +1,5 @@
 {
-  "name": "crypto-booking",
+  "name": "crypto-booking-qa",
   "alias": "booking-qa.windingtree.com",
   "build": {
     "env": {
