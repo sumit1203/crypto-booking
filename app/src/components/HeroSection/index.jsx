@@ -5,7 +5,7 @@ import AnchorLink from 'react-anchor-link-smooth-scroll';
 export default class HeroSection extends React.Component {
   render () {
     return (
-      <article className="bg--gradient hero">
+      <article id="app-hero" className="bg--grad">
         <div className="section-wrapper py-md-3 py-lg-5">
           <div className="container py-0 py-md-1 py-lg-2">
             <div className="row justify-content-center text-center">
