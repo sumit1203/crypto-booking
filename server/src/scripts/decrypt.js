@@ -11,6 +11,6 @@ function decryptPersonalInfo(booking) {
   return web3.utils.hexToString(decryptedHexInfo);
 }
 
-for (var i = 0; i < bookings.length; i++) {
+for (let i = 0; i < bookings.length; i++) {
   console.log("Booking", bookings[i].bookingIndex, decryptPersonalInfo(bookings[i]));
 }
