@@ -1,6 +1,6 @@
 import React from 'react'
 
-const RulesModal = () => (
+const CancellationPolicyModal = () => (
   <div className="modal" id="modalCancellationPolicy" tabIndex="-2" role="dialog">
     <div className="modal-dialog" role="document">
       <div className="modal-content">
@@ -34,4 +34,4 @@ const RulesModal = () => (
   </div>
 )
 
-export default RulesModal
+export default CancellationPolicyModal

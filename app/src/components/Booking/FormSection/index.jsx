@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react'
-import $ from 'jquery'
 import PropTypes from 'prop-types'
 import Web3 from 'web3'
+import $ from 'jquery'
+import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
 import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
-import { WEB3_PROVIDER, BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config'
-
+import ErrorAlert from '../../ErrorAlert'
 import { roomType } from '../propTypes'
 
 class FormSection extends React.Component {
@@ -90,14 +90,6 @@ class FormSection extends React.Component {
     this.setState({price: total})
   }
 
-  showErrorAlert = () => {
-    $('.alert').addClass('show')
-    setTimeout(() => {
-      $('.alert').removeClass('show')
-      this.setState({errorMessage: ''})
-    }, 3000)
-  }
-
   onSubmit = async ({guestEthAddress, captchaToken}) => {
     const {from, to, fullName, birthDate, email, phone, guestCount, paymentType} = this.state
     const {id: roomType} = this.props.selectedRoom
@@ -108,7 +100,6 @@ class FormSection extends React.Component {
       nights.push(i)
     }
     const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call()
-
     if (!availableRooms.some(roomFlag => !!parseInt(roomFlag))) {
       this.setState({isFull: true})
       return
@@ -136,11 +127,8 @@ class FormSection extends React.Component {
       if (response.status >= 400) {
         console.error(response)
         // HOT FIX to remove blackscreen on error. We should remove bootstrap or use https://react-bootstrap.github.io/
-        const modal = document.querySelector('.modal-backdrop')
-        if(modal){
-          modal.remove()
-        }
-        this.setState({errorMessage: response.long, loading: false}, this.showErrorAlert)
+        $('#checkEmail').modal('hide')
+        this.setState({errorMessage: response.long, loading: false})
         return
       }
       const {txs, booking} = response
@@ -157,6 +145,10 @@ class FormSection extends React.Component {
     this.setState({isFull: null, instructions: null})
   }
 
+  onCloseErrorAlert = () => {
+    this.setState({errorMessage: ''})
+  }
+
   render () {
     const { errorMessage, from, to, instructions, isFull, price, paymentType, guestCount, email, phone, loading, totalDays} = this.state
     const {selectedRoom, roomTypes} = this.props
@@ -164,12 +156,7 @@ class FormSection extends React.Component {
     if (instructions || loading) return <CheckEmail onClose={this.onCloseModal} instructions={instructions} loading={loading}/>
     return (
       <Fragment>
-          { errorMessage && (<div className="alert fade fixed-top alert-danger text-center" role="alert">
-            <span>{errorMessage}</span>
-            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>)}
+          { errorMessage && <ErrorAlert message={errorMessage} onClose={this.onCloseErrorAlert}/>}
         <RoomBooking
           from={from}
           to={to}
