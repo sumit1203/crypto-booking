@@ -17,7 +17,7 @@ module.exports = function (deployer, network, accounts) {
   if (network != 'development') {
     deployBooking((network == 'mainnent')
       ? '0xeb9951021698b42e4399f9cbb6267aa35f82d59d'
-      : '0x5FDFBa355A30FB00ee12965cf3a1c24CA8DF77FB');
+      : '0xa63F395D07883239b0709E96c2998e38e68A58ec');
   } else {
     deployer.deploy(LifTokenTest).then(function (lifToken) {
       console.log('LifTokenTest address:', lifToken.address);
