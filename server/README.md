@@ -52,3 +52,17 @@ Travis must contain this secret variables
 - STARTING_BLOCK
 - WEB3_PROVIDER
 - WHITELIST
+
+## Decrypt Database
+
+Export the decrypted booking offers to a json array next to the decrypt script.
+```
+mongoexport -h MONGODB_URI -d crypto-booking -c bookings -u USER -p PASSWORD --type json -o src/scripts/bookings.json --jsonArray                                
+```
+
+Run the decrypt script in production environment with the master key as parameter.
+```
+NODE_ENV=production MASTER_KEY=xxx node src/scripts/decrypt.js
+```
+
+The output will be print in the console.

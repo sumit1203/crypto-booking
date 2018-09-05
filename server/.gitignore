@@ -61,5 +61,8 @@ typings/
 keys/*.json
 test/utils/temp-keys/*
 
+# DB Output
+src/scripts/bookings.json
+
 # IDE
 .idea/
