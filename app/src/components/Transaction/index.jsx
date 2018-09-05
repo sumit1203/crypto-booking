@@ -16,7 +16,7 @@ const Transaction = ({to, gas, data, value}) => (
 
 export const transactionType = {
   to: PropTypes.string.isRequired,
-  gas: PropTypes.string.isRequired,
+  gas: PropTypes.number.isRequired,
   data: PropTypes.string.isRequired,
   value: PropTypes.string
 }

@@ -3,7 +3,11 @@ require('dotenv').config({ path: '../../../.env.test' });
 const { expect } = require('chai');
 const sgMail = require('@sendgrid/mail');
 const sinon = require('sinon');
+const Web3 = require('web3');
 const mongoose = require('mongoose');
+
+const web3 = new Web3();
+
 const {
   createBooking,
   readBooking,
@@ -18,7 +22,7 @@ const {
 } = require('../../src/services/booking');
 const { validBooking, validBookingWithEthPrice } = require('../utils/test-data');
 const { BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
-const { BOOKING_POC_ADDRESS } = require('../../src/config');
+const { BOOKING_POC_ADDRESS, OWNER_ADDRESS } = require('../../src/config');
 const { disconnectDB, connectDB } = require('../../src/models');
 
 describe('Booking service', () => {
@@ -45,7 +49,7 @@ describe('Booking service', () => {
     await disconnectDB();
   });
   it('Should create a valid booking', async function () {
-    const { booking, offerSignature, bookingIndex, privateKey } = await createBooking(validBooking);
+    const { booking, offerSignature, bookingIndex, signatureData, privateKey } = await createBooking(validBooking);
     expect(booking).to.have.property('bookingHash');
     expect(booking.bookingHash).to.be.a('string');
     expect(booking).to.have.property('guestEthAddress', validBooking.guestEthAddress);
@@ -66,6 +70,16 @@ describe('Booking service', () => {
     expect(offerSignature).to.not.be.an('undefined');
     expect(bookingIndex).to.be.an('number');
     expect(privateKey).to.be.an('string');
+
+    const hashedMessage = web3.utils.soliditySha3(
+      { type: 'string', value: signatureData.roomType },
+      { type: 'uint256', value: signatureData.weiPerNight },
+      { type: 'uint256', value: signatureData.signatureTimestamp },
+      { type: 'string', value: signatureData.paymentType },
+      { type: 'bytes32', value: signatureData.bookingHash }
+    );
+    const signer = web3.eth.accounts.recover(hashedMessage, offerSignature);
+    expect(signer).to.be.equal(OWNER_ADDRESS);
   });
 
   it('Should create a new booking with a diffent public key if already exists', async function () {
