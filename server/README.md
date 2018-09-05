@@ -11,6 +11,7 @@ $ npm i
 ### .env
 You need 2 `.env` files. One for test and other for running the server.
 Test env must be located at `./test/utils/.env`.
+The OWNER_PRIVATE_KEY goes with the 0x prefix.
 
 ```bash
 WHITELIST=11.22.33.44,55.66.77.88       
