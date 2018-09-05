@@ -1,6 +1,7 @@
 /* eslint-env mocha */
-require('dotenv').config({ path: './test/utils/.env' });
+require('dotenv').config({ path: '../../../.env.test' });
 const { expect } = require('chai');
+const { connectDB, disconnectDB } = require('../../src/models');
 const { Booking } = require('../../src/models/Booking');
 const { BOOKING_PAYMENT_TYPES, BOOKING_ROOM_TYPES, BOOKING_STATUS, SIGNATURE_TIME_LIMIT } = require('../../src/constants');
 const { validBookingDB, validBookingWithEthPrice, testPrivateKey } = require('../utils/test-data');
@@ -14,6 +15,12 @@ function basicValidationExpect (validation, field) {
 }
 
 describe('Booking model', () => {
+  before(async () => {
+    connectDB();
+  });
+  after(async () => {
+    disconnectDB();
+  });
   describe('bookingHash', () => {
     it('Should throw an error if bookingHash is not defined', async () => {
       const booking = await Booking.generate(validBookingWithEthPrice);
@@ -316,7 +323,38 @@ describe('Booking model', () => {
       });
     });
     xdescribe('generatePaymentAmount', () => {});
-    xdescribe('getWeiPerNight', () => {});
+    describe('getWeiPerNight', async () => {
+      it('Should throw and error if cryptoPrice is not a number', async () => {
+        const booking = new Booking(validBookingDB);
+        try {
+          await booking.getWeiPerNight('Not a number');
+          throw Error('should not be called');
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidCryptoPrice');
+        }
+      });
+      it('Should throw and error if roomType is not valid', async () => {
+        const booking = new Booking(validBookingDB);
+        try {
+          booking.roomType = 'invalidRoomType';
+          await booking.getWeiPerNight(1);
+          throw Error('should not be called');
+        } catch (e) {
+          expect(e.code).to.be.equal('#invalidRoomType');
+        }
+      });
+      it('Should return room\'s price in wei per night', async () => {
+        const booking = new Booking(validBookingDB);
+        const cryptoPrice = 0.541;
+        expect(await booking.getWeiPerNight(cryptoPrice)).to.be.a('string');
+      });
+      it('Should return room\'s price in wei per night with lif token', async () => {
+        const booking = new Booking(validBookingDB);
+        booking.paymentType = BOOKING_PAYMENT_TYPES.lif;
+        const cryptoPrice = 0.541;
+        expect(await booking.getWeiPerNight(cryptoPrice)).to.be.a('string');
+      });
+    });
     describe('setAsPending', () => {
       it('Should set the booking as pending', async () => {
         const booking = new Booking(validBookingDB);
@@ -398,15 +436,15 @@ describe('Booking model', () => {
         expect(booking.getToDate()).to.be.equal('10/9/2018');
       });
     });
-    describe('getRemaindingMinutes', () => {
+    describe('getRemainingMinutes', () => {
       it('Should return 30 minutes', () => {
         const booking = new Booking(validBookingDB);
-        expect(booking.getRemaindingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT);
+        expect(booking.getRemainingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT);
       });
       it(`Should return ${SIGNATURE_TIME_LIMIT - 1} minutes`, () => {
         const booking = new Booking(validBookingDB);
         booking.signatureTimestamp = booking.signatureTimestamp - 60;
-        expect(booking.getRemaindingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT - 1);
+        expect(booking.getRemainingMinutes()).to.be.equal(SIGNATURE_TIME_LIMIT - 1);
       });
     });
   });

@@ -134,9 +134,12 @@
 
 
 // BOOK-A-ROOM
+$border-radius: 4px;
+
 #book-a-room {
   background: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%);
 }
+
 
 // MODALS
 #modalConfirm {
@@ -227,4 +230,9 @@
 // FOOTER
 .footer {
   border-top: 1px solid #8863A6;
+}
+
+// CUSTOM HELPER
+@media screen and (max-width: 366px) {
+  .hide-xs {display:none; }
 }

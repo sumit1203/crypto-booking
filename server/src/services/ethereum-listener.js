@@ -1,10 +1,13 @@
 const { bookingPoc } = require('./web3');
-const { readBooking, confirmBooking, cancelBooking, updateRoom } = require('../controllers/Booking');
-const { sendConfirmation, sendBookingChange } = require('./mail.js');
+const { readBooking, confirmBooking, cancelBooking, updateRoom } = require('./booking');
+const { sendConfirmation } = require('./mail.js');
 const { STARTING_BLOCK } = require('../config');
 const { BOOKING_STATUS } = require('../constants');
 
-let _nextBlockToProcess = STARTING_BLOCK;
+const options = {
+  fromBlock: parseInt(STARTING_BLOCK),
+  toBlock: 'latest',
+};
 
 async function onBookingDone (args) {
   try {
@@ -24,18 +27,6 @@ async function onBookingDone (args) {
   }
 };
 
-const onBookingChange = async (event) => {
-  const booking = await readBooking({ bookingHash: event.returnValues.bookingHash });
-  if (!booking) {
-    return console.error(`Can not find booking for event: ${event.event}, blockNumber: ${event.blockNumber}, logIndex: ${event.blockNumber}`);
-  }
-  if (booking.guestEthAddress === event.returnValues.newGuest) {
-    return;
-  }
-  sendBookingChange(event, event.returnValues.bookingHash, booking.personalInfo.email);
-  confirmBooking(booking.id);
-};
-
 async function onBookingCancel (args) {
   try {
     const { event, blockNumber, returnValues: { bookingHash } } = args;
@@ -53,30 +44,32 @@ async function onBookingCancel (args) {
 }
 
 const eventTypes = {
-  'BookingChanged': onBookingChange,
   'BookingDone': onBookingDone,
   'BookingCanceled': onBookingCancel,
 };
 
-const checkEtherumUpdates = () => {
-  const options = {
-    fromBlock: _nextBlockToProcess,
-    toBlock: 'latest',
-  };
-
-  bookingPoc.getPastEvents('allEvents', options, (err, events) => {
-    if (err) {
-      return console.error(err);
+const _eventDispatcher = (err, events) => {
+  const startingBlock = options.fromBlock;
+  console.log(`${events.length} events since block ${startingBlock}`);
+  if (err) {
+    return console.error(err);
+  }
+  events.forEach((event) => {
+    if (eventTypes[event.event]) {
+      eventTypes[event.event](event);
     }
-    events.forEach((event) => {
-      if (eventTypes[event.event]) {
-        eventTypes[event.event](event);
-      }
-      _nextBlockToProcess = event.blockNumber + 1;
-    });
+    options.fromBlock = event.blockNumber + 1;
   });
+  return { startingBlock, nextBlock: options.fromBlock };
+};
+
+const checkEtherumUpdates = () => {
+  bookingPoc.getPastEvents('allEvents', options, _eventDispatcher);
 };
 
 module.exports = {
   checkEtherumUpdates,
+  onBookingDone,
+  onBookingCancel,
+  _eventDispatcher,
 };
