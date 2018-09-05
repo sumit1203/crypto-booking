@@ -1,4 +1,14 @@
 {
-  "name": "crypto-booking-server",
-  "alias": "crypto-booking-server-qa.windingtree.com"
+  "name": "crypto-booking-server-qa",
+  "alias": "crypto-booking-server-qa.windingtree.com",
+  "scale": {
+    "sfo1": {
+      "min": 0,
+      "max": 1
+    },
+    "bru1": {
+      "min": 0,
+      "max": 1
+    }
+  }
 }
