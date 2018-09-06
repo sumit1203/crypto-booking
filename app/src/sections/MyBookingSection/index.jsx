@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import $ from 'jquery'
 import EmailSentModal from './EmailSentModal'
 import DeleteInstructionsModal from './DeleteInstructionsModal'
-import ErrorAlert from '../ErrorAlert'
+import ErrorAlert from '../../components/ErrorAlert'
 import { SIGNER_API } from '../../config'
 
 export default class MyBookingSection extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import ImageSlider from '../../../ImageSlider';
+import ImageSlider from '../../../../components/ImageSlider';
 import { roomType } from '../../propTypes';
 import MarkdownRenderer from 'react-markdown-renderer';
 import AnchorLink from 'react-anchor-link-smooth-scroll';

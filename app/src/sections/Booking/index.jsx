@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import Web3 from 'web3';
-import Loader from '../Loader';
+import Loader from '../../components/Loader';
 import BookingPoC  from '../../abis/BookingPoC.json';
 import RoomsSection from './RoomsSection'
 import FormSection from './FormSection'
