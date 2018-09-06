@@ -134,8 +134,9 @@ class FormSection extends React.Component {
         return
       }
       const {txs, booking} = response
+      const txsWithFrom = txs.map(tx => ({from: booking.guestEthAddress, ...tx}))
       this.setState({
-        instructions: {txs, booking}
+        instructions: {txs: txsWithFrom, booking}
       })
     }catch (e) {
       console.error(e)
