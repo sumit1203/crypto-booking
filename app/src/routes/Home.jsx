@@ -5,7 +5,6 @@ import Footer from '../sections/Footer';
 import LearnMoreSection from '../sections/LearnMoreSection';
 import CollaborationSection from '../sections/CollaborationSection';
 import BookingSection from '../sections/Booking';
-import MyBookingSection from '../sections/MyBookingSection';
 import LifSection from '../sections/LifSection';
 import Navbar from '../sections/Navbar';
 
@@ -16,7 +15,6 @@ const Home = () => (
     <CollaborationSection />
     <HotelSection />
     <BookingSection />
-    <MyBookingSection />
     <LifSection />
     <LearnMoreSection />
     <Footer />

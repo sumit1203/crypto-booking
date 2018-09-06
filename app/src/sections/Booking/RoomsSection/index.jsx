@@ -7,7 +7,7 @@ import {roomType} from '../propTypes'
 
 class RoomsSection extends React.Component {
   render () {
-    const {roomTypes, onRoomTypeChange} = this.props
+    const {roomTypes, onRoomTypeChange, isBookingDisabled} = this.props
     return (
       <article id="pick-room" className="section-wrapper bg-light pt-0 pb-0 pb-md-1 pb-lg-2 text-center text-md-left">
           <header>
@@ -30,7 +30,7 @@ class RoomsSection extends React.Component {
           <div className="py-3 card-deck">
             {roomTypes.map((room,index) => (
               <div key={room.id} className={`card ${room.isFull ? 'full-room' : ''}`}>
-                <Room room={room} roomIndex={index} onSelect={onRoomTypeChange}/>
+                <Room room={room} roomIndex={index} onSelect={onRoomTypeChange} isBookingDisabled={isBookingDisabled}/>
               </div>
             ))
             }
@@ -44,6 +44,7 @@ class RoomsSection extends React.Component {
 RoomsSection.propTypes = {
   onRoomTypeChange: PropTypes.func.isRequired,
   roomTypes: PropTypes.arrayOf(roomType).isRequired,
+  isBookingDisabled: PropTypes.bool
 }
 
 export default RoomsSection

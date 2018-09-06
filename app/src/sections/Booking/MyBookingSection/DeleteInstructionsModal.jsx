@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Transaction, { transactionType } from '../../components/Transaction'
-import Loader from '../../components/Loader'
+import Transaction, { transactionType } from '../../../components/Transaction'
+import Loader from '../../../components/Loader'
 
 const DeleteInstructionsModal = ({tx, loading}) => {
   return (

@@ -4,6 +4,7 @@ import Loader from '../../components/Loader';
 import BookingPoC  from '../../abis/BookingPoC.json';
 import RoomsSection from './RoomsSection'
 import FormSection from './FormSection'
+import MyBookingSection from './MyBookingSection'
 import { WEB3_PROVIDER, HOTEL_URL, BOOKING_POC_ADDRESS } from '../../config'
 
 const PRICES_BY_ROOMTYPE = {
@@ -19,19 +20,23 @@ export default class BookingContainer extends React.Component {
       isLoading: true,
       roomTypes: [],
       selectedRoom: {},
+      isBookingDisabled: false
     }
   }
 
   async componentDidMount() {
       const bookingPoC = new BookingContainer.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
-    try {
+      const endDate = await bookingPoC.methods.endBookings().call()
+      const isBookingDisabled = Date.now() > endDate
+      this.setState({isBookingDisabled})
+      try {
       const {data} = await (await fetch('https://api.coinmarketcap.com/v2/ticker/2728/?convert=EUR')).json()
       const lifQuotation = data.quotes.EUR.price
       const roomTypesResponse = await fetch(`${HOTEL_URL}/roomTypes`);
       const roomTypes = await roomTypesResponse.json();
       const mappedRooms = await Object.values(roomTypes).reduce(async (acc, room) => {
         acc = await acc
-        const isFull = !(await this._isRoomTypeAvailable(bookingPoC, room.id))
+        const isFull = isBookingDisabled || !(await this._isRoomTypeAvailable(bookingPoC, room.id))
         const price = PRICES_BY_ROOMTYPE[room.id]
         const lifPrice = Math.round(price * lifQuotation/0.5)
         const ethPrice = Math.round(price * 0.8)
@@ -62,7 +67,7 @@ export default class BookingContainer extends React.Component {
   }
 
   render () {
-    const {isLoading, selectedRoom, roomTypes} = this.state
+    const {isLoading, selectedRoom, roomTypes, isBookingDisabled} = this.state
 
     if (isLoading) return  (
       <Loader block={200} label="Loading..."/>
@@ -70,8 +75,9 @@ export default class BookingContainer extends React.Component {
 
     return (
       <Fragment>
-        <RoomsSection onRoomTypeChange={this.onRoomTypeChange} roomTypes={roomTypes}/>
-        <FormSection onRoomTypeChange={this.onRoomTypeChange} selectedRoom={selectedRoom} roomTypes={roomTypes}/>
+        <RoomsSection onRoomTypeChange={this.onRoomTypeChange} roomTypes={roomTypes} isBookingDisabled={isBookingDisabled}/>
+        {!isBookingDisabled && <FormSection onRoomTypeChange={this.onRoomTypeChange} selectedRoom={selectedRoom} roomTypes={roomTypes}/>}
+        {!isBookingDisabled && <MyBookingSection/>}
       </Fragment>
     )
   }
