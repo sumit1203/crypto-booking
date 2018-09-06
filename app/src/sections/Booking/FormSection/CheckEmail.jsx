@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 import $ from 'jquery'
 import PropTypes from 'prop-types'
-import Transaction, {transactionType} from '../../Transaction'
-import Loader from '../../Loader'
-import BookingContainer from '../index'
+import Transaction, {transactionType} from '../../../components/Transaction'
+import Loader from '../../../components/Loader'
+import BookingContainer from '..'
 
 class CheckEmail extends React.Component {
   componentDidMount () {
