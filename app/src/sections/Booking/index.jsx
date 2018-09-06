@@ -26,7 +26,8 @@ export default class BookingContainer extends React.Component {
 
   async componentDidMount() {
       const bookingPoC = new BookingContainer.web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
-      const endDate = await bookingPoC.methods.endBookings().call()
+      const endDate = (await bookingPoC.methods.endBookings().call()) * 1000
+      console.log(new Date(endDate))
       const isBookingDisabled = Date.now() > endDate
       this.setState({isBookingDisabled})
       try {
