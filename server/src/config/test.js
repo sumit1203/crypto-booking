@@ -14,4 +14,6 @@ module.exports = {
   GIT_REV: process.env.GIT_REV,
   RECAPTCHA_SECRET: process.env.RECAPTCHA_SECRET,
   IS_RECAPTCHA_ON: false,
+  INITIAL_DATE: new Date(2018, 8, 14),
+  FINAL_DATE: new Date(2018, 8, 21),
 };
