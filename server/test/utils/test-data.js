@@ -22,8 +22,8 @@ const validBooking = {
     birthDate: '1987-12-17',
     phone: '+420605852377',
   },
-  from: 1,
-  to: 4,
+  from: new Date(2018, 8, 14),
+  to: new Date(2018, 8, 21),
   guestCount: 1,
 };
 const validLifBooking = {
@@ -37,8 +37,8 @@ const validLifBooking = {
     birthDate: '1987-12-17',
     phone: '+420605852377',
   },
-  from: 1,
-  to: 4,
+  from: new Date(2018, 8, 14),
+  to: new Date(2018, 8, 21),
   guestCount: 1,
 };
 const validBookingWithEthPrice = {
@@ -53,8 +53,8 @@ const validBookingWithEthPrice = {
     birthDate: '1987-12-17',
     phone: '+420605852377',
   },
-  from: 1,
-  to: 4,
+  from: new Date(2018, 8, 14),
+  to: new Date(2018, 8, 21),
   cryptoPrice: 1,
   guestCount: 1,
   roomNumber: 3,
@@ -66,8 +66,8 @@ const validBookingDB = {
   paymentType: 'eth',
   roomType: 'pure-cozy',
   encryptedPersonalInfo: '0x7b226e616d65223a22536f6d65206e616d65222c22656d61696c223a22656d61696c40656d61696c2e636f6d222c226269727468646179223a2231372f31322f31393837222c2270686f6e65223a222b3131313131313131313131227d',
-  from: 1,
-  to: 4,
+  from: new Date(2018, 8, 14),
+  to: new Date(2018, 8, 21),
   guestCount: 1,
 };
 
@@ -117,8 +117,8 @@ const instructionsData = {
     paymentAmount: 596519550715883900,
     paymentType: 'eth',
     roomType: 'pure-cozy',
-    from: 1,
-    to: 4,
+    from: new Date(2018, 8, 14),
+    to: new Date(2018, 8, 21),
     guestCount: 1,
     bookingHash: '0x1ab512eb0d6ba16d0aa20b616b257a3c55b5a395e80d0fcbf5963ac694d5b309',
     signatureTimestamp: 1534332702,

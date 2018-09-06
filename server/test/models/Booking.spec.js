@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 require('dotenv').config({ path: '../../../.env.test' });
+const mongoose = require('mongoose');
 const { expect } = require('chai');
 const { connectDB, disconnectDB } = require('../../src/models');
 const { Booking } = require('../../src/models/Booking');
@@ -15,12 +16,17 @@ function basicValidationExpect (validation, field) {
 }
 
 describe('Booking model', () => {
+  let BookingModel;
   before(async () => {
     connectDB();
+    BookingModel = mongoose.model('Booking');
   });
   after(async () => {
     disconnectDB();
   });
+  afterEach(async () => {
+    await BookingModel.remove({}).exec();
+  })
   describe('bookingHash', () => {
     it('Should throw an error if bookingHash is not defined', async () => {
       const booking = await Booking.generate(validBookingWithEthPrice);
@@ -427,13 +433,13 @@ describe('Booking model', () => {
     describe('getFromDate', () => {
       it('Should return an string 6/9/2018', () => {
         const booking = new Booking(validBookingDB);
-        expect(booking.getFromDate()).to.be.equal('6/9/2018');
+        expect(booking.getFromDate()).to.be.equal(validBookingDB.from);
       });
     });
     describe('getFromDate', () => {
       it('Should return an string 10/9/2018', () => {
         const booking = new Booking(validBookingDB);
-        expect(booking.getToDate()).to.be.equal('10/9/2018');
+        expect(booking.getToDate()).to.be.equal(validBookingDB.to);
       });
     });
     describe('getRemainingMinutes', () => {
