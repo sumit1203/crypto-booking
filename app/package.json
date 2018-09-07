@@ -73,5 +73,10 @@
     "web3": "^1.0.0-beta.34",
     "websocket": "^1.0.26",
     "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
