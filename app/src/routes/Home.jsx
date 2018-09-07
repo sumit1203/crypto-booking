@@ -1,13 +1,12 @@
 import React from 'react';
-import HotelSection from '../components/HotelSection';
-import HeroSection from '../components/HeroSection';
-import Footer from '../components/Footer';
-import LearnMoreSection from '../components/LearnMoreSection';
-import CollaborationSection from '../components/CollaborationSection';
-import BookingSection from '../components/Booking';
-import MyBookingSection from '../components/MyBookingSection';
-import LifSection from '../components/LifSection';
-import Navbar from '../components/Navbar';
+import HotelSection from '../sections/HotelSection';
+import HeroSection from '../sections/HeroSection';
+import Footer from '../sections/Footer';
+import LearnMoreSection from '../sections/LearnMoreSection';
+import CollaborationSection from '../sections/CollaborationSection';
+import BookingSection from '../sections/Booking';
+import LifSection from '../sections/LifSection';
+import Navbar from '../sections/Navbar';
 
 const Home = () => (
   <div>
@@ -16,7 +15,6 @@ const Home = () => (
     <CollaborationSection />
     <HotelSection />
     <BookingSection />
-    <MyBookingSection />
     <LifSection />
     <LearnMoreSection />
     <Footer />

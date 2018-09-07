@@ -8,10 +8,10 @@ import BookingPoC from '../../../abis/BookingPoC.json'
 import RoomBooking from './RoomBooking'
 import CheckEmail from './CheckEmail'
 import FullyBooked from './FullyBooked'
-import ErrorAlert from '../../ErrorAlert'
+import ErrorAlert from '../../../components/ErrorAlert'
 
 import { roomType } from '../propTypes'
-import BookingContainer from '../index'
+import BookingContainer from '..'
 
 class FormSection extends React.Component {
   constructor (props) {

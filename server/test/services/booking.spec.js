@@ -130,8 +130,8 @@ describe('Booking service', () => {
     expect(booking.signatureTimestamp).to.have.a('number');
     expect(booking.personalInfo).to.be.deep.equal({});
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
-    expect(booking).to.have.property('to', validBookingWithEthPrice.to);
-    expect(booking).to.have.property('from', validBookingWithEthPrice.from);
+    expect(booking.from.getTime()).to.be.eql(validBookingWithEthPrice.from.getTime());
+    expect(booking.to.getTime()).to.be.eql(validBookingWithEthPrice.to.getTime());
     expect(booking).to.have.property('confirmationEmailSent', false);
     expect(booking).to.have.property('changesEmailSent');
     expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
@@ -155,8 +155,8 @@ describe('Booking service', () => {
     expect(booking.personalInfo).to.have.property('birthDate', validBookingWithEthPrice.personalInfo.birthDate);
     expect(booking.personalInfo).to.have.property('phone', validBookingWithEthPrice.personalInfo.phone);
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
-    expect(booking).to.have.property('to', validBookingWithEthPrice.to);
-    expect(booking).to.have.property('from', validBookingWithEthPrice.from);
+    expect(booking.from.getTime()).to.be.eql(validBookingWithEthPrice.from.getTime());
+    expect(booking.to.getTime()).to.be.eql(validBookingWithEthPrice.to.getTime());
     expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
   });
   it('Should read a booking without and index', async () => {
@@ -177,8 +177,8 @@ describe('Booking service', () => {
     expect(booking.personalInfo).to.have.property('birthDate', validBookingWithEthPrice.personalInfo.birthDate);
     expect(booking.personalInfo).to.have.property('phone', validBookingWithEthPrice.personalInfo.phone);
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
-    expect(booking).to.have.property('to', validBookingWithEthPrice.to);
-    expect(booking).to.have.property('from', validBookingWithEthPrice.from);
+    expect(booking.from.getTime()).to.be.eql(validBookingWithEthPrice.from.getTime());
+    expect(booking.to.getTime()).to.be.eql(validBookingWithEthPrice.to.getTime());
     expect(booking).to.have.property('guestCount', validBookingWithEthPrice.guestCount);
   });
   it('Should return null if the id not exists', async () => {

@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react'
 import $ from 'jquery'
 import PropTypes from 'prop-types'
-import Transaction, { transactionType } from '../../Transaction'
-import Loader from '../../Loader'
-import BookingContainer from '../index'
-import MetaMaskIntegration from '../../MetaMaskPayment'
+import Transaction, {transactionType} from '../../../components/Transaction'
+import MetaMaskIntegration from '../../../components/MetaMaskPayment'
+import Loader from '../../../components/Loader'
 
 class CheckEmail extends React.Component {
   componentDidMount () {

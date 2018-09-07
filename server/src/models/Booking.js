@@ -3,6 +3,7 @@ const autoIncrement = require('mongoose-auto-increment');
 const Schema = mongoose.Schema;
 const { SIGNATURE_TIME_LIMIT, BOOKING_PAYMENT_TYPES,
   BOOKING_ROOM_TYPES, BOOKING_STATUS } = require('../constants');
+const { INITIAL_DATE, FINAL_DATE } = require('../config');
 const { handleApplicationError } = require('../errors');
 const { web3 } = require('../services/web3');
 const { encrypt, decrypt, generateKeyPair } = require('../services/crypto');
@@ -46,20 +47,20 @@ const Booking = new Schema({
     required: [true, 'noRoomType'],
   },
   from: {
-    type: Number,
+    type: Date,
     validate: {
       validator: function (from) {
-        return from > 0 && from < 5;
+        return from >= INITIAL_DATE && from <= FINAL_DATE;
       },
       message: 'fromOutOfRange',
     },
     required: [true, 'noFrom'],
   },
   to: {
-    type: Number,
+    type: Date,
     validate: {
       validator: function (to) {
-        return to >= this.from && to < 5;
+        return to > this.from && to <= FINAL_DATE;
       },
       message: 'toOutOfRange',
     },
@@ -199,16 +200,24 @@ Booking.method({
     return this.save();
   },
   getFromDate: function () {
-    const day = 5 + this.from;
-    return `${day}/9/2018`;
+    return this.from;
   },
   getToDate: function () {
-    const day = 5 + this.to + 1;/* are nights so we need to add one more day */
-    return `${day}/9/2018`;
+    return this.to;
   },
   getRemainingMinutes: function () {
     const limit = Math.floor(Date.now() / 1000 - 2 * SIGNATURE_TIME_LIMIT * 60);
     return Math.abs(Math.floor((limit - this.signatureTimestamp) / 60));
+  },
+  getNights: function () {
+    const nights = [];
+    const timeDiff = Math.abs(this.to.getTime() - this.from.getTime());
+    const numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const firstBookingDay = (this.from.getTime() - INITIAL_DATE.getTime()) / (1000 * 3600 * 24);
+    for (let i = firstBookingDay; i <= numberOfNights; i++) {
+      nights.push(i);
+    }
+    return nights;
   },
 });
 
