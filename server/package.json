@@ -1,6 +1,6 @@
 {
   "name": "crypto-booking-server",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "Nodejs server to sign room offers and manage bookings.",
   "scripts": {
     "start": "NODE_ENV=production  node ./src/index.js",
