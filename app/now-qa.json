@@ -1,9 +1,19 @@
 {
-  "name": "crypto-booking",
+  "name": "crypto-booking-qa",
   "alias": "booking-qa.windingtree.com",
   "build": {
     "env": {
       "ETH_NET": "ropsten"
+    }
+  },
+  "scale": {
+    "sfo1": {
+      "min": 0,
+      "max": 1
+    },
+    "bru1": {
+      "min": 0,
+      "max": 1
     }
   }
 }

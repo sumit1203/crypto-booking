@@ -2,7 +2,8 @@ import React, { Fragment } from 'react'
 import $ from 'jquery'
 import EmailSentModal from './EmailSentModal'
 import DeleteInstructionsModal from './DeleteInstructionsModal'
-import { SIGNER_API } from '../../config'
+import ErrorAlert from '../../../components/ErrorAlert'
+import { SIGNER_API } from '../../../config'
 
 export default class MyBookingSection extends React.Component {
   constructor (props) {
@@ -10,7 +11,8 @@ export default class MyBookingSection extends React.Component {
     this.state = {
       bookingHash: '',
       bookingIndex: '',
-      cancelTx: null
+      cancelTx: null,
+      isLoading: false
     }
   }
 
@@ -23,11 +25,12 @@ export default class MyBookingSection extends React.Component {
   }
 
   onSubmit = async (e) => {
-    // TODO check this when server can handle this request
     e.preventDefault()
     try {
       const {bookingHash, bookingIndex} = this.state
       const data = {bookingHash, bookingIndex}
+      this.setState({isLoading: true})
+      $('#emailSentModal').modal('show')
       const response = await (await fetch(SIGNER_API + '/api/booking/emailInfo', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -35,12 +38,14 @@ export default class MyBookingSection extends React.Component {
           'Content-Type': 'application/json'
         }
       })).json()
+      this.setState({isLoading: false})
       if (response.status > 400) {
+        $('#emailSentModal').modal('hide')
         console.error(response.code)
-        alert(response.long || response.short)
+        this.setState({errorMessage: response.long})
       }
-      $('#emailSentModal').modal('show')
     } catch (e) {
+      $('#emailSentModal').modal('hide')
       console.error(e)
     }
   }
@@ -49,7 +54,8 @@ export default class MyBookingSection extends React.Component {
     try {
       const {bookingHash, bookingIndex} = this.state
       const data = {bookingHash, bookingIndex}
-      // TODO check this when server can handle this request
+      this.setState({isLoading: true})
+      $('#deleteInstructionsModal').modal('show')
       const response = await (await fetch(SIGNER_API + '/api/booking', {
         method: 'DELETE',
         body: JSON.stringify(data),
@@ -57,9 +63,11 @@ export default class MyBookingSection extends React.Component {
           'Content-Type': 'application/json'
         }
       })).json()
+      this.setState({isLoading: false})
       if (response.status >= 400) {
         console.error(response)
-        this.setState({errorMessage: response.long, loading: false}, this.showErrorAlert)
+        $('#deleteInstructionsModal').modal('hide')
+        this.setState({errorMessage: response.long})
         return
       }
       this.setState({cancelTx: {
@@ -67,32 +75,23 @@ export default class MyBookingSection extends React.Component {
         data: response.tx.data,
         value: response.tx.value,
         gas: response.tx.gas
-      }}, () => $('#deleteInstructionsModal').modal('show'))
+      }})
     } catch (e) {
+      $('#deleteInstructionsModal').modal('hide')
       console.error(e)
     }
 
   }
 
-  showErrorAlert = () => {
-    $('.alert').addClass('show')
-    setTimeout(() => {
-      $('.alert').removeClass('show')
-      this.setState({errorMessage: ''})
-    }, 3000)
+  onCloseAlert = () => {
+    this.setState({errorMessage: ''})
   }
 
   render () {
-    const {cancelTx, errorMessage} = this.state
+    const {cancelTx, errorMessage, isLoading} = this.state
     return (
       <Fragment>
-        {errorMessage && (<div className="alert fade fixed-top alert-danger text-center" role="alert">
-          <span>{errorMessage}</span>
-          <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>)
-      }
+        {errorMessage && (<ErrorAlert message={errorMessage} onClose={this.onCloseAlert}/>)}
         <article className="py-3 py-md-4 bg-white border-bottom" id="my-booking">
           <div className="container">
             <div className="row justify-content-center">
@@ -129,8 +128,8 @@ export default class MyBookingSection extends React.Component {
               </div>
             </div>
           </div>
-          <EmailSentModal/>
-          {cancelTx && <DeleteInstructionsModal {...cancelTx}/>}
+          <EmailSentModal loading={isLoading} />
+          <DeleteInstructionsModal tx={cancelTx} loading={isLoading}/>
         </article>
       </Fragment>
     )

@@ -55,9 +55,9 @@ export default class RoomBooking extends React.Component {
      return (
        <Fragment key={room.id}>
         <input id={`radio-${room.id}`} name="type" type="radio" value={room.id} onChange={onRoomTypeChange} checked={selectedRoom.id === room.id} required/>
-        <label htmlFor={`radio-${room.id}`}>
+        <label htmlFor={`radio-${room.id}`} className="w-50">
           <i className="mdi mdi-check-circle d-none d-sm-inline"/>
-          {index === 0 ? ' Twin Bed' : index === 1 && ' King Bed'}
+          {index === 0 ? <span>King<span className="hide-xs">-size</span> Bed</span> : index === 1 && ' Twin Bed'}
         </label>
 
        </Fragment>)
@@ -120,7 +120,7 @@ export default class RoomBooking extends React.Component {
                   <h5 className="mb-1"> Type of Room </h5>
                   <div className="form-row">
                     <div className="col-12 mb-1 mb-sm-0">
-                      <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
+                      <div className="btn-group btn-group--switch col-sm-12 col-md-10 col-lg-7 mr-auto ml-auto" role="group" aria-label="Room type">
                         {this.renderRoomTypes()}
                       </div>
                     </div>

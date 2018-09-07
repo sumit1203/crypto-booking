@@ -11,6 +11,7 @@ $ npm i
 ### .env
 You need 2 `.env` files. One for test and other for running the server.
 Test env must be located at `./test/utils/.env`.
+The OWNER_PRIVATE_KEY goes with the 0x prefix.
 
 ```bash
 WHITELIST=11.22.33.44,55.66.77.88       
@@ -51,3 +52,17 @@ Travis must contain this secret variables
 - STARTING_BLOCK
 - WEB3_PROVIDER
 - WHITELIST
+
+## Decrypt Database
+
+Export the decrypted booking offers to a json array next to the decrypt script.
+```
+mongoexport -h MONGODB_URI -d crypto-booking -c bookings -u USER -p PASSWORD --type json -o src/scripts/bookings.json --jsonArray                                
+```
+
+Run the decrypt script in production environment with the master key as parameter.
+```
+NODE_ENV=production MASTER_KEY=xxx node src/scripts/decrypt.js
+```
+
+The output will be print in the console.

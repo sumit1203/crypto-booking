@@ -1,7 +1,7 @@
 import React from 'react';
 import MarkdownRenderer from 'react-markdown-renderer';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
-import HotelMap from '../Map';
+import HotelMap from '../../components/Map';
 
 export default class Hotel extends React.Component {
 

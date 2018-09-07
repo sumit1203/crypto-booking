@@ -5,17 +5,21 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import {CAPTCHA_SITE_KEY} from '../../../config'
 
 import payment from 'windingtree-media-web/custom-icons/svg/wt-icon--payment.svg'
+import BookingContainer from '..'
 
 class ConfirmModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      guestEthAddress: null,
+      guestEthAddress: '',
       captchaToken: null
     }
   }
 
   componentDidMount() {
+    BookingContainer.web3.eth.getAccounts().then(accounts => {
+      this.setState({guestEthAddress: accounts[0]})
+    })
     $('#modalConfirm').modal('show')
     $('#modalConfirm').on('hidden.bs.modal', () => {
       this.props.onClose()
@@ -45,6 +49,7 @@ class ConfirmModal extends React.Component {
 
   render () {
     const {paymentType, onPaymentTypeChange, price} = this.props
+    const {guestEthAddress} = this.state
     return (
       <div className="modal" id="modalConfirm" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
@@ -57,21 +62,17 @@ class ConfirmModal extends React.Component {
                 </button>
               </div>
               <div className="modal-body">
-                <p> Select your preferred payment method.</p>
+                <p className="mb-1"> Select your preferred payment method.</p>
                 <div className="row mb-1">
-                  <div className="col col-sm-8">
-                    <div className="row no-gutters mb-1 mt-1">
-                      <div className="col-4 d-none d-sm-block">
-                        <img src={payment}
-                          className="img-fluid"
-                          style={{position: 'relative', right: -30}}
-                          width="100"
-                          alt="Payment icon"
-                        />
+                  <div className="col-sm-8">
+                    <div className="row no-gutters mb-1">
+                      <div className="col-4">
+                        <img src={payment} style={{position: 'relative', right: -30}} alt="icon" width="100"
+                             className="img-fluid"/>
                       </div>
-                      <div className="col-8 align-self-center">
-                        <div className="form-check">
-                          <input className="form-check-input"
+                      <div className="col-8">
+                        <div className="form-check" style={{marginBottom: '0.3em', paddingTop: 7}}>
+                          <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
                                  type="radio" name="pay-type" id="pay-eth" value="eth" required
                                  onChange={onPaymentTypeChange} checked={paymentType === 'eth'}/>
                           <label className="form-check-label" htmlFor="pay-eth">
@@ -79,7 +80,7 @@ class ConfirmModal extends React.Component {
                           </label>
                         </div>
                         <div className="form-check">
-                          <input className="form-check-input"
+                          <input className="form-check-input" style={{position: 'relative', top: 2, marginRight: 5}}
                                  type="radio" name="pay-type" id="pay-lif" value="lif" required
                                  onChange={onPaymentTypeChange} checked={paymentType === 'lif'}/>
                           <label className="form-check-label" htmlFor="pay-lif">
@@ -89,15 +90,15 @@ class ConfirmModal extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col col-sm-4 align-self-center">
-                  <div className="float-right">
-                    <p>
-                      <small>Final price:</small>
-                    </p>
-                    <div className="badge badge-light px-1 mr-sm-1">
-                      <span className="h3">$<span className="h2 font--alt">{this.props.price}</span></span>.
+                  <div className="col-sm-4">
+                    <div style={{marginTop: -10}}>
+                      <p>
+                        <small>Final price:</small>
+                      </p>
+                      <div className="badge badge-light px-1">
+                        <span className="h3">$<span className="h2 font--alt">{price}</span></span>.
+                      </div>
                     </div>
-                  </div>
                   </div>
                 </div>
                 <div className="row">
@@ -105,17 +106,19 @@ class ConfirmModal extends React.Component {
                     <p className="mb-1">
                       Provide the address from which you will pay.
                     </p>
-                    <div className="mb-1 pl-sm-1">
-                      <div className="form-group form-row mb-2 mb-sm-1 align-items-center">
+                    <div className="mb-1 px-1">
+                      <div className="form-group form-row mb-0">
                         <label htmlFor="guestAddress" className="col-md-4 col-lg-3 col-form-label col-form-label-lg">
                           <b>Your Address</b>
                         </label>
-                        <div className="col-md-8 col-lg-9 pr-sm-1">
+                        <div className="col-md-8 col-lg-9">
                           <input
                             type="text"
+                            value={guestEthAddress}
                             id="guestAddress"
                             autoComplete="off"
                             className="form-control form-control-lg w-100"
+                            style={{width: 450}}
                             onChange={this.onAddressChange}
                             placeholder='0xe99356bde974bbe08721d77712168fa070aa8da2'
                             required
@@ -125,14 +128,7 @@ class ConfirmModal extends React.Component {
                     </div>
                   </div>
                 </div>
-
-                <ReCAPTCHA
-                  ref={this.setReCaptchaRef}
-                  sitekey={CAPTCHA_SITE_KEY}
-                 theme='light'
-                  onChange={this.onCaptchaChange}
-                />
-
+                <ReCAPTCHA ref={this.setReCaptchaRef} sitekey={CAPTCHA_SITE_KEY} theme='light' onChange={this.onCaptchaChange}/>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-dismiss="modal">Cancel</button>
