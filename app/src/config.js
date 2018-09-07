@@ -18,7 +18,7 @@ const config = process.env.NODE_ENV === 'production' ? configProd : configDev;
 
 if (process.env.ETH_NET === 'ropsten') {
   config.WEB3_PROVIDER = 'https://ropsten.infura.io/v3/801e69a40e3e49b786cd42e8fb16afa2';
-  config.BOOKING_POC_ADDRESS = '0xA83f78A5b3490b9D6A45B6ada3fF31FAf752566D';
+  config.BOOKING_POC_ADDRESS = '0xBe39d6DAD35E8B7CDeE8Be51d2960c8499Cd14fc';
   config.SIGNER_API = 'https://crypto-booking-server-qa.windingtree.com';
 }
 

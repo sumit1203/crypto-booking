@@ -2,7 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 
 export default class CopyLinkInput extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       isCopied: false
@@ -25,20 +25,23 @@ export default class CopyLinkInput extends React.Component {
       this.setState({isCopied: false})
     }, 3000)
   }
-  render() {
+
+  render () {
     const {
       state: {isCopied},
       props: {className, ...restProps}
     } = this
-    const buttonClass = classnames('btn-primary','flex-grow-0', {['btn-success']: isCopied})
-    const inputClass = classnames('form-control', 'p-0', className)
+    const buttonClass = classnames('btn btn-block btn-primary', {['btn-success']: isCopied})
+    const inputClass = classnames('form-control', className)
     return (
-      <div className="d-flex">
+      <form className="input-group input-group--responsive">
         <input {...restProps} ref={this.setInput} className={inputClass}/>
-        <button onClick={this.onClickUrl} className={buttonClass}>
-          {isCopied ? 'Copied' : 'Copy'}
-        </button>
-      </div>
+        <div className="input-group-append">
+          <button onClick={this.onClickUrl} className={buttonClass}>
+            {isCopied ? 'Copied' : 'Copy'}
+          </button>
+        </div>
+      </form>
     )
   }
 }

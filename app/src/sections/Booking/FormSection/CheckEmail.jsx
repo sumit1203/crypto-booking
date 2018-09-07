@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 import $ from 'jquery'
 import PropTypes from 'prop-types'
 import Transaction, {transactionType} from '../../../components/Transaction'
+import MetaMaskIntegration from '../../../components/MetaMaskPayment'
 import Loader from '../../../components/Loader'
-import BookingContainer from '..'
 
 class CheckEmail extends React.Component {
   componentDidMount () {
@@ -19,7 +19,7 @@ class CheckEmail extends React.Component {
       <div className="modal" id="checkEmail" tabIndex="-2" role="dialog">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
-            {loading ? <Loader block={200} label="Loading..."/> : <Transactions txs={instructions.txs} from={instructions.booking.guestEthAddress}/>}
+            {loading ? <Loader block={200} label="Loading..."/> : <Transactions txs={instructions.txs}/>}
           </div>
         </div>
       </div>
@@ -28,22 +28,7 @@ class CheckEmail extends React.Component {
 }
 
 class Transactions extends React.Component {
-  componentDidMount() {
-    const {txs, from} = this.props
-    if (web3.currentProvider.isMetaMask) {
-      setTimeout(async () => {
-        try {
-         await BookingContainer.web3.eth.sendTransaction({from, ...txs[0]})
-          if (!txs[1]) return
-          await BookingContainer.web3.eth.sendTransaction({from, ...txs[1]})
-        }catch (e) {
-          console.warn(e)
-        }
-      }, 1000)
-    }
-  }
-
-  render() {
+  render () {
     const {txs} = this.props
     return (
       <Fragment>
@@ -57,6 +42,7 @@ class Transactions extends React.Component {
           <h5 className="mb-1">We sent the payment instructions to your email address.</h5>
           <h5 className="mb-1">To pay your room and book it</h5>
           {txs.length > 1 ? <LifBody txs={txs}/> : <EthBody tx={txs[0]}/>}
+          <MetaMaskIntegration txs={txs}/>
         </div>
         <div className="modal-footer">
           <button type="button" className="btn btn-primary" data-dismiss="modal">Ok</button>
