@@ -6,19 +6,14 @@ const { getInstructionsTxs } = require('../services/web3');
 const create = async (req, res, next) => {
   try {
     const { signatureData, booking, offerSignature, bookingIndex } = await createBooking(req.body);
-    const nights = [];
-    for (let i = booking.from; i <= booking.to; i++) {
-      nights.push(i);
-    }
-
     const data = {
-      txs: await getInstructionsTxs(booking.paymentType, signatureData, offerSignature, nights),
+      txs: await getInstructionsTxs(booking.paymentType, signatureData, offerSignature, booking.nights),
       booking,
       offerSignature,
       signatureData,
       contractAddress: BOOKING_POC_ADDRESS,
       bookingIndex,
-      nights,
+      nights: booking.nights,
     };
     sendInstructions(data, booking.personalInfo.email);
     res.json(data);

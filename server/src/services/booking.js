@@ -51,6 +51,7 @@ function _prepareForExport (bookingModel, privateKey) {
   booking.fromDate = bookingModel.getFromDate();
   booking.toDate = bookingModel.getToDate();
   booking.remainingMinutes = bookingModel.getRemainingMinutes();
+  booking.nights = bookingModel.getNights();
   return booking;
 }
 
@@ -83,13 +84,9 @@ async function getCancelBookingInstructions (bookingHash) {
   if (!bookingModel || bookingModel.status !== BOOKING_STATUS.approved) {
     throw handleApplicationError('bookingNotFound');
   }
-  const { roomType, roomNumber, from, to, paymentType } = bookingModel;
+  const { roomType, roomNumber, paymentType } = bookingModel;
   const isEther = paymentType === BOOKING_PAYMENT_TYPES.eth;
-  const nights = [];
-  for (let i = from; i <= to; i++) {
-    nights.push(i);
-  }
-  const tx = getCancelBookingTx(roomType, nights, roomNumber, bookingHash, isEther);
+  const tx = getCancelBookingTx(roomType, bookingModel.getNights(), roomNumber, bookingHash, isEther);
   return tx;
 }
 
