@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Loader from '../Loader'
+import Loader from '../../../components/Loader'
 
 const EmailSentModal = ({loading}) => (
   <div className="modal" id="emailSentModal" tabIndex="-2" role="dialog">

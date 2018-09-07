@@ -5,7 +5,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import {CAPTCHA_SITE_KEY} from '../../../config'
 
 import payment from 'windingtree-media-web/custom-icons/svg/wt-icon--payment.svg'
-import BookingContainer from '../index'
+import BookingContainer from '..'
 
 class ConfirmModal extends React.Component {
   constructor (props) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Loader from '../Loader';
+import Loader from '../../components/Loader';
 import Hotel from './Hotel';
 import { HOTEL_URL } from '../../config'
 
