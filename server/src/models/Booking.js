@@ -209,6 +209,16 @@ Booking.method({
     const limit = Math.floor(Date.now() / 1000 - 2 * SIGNATURE_TIME_LIMIT * 60);
     return Math.abs(Math.floor((limit - this.signatureTimestamp) / 60));
   },
+  getNights: function () {
+    const nights = [];
+    const timeDiff = Math.abs(this.to.getTime() - this.from.getTime());
+    const numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const firstBookingDay = (this.from.getTime() - INITIAL_DATE.getTime()) / (1000 * 3600 * 24);
+    for (let i = firstBookingDay; i <= numberOfNights; i++) {
+      nights.push(i);
+    }
+    return nights;
+  },
 });
 
 // Error Handler
