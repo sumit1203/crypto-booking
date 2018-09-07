@@ -22,8 +22,8 @@ const validBooking = {
     birthDate: '1987-12-17',
     phone: '+420605852377',
   },
-  from: new Date(2018, 8, 14),
-  to: new Date(2018, 8, 21),
+  from: new Date(2018, 8, 15),
+  to: new Date(2018, 8, 20),
   guestCount: 1,
 };
 const validLifBooking = {
