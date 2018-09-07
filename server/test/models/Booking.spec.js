@@ -26,7 +26,7 @@ describe('Booking model', () => {
   });
   afterEach(async () => {
     await BookingModel.remove({}).exec();
-  })
+  });
   describe('bookingHash', () => {
     it('Should throw an error if bookingHash is not defined', async () => {
       const booking = await Booking.generate(validBookingWithEthPrice);
