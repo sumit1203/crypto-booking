@@ -11,8 +11,7 @@
     "deploy-now-ropsten": "now --team windingtree --token $NOW_TOKEN --local-config=now-qa.json",
     "alias-ropsten": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-qa.json",
     "now-start": "serve --single ./public",
-    "alias": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-mainnet.json",
-    "postinstall": "npm install https://github.com/windingtree/wt-ui.git#develop"
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-mainnet.json"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
