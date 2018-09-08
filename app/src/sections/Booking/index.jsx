@@ -13,7 +13,8 @@ const PRICES_BY_ROOMTYPE = {
 }
 
 export default class BookingContainer extends React.Component {
-  static web3 = web3 ? new Web3(web3.currentProvider) : new Web3(WEB3_PROVIDER)
+  static web3 = (typeof web3 !== 'undefined') ? new Web3(web3.currentProvider) : new Web3(WEB3_PROVIDER)
+
   constructor(props) {
     super(props)
     this.state = {
