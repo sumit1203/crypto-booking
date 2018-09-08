@@ -1,6 +1,6 @@
 import React from 'react'
 import iconSrc from './icon.svg'
-import BookingContainer from '../Booking'
+import BookingContainer from '../../sections/Booking'
 
 const PENDING = 'pending'
 const SUCCESS = 'success'
@@ -68,4 +68,3 @@ export default class MetaMaskIntegration extends React.Component {
     ))
   }
 }
-
