@@ -3,7 +3,9 @@
   "version": "0.6.7",
   "description": "Web app to show hotel inventory from WT api.",
   "scripts": {
-    "test": "eslint .",
+    "lint": "eslint src --ext jsx --ext .js",
+    "lint-fix": "eslint src --fix --ext jsx --ext .js",
+    "test": "npm run lint",
     "start": "NODE_ENV=development ./node_modules/.bin/webpack-dev-server",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --mode=production",
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
@@ -52,7 +54,8 @@
     "webpack-serve": "^2.0.2"
   },
   "dependencies": {
-    "@windingtree/wt-ui": "git+https://github.com/windingtree/wt-ui.git#develop",
+    "@windingtree/wt-ui": "^1.0.0",
+    "babel-eslint": "^9.0.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.1.3",
     "classnames": "^2.2.6",

@@ -1,7 +1,7 @@
 import React from 'react';
 import Loader from '../../components/Loader';
 import Hotel from './Hotel';
-import { HOTEL_URL } from '../../config'
+import { HOTEL_URL } from '../../config';
 
 
 class HotelContainer extends React.Component {
@@ -25,9 +25,11 @@ class HotelContainer extends React.Component {
 
   render() {
     const { hotelData, isLoading } = this.state;
-    if (isLoading) return  (
-      <Loader block={200} label="Loading..."/>
-    )
+    if (isLoading) {
+      return (
+        <Loader block={200} label="Loading..." />
+      );
+    }
     return (
       <Hotel
         name={hotelData.name}
