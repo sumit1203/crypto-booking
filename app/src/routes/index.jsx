@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { hot } from "react-hot-loader";
 import Loader from '../components/Loader';
-import MetaMask from '../components/Booking/FormSection/CheckEmail'
+import MetaMask from '../sections/Booking/FormSection/CheckEmail'
 
 const LoadableHome = Loadable({
     loader: () => import(
