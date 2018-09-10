@@ -16,4 +16,6 @@ module.exports = {
   IS_RECAPTCHA_ON: false,
   INITIAL_DATE: new Date('2018-09-14T00:00:00Z'),
   FINAL_DATE: new Date('2018-09-21T00:00:00Z'),
+  BOOKING_PERIOD_START: new Date('2018-01-1T00:00:00Z'),
+  BOOKING_PERIOD_END: new Date('2025-09-14T00:00:00Z'),
 };
