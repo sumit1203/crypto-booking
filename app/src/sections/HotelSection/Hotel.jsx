@@ -9,7 +9,7 @@ const Hotel = (props) => {
   } = props;
 
   return (
-    <article id="hotel-section" className="section-wrapper bg--gradient pt-2 pb-2 text-center text-md-left">
+    <article id="hotel-section" className="section-wrapper bg--grad pt-2 pb-2 text-center text-md-left">
       <div className="container">
 
         <div className="row flex-column flex-md-row align-items-center">

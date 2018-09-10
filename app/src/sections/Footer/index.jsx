@@ -7,7 +7,7 @@ import logoWTmd from '../../../node_modules/windingtree-media-web/logo-variants/
 import logoWTsm from '../../../node_modules/windingtree-media-web/logo-variants/sign/svg/sign--white_white-text--sm.svg';
 
 const Footer = () => (
-  <footer className="footer bg--purple text-white">
+  <footer id="app-footer">
     <div className="container">
 
       <div className="pt-2 pb-1">

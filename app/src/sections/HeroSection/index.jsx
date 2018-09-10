@@ -3,7 +3,7 @@ import AnchorLink from 'react-anchor-link-smooth-scroll';
 import LogoEB from '../../img/content/logo-ethberlin-alt.png';
 
 const HeroSection = () => (
-  <article className="bg--gradient hero">
+  <article id="app-hero" className="bg--grad">
     <div className="section-wrapper py-md-3 py-lg-5">
       <div className="container py-0 py-md-1 py-lg-2">
         <div className="row justify-content-center text-center">
