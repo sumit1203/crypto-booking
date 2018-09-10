@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 export const roomType = PropTypes.shape({
   id: PropTypes.string,
@@ -8,4 +8,4 @@ export const roomType = PropTypes.shape({
   price: PropTypes.number,
   lifPrice: PropTypes.number,
   images: PropTypes.arrayOf(PropTypes.string),
-})
+});

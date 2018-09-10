@@ -1,8 +1,21 @@
 {
   "extends": "airbnb",
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "node": true,
     "mocha": true
+  },
+  "rules": {
+    "no-plusplus": "off",
+    "jsx-a11y/label-has-for": [ 2, {
+      "required": {
+        "every": [ "nesting", "id" ]
+      },
+      "allowChildren": true
+    }],
+    "no-console": "off",
+    "import/prefer-default-export": "off",
+    "react/destructuring-assignment": "off"
   }
 }

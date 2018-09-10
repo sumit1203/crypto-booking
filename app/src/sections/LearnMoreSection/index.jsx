@@ -13,10 +13,10 @@ const LearnMoreSection = () => (
             Check our website and meet our engineers on ETH Berlin
           </p>
           <footer>
-            <a href="https://windingtree.com" target='_blank' rel='noopener noreferrer' className="btn btn-outline-light d-none d-sm-inline-block">
+            <a href="https://windingtree.com" target="_blank" rel="noopener noreferrer" className="btn btn-outline-light d-none d-sm-inline-block">
             Visit Winding Tree website
             </a>
-            <a href="https://windingtree.com" target='_blank' rel='noopener noreferrer' className="btn btn-outline-light d-inline-block d-sm-none">
+            <a href="https://windingtree.com" target="_blank" rel="noopener noreferrer" className="btn btn-outline-light d-inline-block d-sm-none">
             Visit our website
             </a>
           </footer>
