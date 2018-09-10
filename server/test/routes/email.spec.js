@@ -23,6 +23,8 @@ describe('POST /api/booking/emailInfo', () => {
     expiredBookingCron.destroy();
     sandbox = sinon.createSandbox();
     BookingModel = mongoose.model('Booking');
+    ethereunListenerCron.destroy();
+    expiredBookingCron.destroy();
   });
   afterEach(async function () {
     await BookingModel.remove({}).exec();

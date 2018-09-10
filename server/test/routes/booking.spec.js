@@ -9,8 +9,9 @@ const { SERVER_PORT, BOOKING_POC_ADDRESS } = require('../../src/config');
 const throttling = require('../../src/middlewares/throttling');
 const prices = require('../../src/services/prices');
 const { turnOffRecaptcha, turnOnRecaptcha } = require('../../src/middlewares/recaptcha');
+const { turnOffBookingPeriod, turnOnBookingPeriod } = require('../../src/middlewares/booking-time');
 const { disconnectDB } = require('../../src/models');
-const { startServer } = require('../../src/app');
+const { startServer, ethereunListenerCron, expiredBookingCron } = require('../../src/app');
 
 const { validBooking, validLifBooking, validBookingWithEthPrice } = require('../utils/test-data');
 
@@ -24,6 +25,9 @@ describe('Bookings', () => {
       server = startServer(SERVER_PORT);
       sandbox = sinon.createSandbox();
       BookingModel = mongoose.model('Booking');
+      turnOffBookingPeriod();
+      ethereunListenerCron.destroy();
+      expiredBookingCron.destroy();
     });
     afterEach(async function () {
       await BookingModel.remove({}).exec();
@@ -43,6 +47,23 @@ describe('Bookings', () => {
       await disconnectDB();
     });
     describe('POST /api/booking', () => {
+      describe('Booking period', () => {
+        before(async () => {
+          turnOnBookingPeriod();
+        });
+        after(async () => {
+          turnOffBookingPeriod();
+        });
+        it('Should throw Perdiod', async () => {
+          try {
+            const body = validBooking;
+            await request({ url: `${apiUrl}/booking`, method: 'POST', json: true, body });
+          } catch (e) {
+            expect(e).to.have.property('error');
+            expect(e.error).to.have.property('code', '#BookingPeriodEnd');
+          }
+        });
+      });
       describe('Recaptcha', () => {
         before(async () => {
           turnOnRecaptcha();
