@@ -16,4 +16,6 @@ module.exports = {
   IS_RECAPTCHA_ON: true,
   INITIAL_DATE: new Date(process.env.INITIAL_DATE),
   FINAL_DATE: new Date(process.env.FINAL_DATE),
+  BOOKING_PERIOD_START: new Date(process.env.BOOKING_PERIOD_START),
+  BOOKING_PERIOD_END: new Date(process.env.BOOKING_PERIOD_END),
 };

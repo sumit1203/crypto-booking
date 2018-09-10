@@ -186,4 +186,14 @@ module.exports = {
     short: 'Booking not found.',
     long: 'The booking was not found. Please verify the the data you entered. If you think that this is an error, please contact Winding Tree team.',
   },
+  BookingPeriodStart: {
+    status: 403,
+    short: 'Booking period has not started.',
+    long: 'Booking perdiod has not started yet. Please, try again next later.',
+  },
+  BookingPeriodEnd: {
+    status: 403,
+    short: 'Booking perdiod has ended.',
+    long: 'Booking perdiod has endend. Thank you for your interest.',
+  },
 };
