@@ -4,7 +4,7 @@ import $ from 'jquery';
 import ReCAPTCHA from 'react-google-recaptcha';
 import payment from 'windingtree-media-web/custom-icons/svg/wt-icon--payment.svg';
 import { CAPTCHA_SITE_KEY } from '../../../config';
-import { withWeb3 } from '../../../contexts/Web3Context'
+import { withWeb3 } from '../../../contexts/Web3Context';
 
 
 class ConfirmModal extends React.Component {
