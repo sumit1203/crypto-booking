@@ -1,9 +1,11 @@
 {
   "name": "crypto-booking-app",
-  "version": "0.6.6",
+  "version": "0.6.8",
   "description": "Web app to show hotel inventory from WT api.",
   "scripts": {
-    "test": "eslint .",
+    "lint": "eslint src --ext jsx,js",
+    "lint-fix": "eslint src --fix --ext jsx --ext .js",
+    "test": "npm run lint && npm run build",
     "start": "NODE_ENV=development ./node_modules/.bin/webpack-dev-server",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --mode=production",
     "deploy": "swarm --bzzapi http://swarm-gateways.net --defaultpath ./public/index.html --recursive up ./public",
@@ -11,11 +13,11 @@
     "deploy-now-ropsten": "now --team windingtree --token $NOW_TOKEN --local-config=now-qa.json",
     "alias-ropsten": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-qa.json",
     "now-start": "serve --single ./public",
-    "alias": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-mainnet.json",
-    "postinstall": "npm install https://github.com/windingtree/wt-ui.git#develop"
+    "alias": "now alias --team windingtree --token=$NOW_TOKEN --local-config=now-mainnet.json"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-eslint": "^9.0.0",
     "babel-loader": "^7.1.5",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -52,6 +54,7 @@
     "webpack-serve": "^2.0.2"
   },
   "dependencies": {
+    "@windingtree/wt-ui": "^1.0.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.1.3",
     "classnames": "^2.2.6",
@@ -71,7 +74,11 @@
     "react-router-dom": "^4.3.1",
     "web3": "^1.0.0-beta.34",
     "websocket": "^1.0.26",
-    "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets",
-    "windingtree-ui": "git+https://github.com/windingtree/wt-ui.git#develop"
+    "windingtree-media-web": "git+https://github.com/windingtree/media.git#web-assets"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }

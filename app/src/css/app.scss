@@ -1,7 +1,25 @@
+// METAMASK STYLES
+$metamask-primary: #F6851B;
+$metamask-secondary: #CD6116;
+.metamask-btn{
+  background-color: $metamask-primary;
+  border-color: $metamask-secondary;
+}
+
+.metamask-tx {
+  line-height: 24px;
+  display: flex;
+
+  .metamask-tx-label {
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+}
 
 // Loader fade in
 .loader {
-  opacity: 0;
   animation: fadein 2s;
 }
 @keyframes fadein {

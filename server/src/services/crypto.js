@@ -84,10 +84,11 @@ const signOffer = async (booking, key) => {
     { type: 'bytes32', value: signatureData.bookingHash }
   );
 
-  web3.eth.accounts.wallet.add(key);
+  web3.eth.accounts.wallet.add(OWNER_PRIVATE_KEY);
   const accounts = web3.eth.accounts.wallet;
-  const offerSignature = await web3.eth.sign(hashedMessage, accounts[0].address);
+  const offerSignature = await web3.eth.sign(hashedMessage, OWNER_ADDRESS);
   web3.eth.accounts.wallet.clear();
+
   return { signatureData, offerSignature };
 };
 
