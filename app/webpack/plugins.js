@@ -8,6 +8,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const isProduction = process.env.NODE_ENV === 'production';
+const Dotenv = require('dotenv-webpack');
 
 const public = 'public';
 
@@ -28,6 +29,12 @@ const plugins = [
   new webpack.EnvironmentPlugin(['NODE_ENV','ETH_NET']),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new webpack.NamedModulesPlugin(),
+  new Dotenv({path: resolve(
+    process.cwd(),
+    '../',
+    '.env',
+  )
+  })
 ];
 
 if (isProduction) {
