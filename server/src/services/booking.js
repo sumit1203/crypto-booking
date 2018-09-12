@@ -64,7 +64,9 @@ async function readBooking (filter, index) {
   if (mongoose.Types.ObjectId.isValid(filter.id)) {
     const bookingModel = await BookingModel.findById(filter.id).exec();
     if (!bookingModel) return null;
-    return _prepareForExport(bookingModel);
+    const bookingIndex = index || bookingModel.bookingIndex;
+    const { privateKey } = getKeyPair(bookingModel.bookingHash, bookingIndex);
+    return _prepareForExport(bookingModel, privateKey);
   }
   if (filter.bookingHash) {
     const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
