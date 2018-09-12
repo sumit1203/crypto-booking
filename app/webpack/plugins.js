@@ -28,11 +28,7 @@ const cleanOptions = {
 const plugins = [
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new webpack.NamedModulesPlugin(),
-  new Dotenv({path: resolve(
-    process.cwd(),
-    '../',
-    '.env',
-  ),
+  new Dotenv({path: resolve('../.env'),
   systemvars: true
   })
 ];

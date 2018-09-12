@@ -1,10 +1,6 @@
 const path = require('path');
 require('dotenv').config({
-  path: path.resolve(
-    process.cwd(),
-    '../',
-    '.env',
-  ),
+  path: path.resolve('../.env'),
 });
 
 const { startServer } = require('./app');
