@@ -26,14 +26,14 @@ const cleanOptions = {
 };
 
 const plugins = [
-  new webpack.EnvironmentPlugin(['NODE_ENV','ETH_NET']),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new webpack.NamedModulesPlugin(),
   new Dotenv({path: resolve(
     process.cwd(),
     '../',
     '.env',
-  )
+  ),
+  systemvars: true
   })
 ];
 
