@@ -27,7 +27,7 @@ class BookingContainer extends React.Component {
     const { web3 } = this.props;
     const bookingPoC = new web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
     const endDate = (await bookingPoC.methods.endBookings().call()) * 1000;
-    const isBookingDisabled = false; //Date.now() > endDate;
+    const isBookingDisabled = Date.now() > endDate;
     this.setState({ isBookingDisabled });
     try {
       const { data } = await (await fetch('https://api.coinmarketcap.com/v2/ticker/2728/?convert=EUR')).json();
