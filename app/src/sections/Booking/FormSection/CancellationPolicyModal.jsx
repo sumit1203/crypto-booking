@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CancellationPolicyModal = () => (
   <div className="modal" id="modalCancellationPolicy" tabIndex="-2" role="dialog">
@@ -9,7 +9,7 @@ const CancellationPolicyModal = () => (
             Hotel cancellation & refund policy
           </h5>
           <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-            <i className="mdi mdi-close"/>
+            <i className="mdi mdi-close" />
           </button>
         </div>
 
@@ -41,6 +41,6 @@ const CancellationPolicyModal = () => (
       </div>
     </div>
   </div>
-)
+);
 
-export default CancellationPolicyModal
+export default CancellationPolicyModal;
