@@ -153,21 +153,19 @@ Booking.method({
     this.encryptedPersonalInfo = encrypt(hexEncoded, privateKey).toString();
   },
   decryptPersonalInfo: function (privateKey) {
-    let encodedPersonalInfo;
     try {
-      encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, privateKey);
-    } catch (e) {
-      console.error(e);
-      encodedPersonalInfo = null;
-    }
-    if (!web3.utils.isHex(encodedPersonalInfo)) {
-      return {};
-    }
-    try {
+      const encodedPersonalInfo = decrypt(this.encryptedPersonalInfo, privateKey);
+      if (!web3.utils.isHex(encodedPersonalInfo)) {
+        throw new Error('bad decrypt');
+      }
       const personalInfo = web3.utils.hexToString(encodedPersonalInfo);
       return JSON.parse(personalInfo);
     } catch (e) {
-      return {};
+      if (e.message.match(/bad decrypt/i)) {
+        console.log(`Bad decrypt for ${this.encryptedPersonalInfo} with key ${privateKey}`);
+        return {};
+      }
+      throw e;
     }
   },
   generatePaymentAmount: async function (cryptoPrice) {
