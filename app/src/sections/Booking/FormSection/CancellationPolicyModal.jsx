@@ -20,7 +20,7 @@ const CancellationPolicyModal = () => (
 
           <ul>
             <li className="mb-1">
-              Any cancellation more than a 7 days prior to checkin date will be refunded
+              Any cancellation more than a 7 days prior to checking date will be refunded
               by 50% of the price of booking.
             </li>
             <li className="mb-1">
