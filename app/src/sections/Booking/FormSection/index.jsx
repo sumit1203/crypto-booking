@@ -1,8 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+import moment from 'moment';
 import $ from 'jquery';
-import { BOOKING_POC_ADDRESS, SIGNER_API } from '../../../config';
+import {
+  BOOKING_POC_ADDRESS, SIGNER_API, INITIAL_DATE, FINAL_DATE,
+} from '../../../config';
 import BookingPoC from '../../../abis/BookingPoC.json';
 import RoomBooking from './RoomBooking';
 import CheckEmail from './CheckEmail';
@@ -17,8 +20,8 @@ class FormSection extends React.Component {
     super(props);
     this.state = {
       paymentType: 'eth',
-      from: 1,
-      to: 5,
+      from: moment(INITIAL_DATE),
+      to: moment(FINAL_DATE),
       fullName: null,
       birthDate: null,
       email: '',
@@ -27,7 +30,6 @@ class FormSection extends React.Component {
       price: null,
       guestCount: '1',
       errorMessage: '',
-      totalDays: [1, 2, 3, 4, 5],
     };
   }
 
@@ -42,16 +44,17 @@ class FormSection extends React.Component {
   }
 
   onDaysChange = (e) => {
-    const day = parseInt(e.target.value, 10);
+    const day = moment.unix(e.target.value);
     const { to, from } = this.state;
-    let dayFrom = Math.min(from, day);
-    let dayTo = Math.max(to, day);
+    const dayAsUnix = day.unix();
+    let dayFrom = Math.min(from.unix(), dayAsUnix);
+    let dayTo = Math.max(to.unix(), dayAsUnix);
 
     if (!e.target.checked) {
-      dayFrom = Math.min(day, 4 /* min from day 9 */);
-      dayTo = Math.min(day + 1, 5 /* max from day 10 */);
+      dayFrom = Math.min(dayAsUnix, moment(FINAL_DATE).subtract(1).unix());
+      dayTo = Math.min(day.clone().add(1, 'day').unix(), moment(FINAL_DATE).unix());
     }
-    this.setState({ from: dayFrom, to: dayTo }, this.computePrice);
+    this.setState({ from: moment.unix(dayFrom), to: moment.unix(dayTo) }, this.computePrice);
   }
 
   onFullNameChange = (e) => {
@@ -90,10 +93,10 @@ class FormSection extends React.Component {
       from, to, fullName, birthDate, email, phone, guestCount, paymentType,
     } = this.state;
     const { selectedRoom: { id: roomType } } = this.props;
-    const mappedFromDate = from;
-    const mappedToDate = to - 1;
+    const mappedFromDate = from.diff(moment(INITIAL_DATE), 'd');
+    const mappedToDate = to.diff(moment(INITIAL_DATE), 'd');
     const nights = [];
-    for (let i = mappedFromDate; i <= mappedToDate; i++) {
+    for (let i = mappedFromDate; i < mappedToDate; i++) {
       nights.push(i);
     }
     const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call();
@@ -106,8 +109,8 @@ class FormSection extends React.Component {
       paymentType,
       guestCount,
       roomType,
-      from: mappedFromDate,
-      to: mappedToDate,
+      from: from.format('YYYY-MM-DD'),
+      to: to.format('YYYY-MM-DD'),
       guestEthAddress,
       personalInfo: {
         fullName, birthDate, phone, email,
@@ -153,7 +156,7 @@ class FormSection extends React.Component {
     const { from, to, paymentType } = this.state;
     const { ethPrice, lifPrice } = roomType;
     if (!from || !to) return;
-    const daysCount = to - from;
+    const daysCount = to.diff(from, 'd');
     const price = paymentType === 'lif' ? lifPrice : ethPrice;
     const total = price * daysCount;
     this.setState({ price: total });
@@ -172,7 +175,6 @@ class FormSection extends React.Component {
       email,
       phone,
       loading,
-      totalDays,
     } = this.state;
     const { selectedRoom, roomTypes } = this.props;
     if (isFull) return <FullyBooked onClose={this.onCloseModal} />;
@@ -199,7 +201,6 @@ class FormSection extends React.Component {
           paymentType={paymentType}
           onPaymentTypeChange={this.onPaymentTypeChange}
           guestCount={guestCount}
-          days={totalDays}
           onGuestCountChange={this.onGuestCountChange}
           onRoomTypeChange={this.onRoomTypeChange}
           onFullNameChange={this.onFullNameChange}

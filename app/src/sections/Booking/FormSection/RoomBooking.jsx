@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import moment from 'moment';
 import $ from 'jquery';
 import PriceLabel from './PriceLabel';
 import ConfirmModal from './ConfirmModal';
@@ -8,6 +9,7 @@ import RulesModal from './RulesModal';
 import CancellationPolicyModal from './CancellationPolicyModal';
 import { roomType } from '../propTypes';
 import { validateEmail, validatePhone } from './inputValidations';
+import { INITIAL_DATE, FINAL_DATE } from '../../../config';
 
 export default class RoomBooking extends React.Component {
   static defaultProps = {
@@ -51,6 +53,40 @@ export default class RoomBooking extends React.Component {
     $('#modalCancellationPolicy').modal('show');
   }
 
+  renderDays = () => {
+    const {
+      to,
+      from,
+      onDaysChange,
+    } = this.props;
+    const fromAsUnix = from.unix();
+    const toAsUnix = to.unix();
+    const initialDate = moment(INITIAL_DATE);
+    const finalDate = moment(FINAL_DATE);
+    const currentDate = initialDate.clone();
+    const numberOfDays = Math.max(0, finalDate.diff(initialDate, 'days'));
+    const days = Array.from((new Array(numberOfDays)), (e, i) => i);
+    return days.map((i) => {
+      currentDate.add(1, 'd');
+      const currentDateAsUnix = currentDate.unix();
+      return (
+        <Fragment key={i}>
+          <input
+            type="checkbox"
+            name="days"
+            id={`days-${i}`}
+            value={currentDateAsUnix}
+            onChange={onDaysChange}
+            checked={currentDateAsUnix >= fromAsUnix && currentDateAsUnix <= toAsUnix}
+          />
+          <label htmlFor={`days-${i}`} className="font--alt">
+            {currentDate.format('DD/MM')}
+          </label>
+        </Fragment>
+      );
+    });
+  }
+
   renderRoomTypes = () => {
     const { roomTypes, selectedRoom, onRoomTypeChange } = this.props;
     return roomTypes.map((room, index) => (
@@ -83,12 +119,9 @@ export default class RoomBooking extends React.Component {
   render() {
     const {
       phone,
-      to,
       email,
-      from,
       price,
       paymentType,
-      days,
       onPaymentTypeChange,
       guestCount,
       onGuestCountChange,
@@ -96,7 +129,6 @@ export default class RoomBooking extends React.Component {
       onBirthDateChange,
       onEmailChange,
       onPhoneChange,
-      onDaysChange,
     } = this.props;
     const { isValidEmail, isValidPhone, isConfirmModalOpen } = this.state;
     return (
@@ -179,26 +211,9 @@ export default class RoomBooking extends React.Component {
                     <div className="col-12 mb-1 mb-sm-0">
 
                       <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
-
                         {
-                          days.map(day => (
-                            <Fragment key={day}>
-                              <input
-                                type="checkbox"
-                                name="days"
-                                id={`days-${day}`}
-                                value={day}
-                                onChange={onDaysChange}
-                                checked={day >= from && day <= to}
-                              />
-                              <label htmlFor={`days-${day}`} className="font--alt">
-                                {5 + day}
-                                /9
-                              </label>
-                            </Fragment>
-                          ))
+                          this.renderDays()
                         }
-
                       </div>
 
                     </div>
@@ -311,9 +326,8 @@ export default class RoomBooking extends React.Component {
 RoomBooking.propTypes = {
   email: PropTypes.string.isRequired,
   phone: PropTypes.string.isRequired,
-  from: PropTypes.number.isRequired,
-  to: PropTypes.number.isRequired,
-  days: PropTypes.arrayOf(PropTypes.number).isRequired,
+  from: PropTypes.instanceOf(moment).isRequired,
+  to: PropTypes.instanceOf(moment).isRequired,
   selectedRoom: roomType.isRequired,
   guestCount: PropTypes.string.isRequired,
   price: PropTypes.number,

@@ -9,8 +9,8 @@ $ npm i
 ```
 
 ### .env
-You need 2 `.env` files. One for test and other for running the server.
-Test env must be located at `./test/utils/.env`.
+You need 2 `.env` files in the root folder of the project. One for test and other for running the server.
+Test env must be named as `.env.test`.
 The OWNER_PRIVATE_KEY goes with the 0x prefix.
 
 ```bash
@@ -28,6 +28,8 @@ OWNER_PRIVATE_KEY=0x4259ac86777aa87b3e24006fe6bc98a9c726c3618b18541716a8acc1a716
 OWNER_ADDRESS=0xD037aB9025d43f60a31b32A82E10936f07484246
 STARTING_BLOCK=3668521
 MASTER_KEY=xprv9s21ZrQH143K4NJpFe33gMkNvp3WjJ5kB8W2Bc1Kr2fviwJXYd1AaTk1r1kD7HevdSzNdmAkD5FrFXUkMVuMwuSFdpUc72fbsvNgjCShE82
+INITIAL_DATE=2018-09-14T00:00:00Z
+FINAL_DATE=2018-09-21T00:00:00Z
 ```
 
 ### Run dev mode
