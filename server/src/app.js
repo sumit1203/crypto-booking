@@ -3,8 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cron = require('node-cron');
+const morgan = require('morgan');
 
-const { BOOKING_POC_ADDRESS, GIT_REV, WEB3_PROVIDER } = require('./config');
+const { BOOKING_POC_ADDRESS, GIT_REV, WEB3_PROVIDER, logger } = require('./config');
 const { validateIPWhiteList } = require('./middlewares/ip-white-list');
 const { handleApplicationError } = require('./errors');
 const { version } = require('../package.json');
@@ -29,6 +30,12 @@ app.get('/', (req, res) => {
   };
   res.status(200).json(response);
 });
+
+app.use(morgan(':remote-addr :remote-user [:date[clf]] :method :url HTTP/:http-version :status :res[content-length] - :response-time ms', {
+  stream: {
+    write: (msg) => logger.info(msg),
+  },
+}));
 
 // API routes
 app.use('/api', routes);
