@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-
 import moment from 'moment';
 import $ from 'jquery';
 import {
@@ -19,6 +18,8 @@ class FormSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      availabilityStatus: null,
+      showFullyBooked: false,
       paymentType: 'eth',
       from: moment(INITIAL_DATE),
       to: moment(FINAL_DATE),
@@ -35,8 +36,10 @@ class FormSection extends React.Component {
 
   componentDidMount() {
     const { web3 } = this.props;
+    const { from, to } = this.state;
     this.bookingPoC = new web3.eth.Contract(BookingPoC.abi, BOOKING_POC_ADDRESS);
     this.computePrice();
+    this.updateAvailability(this.props.selectedRoom.id, from, to);
   }
 
   onPaymentTypeChange = (e) => {
@@ -54,7 +57,10 @@ class FormSection extends React.Component {
       dayFrom = Math.min(dayAsUnix, moment(FINAL_DATE).subtract(1).unix());
       dayTo = Math.min(day.clone().add(1, 'day').unix(), moment(FINAL_DATE).unix());
     }
-    this.setState({ from: moment.unix(dayFrom), to: moment.unix(dayTo) }, this.computePrice);
+    const unixFrom = moment.unix(dayFrom);
+    const unixTo = moment.unix(dayTo);
+    this.setState({ from: unixFrom, to: unixTo }, this.computePrice);
+    this.updateAvailability(this.props.selectedRoom.id, unixFrom, unixTo);
   }
 
   onFullNameChange = (e) => {
@@ -83,27 +89,25 @@ class FormSection extends React.Component {
 
   onRoomTypeChange = (e) => {
     const { onRoomTypeChange, roomTypes } = this.props;
+    const { from, to } = this.state;
     const selectedRoom = roomTypes.find(room => room.id === e.target.value);
     this.computePrice(selectedRoom);
+    this.updateAvailability(selectedRoom.id, from, to);
     onRoomTypeChange(selectedRoom);
   }
 
   onSubmit = async ({ guestEthAddress, captchaToken }) => {
     const {
-      from, to, fullName, birthDate, email, phone, guestCount, paymentType,
+      from, to, fullName, birthDate, email, phone, guestCount, paymentType, availabilityStatus,
     } = this.state;
-    const { selectedRoom: { id: roomType } } = this.props;
-    const mappedFromDate = from.diff(moment(INITIAL_DATE), 'd');
-    const mappedToDate = to.diff(moment(INITIAL_DATE), 'd');
-    const nights = [];
-    for (let i = mappedFromDate; i < mappedToDate; i++) {
-      nights.push(i);
-    }
-    const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call();
-    if (!availableRooms.some(roomFlag => !!parseInt(roomFlag, 10))) {
-      this.setState({ isFull: true });
+
+    if (availabilityStatus === 'loading') return;
+    if (availabilityStatus === 'full') {
+      this.setState({ showFullyBooked: true });
       return;
     }
+
+    const { selectedRoom: { id: roomType } } = this.props;
     const data = {
       'g-recaptcha-response': captchaToken,
       paymentType,
@@ -128,7 +132,6 @@ class FormSection extends React.Component {
 
       if (response.status >= 400) {
         console.error(response);
-        // HOT FIX to remove blackscreen on error. We should remove bootstrap or use https://react-bootstrap.github.io/
         $('#checkEmail').modal('hide');
         this.setState({ errorMessage: response.long, loading: false });
         return;
@@ -145,11 +148,29 @@ class FormSection extends React.Component {
   }
 
   onCloseModal = () => {
-    this.setState({ isFull: null, instructions: null });
+    this.setState({ showFullyBooked: null, instructions: null });
   }
 
   onCloseErrorAlert = () => {
     this.setState({ errorMessage: '' });
+  }
+
+  mapDatesToNights = (from, to) => {
+    const mappedFromDate = from.diff(moment(INITIAL_DATE), 'd');
+    const mappedToDate = to.diff(moment(INITIAL_DATE), 'd');
+    const nights = [];
+    for (let i = mappedFromDate; i < mappedToDate; i++) {
+      nights.push(i);
+    }
+    return nights;
+  }
+
+  updateAvailability = async (roomType, from, to) => {
+    const nights = this.mapDatesToNights(from, to);
+    this.setState({ availabilityStatus: 'loading' });
+    const availableRooms = await this.bookingPoC.methods.roomsAvailable(roomType, nights).call();
+    const isFull = !availableRooms.some(roomFlag => !!parseInt(roomFlag, 10));
+    this.setState({ availabilityStatus: isFull ? 'full' : 'available' });
   }
 
   computePrice = (roomType = this.props.selectedRoom) => {
@@ -168,16 +189,17 @@ class FormSection extends React.Component {
       from,
       to,
       instructions,
-      isFull,
       price,
       paymentType,
       guestCount,
       email,
       phone,
       loading,
+      showFullyBooked,
+      availabilityStatus,
     } = this.state;
     const { selectedRoom, roomTypes } = this.props;
-    if (isFull) return <FullyBooked onClose={this.onCloseModal} />;
+    if (showFullyBooked) return <FullyBooked onClose={this.onCloseModal} />;
     if (instructions || loading) {
       return (
         <CheckEmail
@@ -193,6 +215,7 @@ class FormSection extends React.Component {
         <RoomBooking
           from={from}
           to={to}
+          availabilityStatus={availabilityStatus}
           roomTypes={roomTypes}
           selectedRoom={selectedRoom}
           price={price}

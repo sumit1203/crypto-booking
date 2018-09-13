@@ -10,6 +10,7 @@ import CancellationPolicyModal from './CancellationPolicyModal';
 import { roomType } from '../propTypes';
 import { validateEmail, validatePhone } from './inputValidations';
 import { INITIAL_DATE, FINAL_DATE } from '../../../config';
+import AvailabilityLabel from '../../../components/AvailabilityLabel';
 
 export default class RoomBooking extends React.Component {
   static defaultProps = {
@@ -112,7 +113,6 @@ export default class RoomBooking extends React.Component {
             </span>
           ) : index === 1 && ' Twin Bed'}
         </label>
-
       </Fragment>));
   }
 
@@ -122,8 +122,9 @@ export default class RoomBooking extends React.Component {
       email,
       price,
       paymentType,
-      onPaymentTypeChange,
       guestCount,
+      availabilityStatus,
+      onPaymentTypeChange,
       onGuestCountChange,
       onFullNameChange,
       onBirthDateChange,
@@ -209,15 +210,12 @@ export default class RoomBooking extends React.Component {
                   </h5>
                   <div className="form-row">
                     <div className="col-12 mb-1 mb-sm-0">
-
                       <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
-                        {
-                          this.renderDays()
-                        }
+                        {this.renderDays()}
                       </div>
-
                     </div>
                   </div>
+                  {availabilityStatus && <AvailabilityLabel status={availabilityStatus} />}
                 </section>
                 <div className="card bg-white block-shadow mb-2">
                   <h5 className="px-2 py-2">
@@ -342,4 +340,5 @@ RoomBooking.propTypes = {
   onEmailChange: PropTypes.func.isRequired,
   onPhoneChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  availabilityStatus: PropTypes.string.isRequired,
 };
