@@ -28,7 +28,8 @@ const AvailabilityLabel = ({ status }) => {
     <div>
       <i className={classnames('mdi mdi-18px align-middle', className)} />
       <span>
-        &nbsp;{message}
+        &nbsp;
+        {message}
       </span>
     </div>
   );
