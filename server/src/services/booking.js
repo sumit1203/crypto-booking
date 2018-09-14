@@ -61,19 +61,17 @@ function _prepareForExport (bookingModel, privateKey) {
   * @return {Booking || null}
   */
 async function readBooking (filter, index) {
+  let bookingModel;
   if (mongoose.Types.ObjectId.isValid(filter.id)) {
-    const bookingModel = await BookingModel.findById(filter.id).exec();
-    if (!bookingModel) return null;
-    return _prepareForExport(bookingModel);
+    bookingModel = await BookingModel.findById(filter.id).exec();
   }
   if (filter.bookingHash) {
-    const bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
-    if (!bookingModel) return null;
-    const bookingIndex = index || bookingModel.bookingIndex;
-    const { privateKey } = getKeyPair(filter.bookingHash, bookingIndex);
-    return _prepareForExport(bookingModel, privateKey);
+    bookingModel = await BookingModel.findOne({ bookingHash: filter.bookingHash }).exec();
   }
-  return null;
+  if (!bookingModel) return null;
+  const bookingIndex = index || bookingModel.bookingIndex;
+  const { privateKey } = getKeyPair(bookingModel.bookingHash, bookingIndex);
+  return _prepareForExport(bookingModel, privateKey);
 }
 
 async function getCancelBookingInstructions (bookingHash) {

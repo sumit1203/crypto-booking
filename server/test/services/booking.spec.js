@@ -128,7 +128,7 @@ describe('Booking service', () => {
     expect(booking).to.have.property('paymentType', validBookingWithEthPrice.paymentType);
     expect(booking).to.have.property('signatureTimestamp');
     expect(booking.signatureTimestamp).to.have.a('number');
-    expect(booking.personalInfo).to.be.deep.equal({});
+    expect(booking.personalInfo).to.be.deep.equal(validBookingWithEthPrice.personalInfo);
     expect(booking).to.have.property('roomType', validBookingWithEthPrice.roomType);
     expect(booking.from.getTime()).to.be.eql(validBookingWithEthPrice.from.getTime());
     expect(booking.to.getTime()).to.be.eql(validBookingWithEthPrice.to.getTime());
