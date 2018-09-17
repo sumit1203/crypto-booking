@@ -16,6 +16,9 @@ async function read (req, res, next) {
           price: price,
         };
       } catch (e) {
+        if (e.code === '#invalidRoomType') {
+          throw e;
+        }
         return {
           paymentType: type,
           error: e,

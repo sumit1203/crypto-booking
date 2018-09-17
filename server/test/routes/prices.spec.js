@@ -54,4 +54,12 @@ describe('GET /prices/:roomType', () => {
       expect(e.error).to.have.property('code', '#noPaymentTypes');
     }
   });
+  it('Should return an error if roomType not exists', async () => {
+    try {
+      await request({ url: `${apiUrl}/prices/someRoomType/?paymentTypes[]=${BOOKING_PAYMENT_TYPES.eth}`, method: 'GET', json: true });
+    } catch (e) {
+      expect(e).to.have.property('error');
+      expect(e.error).to.have.property('code', '#invalidRoomType');
+    }
+  });
 });
