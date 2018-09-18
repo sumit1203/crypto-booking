@@ -221,7 +221,6 @@ export default class RoomBooking extends React.Component {
                   </div>
                   {availabilityStatus && <AvailabilityLabel status={availabilityStatus} />}
                 </section>
-                {isAvailable && (
                 <div className="card bg-white block-shadow mb-2">
                   <h5 className="px-2 py-2">
                     Guest information
@@ -239,6 +238,7 @@ export default class RoomBooking extends React.Component {
                         autoComplete="off"
                         type="text"
                         onChange={onFullNameChange}
+                        disabled={!isAvailable}
                         required
                       />
                       <label htmlFor="birthDate">
@@ -251,6 +251,7 @@ export default class RoomBooking extends React.Component {
                         id="birthDate"
                         autoComplete="off"
                         type="date"
+                        disabled={!isAvailable}
                         onChange={onBirthDateChange}
                         required
                       />
@@ -267,6 +268,7 @@ export default class RoomBooking extends React.Component {
                         autoComplete="off"
                         type="email"
                         onChange={onEmailChange}
+                        disabled={!isAvailable}
                         value={email}
                         required
                       />
@@ -282,13 +284,13 @@ export default class RoomBooking extends React.Component {
                         type="tel"
                         onChange={onPhoneChange}
                         value={phone}
+                        disabled={!isAvailable}
                         maxLength={14}
                         required
                       />
                     </div>
                   </section>
                 </div>
-                )}
                 <section className="text-center">
                   {price && <PriceLabel value={price} />}
                   <button className={classnames('btn btn-primary', { disabled: !isAvailable })} type="submit">
