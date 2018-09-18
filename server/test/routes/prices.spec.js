@@ -36,15 +36,13 @@ describe('GET /prices/:roomType', () => {
     expect(resp[1]).to.have.property('paymentType', BOOKING_PAYMENT_TYPES.lif);
     expect(resp[1]).to.have.property('price');
   });
-  it('Should return a valid price and an error if one of the paymentType is invalid', async () => {
-    const resp = await request({ url: `${apiUrl}/prices/${BOOKING_ROOM_TYPES[0]}/?paymentTypes[]=${BOOKING_PAYMENT_TYPES.eth}&paymentTypes[]=invalid`, method: 'GET', json: true });
-    expect(resp).to.be.instanceof(Array);
-    expect(resp).to.have.lengthOf(2);
-    expect(resp[0]).to.have.property('paymentType', BOOKING_PAYMENT_TYPES.eth);
-    expect(resp[0]).to.have.property('price');
-    expect(resp[1]).to.have.property('paymentType', 'invalid');
-    expect(resp[1]).to.have.property('error');
-    expect(resp[1].error).to.have.property('code', '#invalidPaymentType');
+  it('Should return an error if one of the paymentType is invalid', async () => {
+    try {
+      await request({ url: `${apiUrl}/prices/${BOOKING_ROOM_TYPES[0]}/?paymentTypes[]=${BOOKING_PAYMENT_TYPES.eth}&paymentTypes[]=invalid`, method: 'GET', json: true });
+    } catch (e) {
+      expect(e).to.have.property('error');
+      expect(e.error).to.have.property('code', '#invalidPaymentType');
+    }
   });
   it('Should return an error if paymentTypes is not an array', async () => {
     try {
