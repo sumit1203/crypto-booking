@@ -10,13 +10,11 @@ const AvailabilityLabel = ({ status }) => {
   let message;
   switch (status) {
     case IS_AVAILABLE: {
-      className = 'mdi-approval text-success';
-      message = 'We are available';
-      break;
+      return null;
     }
     case IS_FULL: {
       className = 'mdi-alert-circle text-danger';
-      message = 'This option is not available';
+      message = 'The room is not available for this date. Try a different room or select a different date, please.';
       break;
     }
     default: {
@@ -25,7 +23,7 @@ const AvailabilityLabel = ({ status }) => {
     }
   }
   return (
-    <div>
+    <div className="p-1">
       <i className={classnames('mdi mdi-18px align-middle', className)} />
       <span>
         &nbsp;
