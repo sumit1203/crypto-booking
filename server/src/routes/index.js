@@ -4,13 +4,16 @@ const { recaptchaMiddleware } = require('../middlewares/recaptcha');
 const { isBookingPeriod } = require('../middlewares/booking-time');
 const booking = require('../controllers/booking');
 const email = require('../controllers/email');
+const prices = require('../controllers/prices');
 
 const router = express.Router();
 const bookingUrl = '/booking';
+const pricesUrl = '/prices';
 
 router.post(`${bookingUrl}`, isBookingPeriod, recaptchaMiddleware, booking.create);
 
 router.get(`${bookingUrl}/:bookingHash`, booking.read);
+router.get(`${pricesUrl}/:roomType`, prices.read);
 
 router.post(`${bookingUrl}/emailInfo`, createThrottlingInstance({
   windowMs: 60000, // 1 min

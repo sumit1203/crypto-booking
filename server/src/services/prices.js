@@ -1,5 +1,6 @@
 const fetch = require('isomorphic-fetch');
 const { BOOKING_PAYMENT_TYPES, ETH_DISCOUNT, ROOM_TYPE_PRICES } = require('../constants');
+const { handleApplicationError } = require('../errors');
 
 const fetchETHPrice = async (unit = 'EUR') => {
   const PRICE_URL = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${unit}`;
@@ -20,15 +21,28 @@ const fetchPrice = async (type) => {
 };
 
 const getLIFRoomPrice = async (roomType) => {
+  if (!ROOM_TYPE_PRICES[roomType]) {
+    throw handleApplicationError('invalidRoomType');
+  }
   return ROOM_TYPE_PRICES[roomType] * await fetchLIFPrice() / 0.5;
 };
 
 const getETHRoomPrice = async (roomType) => {
+  if (!ROOM_TYPE_PRICES[roomType]) {
+    throw handleApplicationError('invalidRoomType');
+  }
   return ROOM_TYPE_PRICES[roomType] * (1 - ETH_DISCOUNT);
 };
 
 const getRoomPrice = async (roomType, paymentType) => {
-  return (paymentType === BOOKING_PAYMENT_TYPES.eth) ? getETHRoomPrice(roomType) : getLIFRoomPrice(roomType);
+  switch (paymentType) {
+  case BOOKING_PAYMENT_TYPES.eth:
+    return getETHRoomPrice(roomType);
+  case BOOKING_PAYMENT_TYPES.lif:
+    return getLIFRoomPrice(roomType);
+  default:
+    throw handleApplicationError('invalidPaymentType');
+  }
 };
 
 module.exports = {

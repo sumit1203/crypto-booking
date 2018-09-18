@@ -1,4 +1,4 @@
-const { BOOKING_STATUS, BOOKING_ROOM_TYPES } = require('../constants');
+const { BOOKING_STATUS, BOOKING_ROOM_TYPES, BOOKING_PAYMENT_TYPES } = require('../constants');
 
 module.exports = {
   genericError: {
@@ -75,6 +75,16 @@ module.exports = {
     status: 409,
     short: 'No payment type provided.',
     long: 'The paymentType is required.',
+  },
+  noPaymentTypes: {
+    status: 409,
+    short: 'No payment types provided.',
+    long: 'The paymentTypes is required and must be an array.',
+  },
+  invalidPaymentType: {
+    status: 409,
+    short: 'Invalid payment type provided.',
+    long: `The paymentType could be ${Object.keys(BOOKING_PAYMENT_TYPES).join(', ').toLowerCase()}.`,
   },
   noPaymentTx: {
     status: 409,
