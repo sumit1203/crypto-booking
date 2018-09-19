@@ -18,6 +18,34 @@ directory
  The smart contracts to manage rooms availability is located inside of the [smart-contracts](https://github.com/windingtree/crypto-booking/tree/develop/contracts)
 directory
 
+## Env file
+
+An `.env` file must be created inside of the root directory with the following configurations. Alternatively, you can create
+`.env.test` to override default test configuration.
+
+```
+BOOKING_POC_ADDRESS=0x...
+LIF_TOKEN_ADDRESS=0x...
+WHITELIST=*
+SERVER_PORT=3001
+STARTING_BLOCK=3914999
+MONGODB_URI_QA=
+MAIL_API_KEY=
+FROM_EMAIL=no-reply@windingtree.com
+OWNER_PRIVATE_KEY=0x...
+OWNER_ADDRESS=0x...
+WEB3_PROVIDER=https://x.infura.io/v3/0123
+MASTER_KEY=xpr....
+RECAPTCHA_SECRET=6L...
+IS_RECAPTCHA_ON=false
+INITIAL_DATE=2018-10-15T00:00:00Z
+FINAL_DATE=2018-10-03T00:00:00Z
+BOOKING_PERIOD_STAR=2018-09-21T00:00:00Z
+BOOKING_PERIOD_END=2018-10-30T00:00:00Z
+HOTEL_URL=https://demo-api.windingtree.com/hotels/0x4Ee2BC4804D1A75AEBa5C76D25cc2c036B136140
+SIGNER_API=http://localhost:3001
+```
+
 ## Test
 
 To test in a local environment, you have to:
