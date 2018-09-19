@@ -10,7 +10,9 @@ const AvailabilityLabel = ({ status }) => {
   let message;
   switch (status) {
     case IS_AVAILABLE: {
-      return null;
+      className = 'mdi-approval text-success';
+      message = 'The room is still free for you. Hurry up! Our smart contract respects only one rule: First come, first served.';
+      break;
     }
     case IS_FULL: {
       className = 'mdi-alert-circle text-danger';
@@ -23,7 +25,7 @@ const AvailabilityLabel = ({ status }) => {
     }
   }
   return (
-    <div className="p-1">
+    <div className="p-1" style={{ height: 90 }}>
       <i className={classnames('mdi mdi-18px align-middle', className)} />
       <span>
         &nbsp;
