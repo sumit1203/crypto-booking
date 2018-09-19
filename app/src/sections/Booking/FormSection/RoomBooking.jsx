@@ -10,6 +10,7 @@ import CancellationPolicyModal from './CancellationPolicyModal';
 import { roomType } from '../propTypes';
 import { validateEmail, validatePhone } from './inputValidations';
 import { INITIAL_DATE, FINAL_DATE } from '../../../config';
+import AvailabilityLabel from '../../../components/AvailabilityLabel';
 
 export default class RoomBooking extends React.Component {
   static defaultProps = {
@@ -89,31 +90,33 @@ export default class RoomBooking extends React.Component {
 
   renderRoomTypes = () => {
     const { roomTypes, selectedRoom, onRoomTypeChange } = this.props;
-    return roomTypes.map((room, index) => (
-      <Fragment key={room.id}>
-        <input
-          id={`radio-${room.id}`}
-          name="type"
-          type="radio"
-          value={room.id}
-          onChange={onRoomTypeChange}
-          checked={selectedRoom.id === room.id}
-          required
-        />
-        <label htmlFor={`radio-${room.id}`} className="w-50">
-          <i className="mdi mdi-check-circle d-none d-sm-inline" />
-          {index === 0 ? (
-            <span>
-              King
-              <span className="hide-xs">
-              -size
+    return roomTypes.map((room, index) => {
+      const isSelected = selectedRoom.id === room.id;
+      return (
+        <Fragment key={room.id}>
+          <input
+            id={`radio-${room.id}`}
+            name="type"
+            type="radio"
+            value={room.id}
+            onChange={onRoomTypeChange}
+            checked={isSelected}
+            required
+          />
+          <label htmlFor={`radio-${room.id}`} className="w-50">
+            {isSelected && <i className="mdi mdi-check-circle d-none d-sm-inline" />}
+            {index === 0 ? (
+              <span>
+                King
+                <span className="hide-xs">
+                  -size
+                </span>
+                {' Bed'}
               </span>
-              Bed
-            </span>
-          ) : index === 1 && ' Twin Bed'}
-        </label>
-
-      </Fragment>));
+            ) : index === 1 && ' Twin Bed'}
+          </label>
+        </Fragment>);
+    });
   }
 
   render() {
@@ -122,8 +125,9 @@ export default class RoomBooking extends React.Component {
       email,
       price,
       paymentType,
-      onPaymentTypeChange,
       guestCount,
+      availabilityStatus,
+      onPaymentTypeChange,
       onGuestCountChange,
       onFullNameChange,
       onBirthDateChange,
@@ -131,6 +135,7 @@ export default class RoomBooking extends React.Component {
       onPhoneChange,
     } = this.props;
     const { isValidEmail, isValidPhone, isConfirmModalOpen } = this.state;
+    const isAvailable = availabilityStatus === 'available';
     return (
       <article id="book-a-room" className="section-wrapper bg-light py-3 py-md-4">
         <div className="container">
@@ -209,15 +214,12 @@ export default class RoomBooking extends React.Component {
                   </h5>
                   <div className="form-row">
                     <div className="col-12 mb-1 mb-sm-0">
-
                       <div className="btn-group btn-group--switch mr-auto ml-auto" role="group" aria-label="Room type">
-                        {
-                          this.renderDays()
-                        }
+                        {this.renderDays()}
                       </div>
-
                     </div>
                   </div>
+                  {availabilityStatus && <AvailabilityLabel status={availabilityStatus} />}
                 </section>
                 <div className="card bg-white block-shadow mb-2">
                   <h5 className="px-2 py-2">
@@ -236,6 +238,7 @@ export default class RoomBooking extends React.Component {
                         autoComplete="off"
                         type="text"
                         onChange={onFullNameChange}
+                        disabled={!isAvailable}
                         required
                       />
                       <label htmlFor="birthDate">
@@ -248,6 +251,7 @@ export default class RoomBooking extends React.Component {
                         id="birthDate"
                         autoComplete="off"
                         type="date"
+                        disabled={!isAvailable}
                         onChange={onBirthDateChange}
                         required
                       />
@@ -264,6 +268,7 @@ export default class RoomBooking extends React.Component {
                         autoComplete="off"
                         type="email"
                         onChange={onEmailChange}
+                        disabled={!isAvailable}
                         value={email}
                         required
                       />
@@ -279,6 +284,7 @@ export default class RoomBooking extends React.Component {
                         type="tel"
                         onChange={onPhoneChange}
                         value={phone}
+                        disabled={!isAvailable}
                         maxLength={14}
                         required
                       />
@@ -287,7 +293,7 @@ export default class RoomBooking extends React.Component {
                 </div>
                 <section className="text-center">
                   {price && <PriceLabel value={price} />}
-                  <button className="btn btn-primary" type="submit">
+                  <button className={classnames('btn btn-primary', { disabled: !isAvailable })} type="submit">
                     Proceed with booking
                   </button>
                   <br />
@@ -342,4 +348,5 @@ RoomBooking.propTypes = {
   onEmailChange: PropTypes.func.isRequired,
   onPhoneChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  availabilityStatus: PropTypes.string.isRequired,
 };

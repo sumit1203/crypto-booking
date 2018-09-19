@@ -13,18 +13,17 @@ const CollaborationSection = () => (
           <p className="h4 lead">
             We offer at least a
             <b>
-              20% discount
+              {' 20% discount '}
             </b>
-            to hackers and engineers who pay
-            with
+            to hackers and engineers who pay with
             <AnchorLink href="#paying-with-lif">
               <b>
-                LIF
+                {' LIF '}
               </b>
             </AnchorLink>
             or
             <b>
-              ETH
+              {' ETH'}
             </b>
             .
           </p>
