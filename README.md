@@ -28,27 +28,11 @@ To test in a local environment, you have to:
 4.- Run `npm start` on the app, leave it in the background.
 
 ## Release
-### Server
+### Version
 
-This is the steps to create a new server release.
-
-- Update version in `server/package.json`
-- Merge branch into `develop`
-- Merge `develop` into `master`
-- Merge `master` into `release/server`
-
- This will trigger the deploy in `Travis-CI`
-
-### App
-
-This is the steps to create a new app release.
-
-- Update version in `server/package.json`
-- Merge branch into `develop`
-- Merge `develop` into `master`
-- Merge `master` into `release/app`
-
-This will trigger the deploy in `Travis-CI`
+- Update server, app and global `package.json` continuously.
+- Merge from develop to master branch.
+- Create a new Git tag. This will trigger the deploy in `Travis-CI`
 
 ## Collaborate!
 
