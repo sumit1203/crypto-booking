@@ -1,5 +1,6 @@
 /* eslint-env mocha */
-require('dotenv').config({ path: '../../../.env.test' });
+const path = require('path');
+require('dotenv').config({ path: path.resolve('../.env.test') });
 const { expect } = require('chai');
 const mongoose = require('mongoose');
 const request = require('request-promise-native');
