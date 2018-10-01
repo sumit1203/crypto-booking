@@ -1,9 +1,23 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
-require('dotenv').config({ path: '../../../.env.test' });
+const path = require('path');
+require('dotenv').config({ path: path.resolve('../.env.test') });
 const { expect } = require('chai');
+const nock = require('nock');
 const { fetchETHPrice, fetchPrice, fetchLIFPrice } = require('../../src/services/prices');
+const quoteETH = require('../utils/nock-responses/quote-eth-success.json');
+const quoteLIF = require('../utils/nock-responses/quote-lif-success.json');
 
+// Moke the call to the api for all tests
+beforeEach(() => {
+  nock('https://sandbox-api.coinmarketcap.com')
+    .get('/v1/cryptocurrency/quotes/latest')
+    .query({ convert: 'EUR', symbol: 'ETH' })
+    .reply(200, quoteETH)
+    .get('/v1/cryptocurrency/quotes/latest')
+    .query({ convert: 'EUR', symbol: 'LIF' })
+    .reply(200, quoteLIF);
+});
 describe('Prices services', () => {
   it('Should fetch ETH price', async () => {
     const price = await fetchETHPrice();

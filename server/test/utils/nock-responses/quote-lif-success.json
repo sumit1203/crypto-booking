@@ -1,0 +1,35 @@
+{
+  "status": {
+    "timestamp": "2018-09-24T23:10:15.945Z",
+    "error_code": 0,
+    "error_message": null,
+    "elapsed": 7,
+    "credit_count": 1
+  },
+  "data": {
+    "LIF": {
+      "id": 2728,
+      "name": "Winding Tree",
+      "symbol": "LIF",
+      "slug": "winding-tree",
+      "circulating_supply": 20008666.1610851,
+      "total_supply": 24976439.4513564,
+      "max_supply": null,
+      "date_added": "2018-07-11T00:00:00.000Z",
+      "num_market_pairs": 1,
+      "cmc_rank": 603,
+      "last_updated": "2018-08-17T08:56:02.000Z",
+      "quote": {
+        "EUR": {
+          "price": 264.05565467798647,
+          "volume_24h": 1482463973.8171575,
+          "percent_change_1h": -0.2007,
+          "percent_change_24h": 3.0487,
+          "percent_change_7d": -20.2724,
+          "market_cap": 26769271146.585995,
+          "last_updated": "2018-08-17T08:55:13.000Z"
+        }
+      }
+    }
+  }
+}

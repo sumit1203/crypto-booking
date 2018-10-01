@@ -18,4 +18,5 @@ module.exports = {
   FINAL_DATE: new Date(process.env.FINAL_DATE),
   BOOKING_PERIOD_START: new Date(process.env.BOOKING_PERIOD_START),
   BOOKING_PERIOD_END: new Date(process.env.BOOKING_PERIOD_END),
+  COINMARKETCAP_KEY: process.env.COINMARKETCAP_KEY,
 };

@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
-require('dotenv').config({ path: '../../../.env.test' });
+const path = require('path');
+require('dotenv').config({ path: path.resolve('../.env.test') });
 const { expect } = require('chai');
 const { onBookingDone, onBookingCancel, _eventDispatcher } = require('../../src/services/ethereum-listener');
 const { events } = require('../utils/test-data');
