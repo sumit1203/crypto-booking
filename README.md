@@ -1,5 +1,7 @@
 # Crypto Booking [Proof of Concept]
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/windingtree/crypto-booking.svg)](https://greenkeeper.io/)
+
 This repository contains all the necessary solutions to offer hotel rooms in exchange for ETH or Lif tokens. It is compound by a web app, server signer, and smart contracts, it connects directly to WT API, the hotel needs to be deployed in one of WT networks.
 
 ## Is it a Dapp?
